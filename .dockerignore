@@ -1,0 +1,41 @@
+# Build outputs
+**/bin/
+**/obj/
+**/dist/
+**/.angular/
+**/node_modules/
+
+# Local-only / secrets
+**/.env
+**/.env.local
+**/.env.*.local
+**/appsettings.Local.json
+**/appsettings.*.Local.json
+**/logs/
+**/storage/
+
+# Tooling
+**/.vs/
+**/.vscode/
+**/.idea/
+.git/
+.gitignore
+.editorconfig
+
+# Sample/dev data Anton has at the root (not for shipping)
+*.pdf
+*.png
+*.jpg
+*.docx
+*.xlsx
+*.xlsm
+
+# Docs and worker — not needed in the runtime image
+docs/
+workers/
+packages/
+tools/
+
+# CI / config that doesn't belong in the image
+.github/
+README.md

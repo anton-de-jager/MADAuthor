@@ -1,0 +1,63 @@
+# Environment & secrets — never commit
+.env
+.env.local
+.env.*.local
+*.pfx
+*.key
+appsettings.Local.json
+appsettings.*.Local.json
+
+# .NET
+**/bin/
+**/obj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+.vs/
+.vscode/launch.json
+.vscode/tasks.json
+*.swp
+*.tmp
+[Tt]humbs.db
+[Dd]esktop.ini
+
+# EF Core
+**/Migrations/*.Designer.cs.bak
+
+# Node / Angular
+node_modules/
+dist/
+.angular/
+*.tsbuildinfo
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Logs
+logs/
+*.log
+
+# Local file storage (Phase 1)
+storage/
+
+# Deploy staging output
+.deploy/
+
+# Test results
+TestResults/
+coverage/
+*.coverage
+*.coveragexml
+
+# JetBrains
+.idea/
+
+# Rider
+*.DotSettings.user
+
+# Claude worker + scanner runtime state
+.claude/worker/state.json
+.claude/worker/worker.log
+.claude/scanner/state.json
+.claude/scanner/scanner.log

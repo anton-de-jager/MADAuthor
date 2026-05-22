@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    IIS hosting config for MADAuthor on a Windows server with the .NET 8 Hosting Bundle.
+
+    Prerequisites on the host (one-time):
+      1. Install ".NET 8.0 Hosting Bundle" from https://dotnet.microsoft.com/download/dotnet/8.0
+         (gives IIS the AspNetCoreModuleV2 it needs to run the app in-process).
+      2. In IIS Manager, the app pool for this site should be set to "No Managed Code"
+         (.NET CLR version → No Managed Code). ASP.NET Core runs out-of-process from IIS.
+      3. The app pool identity needs read/write on the storage/ and logs/ subfolders
+         created next to the DLLs.
+
+    This file gets copied verbatim into the publish output by Deploy-Ftp.ps1.
+-->
+<configuration>
+  <location path="." inheritInChildApplications="false">
+    <system.webServer>
+      <!--
+        WebDAVModule intercepts DELETE / PUT / PATCH / PROPFIND on Windows Server's default IIS
+        config and returns 405 / 403 BEFORE the request reaches AspNetCoreModuleV2. Symptom: the
+        SPA gets "No 'Access-Control-Allow-Origin' header" on DELETE because the IIS error page
+        doesn't run through ASP.NET Core's CORS middleware. Removing the module makes the verbs
+        flow to our app.
+      -->
+      <modules runAllManagedModulesForAllRequests="false">
+        <remove name="WebDAVModule" />
+      </modules>
+      <handlers>
+        <!-- Same logic for the handler — WebDAV's handler also has to go, and we want only
+             AspNetCoreModuleV2 binding the wildcard route with all verbs. -->
+        <remove name="WebDAV" />
+        <add name="aspNetCore" path="*" verb="*" modules="AspNetCoreModuleV2" resourceType="Unspecified" />
+      </handlers>
+      <aspNetCore
+        processPath="dotnet"
+        arguments=".\MadAuthor.Api.dll"
+        stdoutLogEnabled="true"
+        stdoutLogFile=".\logs\stdout"
+        hostingModel="InProcess">
+        <environmentVariables>
+          <environmentVariable name="ASPNETCORE_ENVIRONMENT" value="Production" />
+          <!-- Cross-subdomain refresh cookie. Sets the cookie's Domain on the parent
+               so the SPA at madauthor.* can receive a cookie issued by madauthorapi.*.
+               Not in the local .env because Domain attribute breaks localhost dev. -->
+          <environmentVariable name="COOKIE_DOMAIN" value=".madproducts.co.za" />
+          <!--
+            Real secrets (JWT_SIGNING_KEY, DB connection, UNSPLASH_ACCESS_KEY, SMTP_*)
+            come from the uploaded .env (the deploy script strips FTP_* before upload).
+            If you'd rather keep .env off the server entirely, move them here and tweak
+            Deploy-Ftp.ps1 to skip uploading .env.
+          -->
+        </environmentVariables>
+      </aspNetCore>
+
+      <!--
+        IIS Request Filtering — Plesk's default applicationHost rejects DELETE / PUT / PATCH at
+        the server level (returns a generic 403 "Access is denied" HTML page BEFORE any handler
+        runs, which is why the SPA sees "No Access-Control-Allow-Origin"). Explicitly allow them
+        here so RESTful verbs reach AspNetCoreModuleV2.
+      -->
+      <security>
+        <requestFiltering>
+          <verbs allowUnlisted="true">
+            <add verb="DELETE" allowed="true" />
+            <add verb="PUT" allowed="true" />
+            <add verb="PATCH" allowed="true" />
+            <add verb="OPTIONS" allowed="true" />
+          </verbs>
+        </requestFiltering>
+      </security>
+
+      <!-- Keep the default static-file MIME types but ensure .json works. -->
+      <staticContent>
+        <remove fileExtension=".json" />
+        <mimeMap fileExtension=".json" mimeType="application/json" />
+      </staticContent>
+
+      <!-- Avoid the FTP-edit dance of the auto-generated machine key — make it sticky. -->
+      <httpProtocol>
+        <customHeaders>
+          <remove name="X-Powered-By" />
+        </customHeaders>
+      </httpProtocol>
+    </system.webServer>
+  </location>
+</configuration>

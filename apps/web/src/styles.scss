@@ -1,0 +1,64 @@
+@import '@angular/material/prebuilt-themes/magenta-violet.css';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+    color-scheme: dark;
+}
+
+html,
+body {
+    height: 100%;
+    margin: 0;
+    background: theme('colors.ink.950');
+    color: theme('colors.ink.100');
+    font-family: theme('fontFamily.sans');
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+}
+
+::selection {
+    background: theme('colors.brand.600');
+    color: white;
+}
+
+// Glassmorphism panel used across the app for cards/forms.
+.glass {
+    background: rgba(23, 32, 51, 0.55);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(148, 163, 184, 0.12);
+    box-shadow:
+        0 1px 0 rgba(255, 255, 255, 0.04) inset,
+        0 20px 40px -20px rgba(0, 0, 0, 0.6);
+}
+
+// Subtle animated gradient backdrop used by the auth screens.
+.aurora {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+}
+.aurora::before {
+    content: '';
+    position: absolute;
+    inset: -25%;
+    background:
+        radial-gradient(40% 40% at 20% 30%, rgba(124, 58, 237, 0.35), transparent 70%),
+        radial-gradient(35% 35% at 80% 20%, rgba(56, 189, 248, 0.25), transparent 70%),
+        radial-gradient(45% 45% at 70% 80%, rgba(217, 70, 239, 0.25), transparent 70%);
+    filter: blur(40px);
+    z-index: -1;
+    animation: aurora-drift 18s ease-in-out infinite alternate;
+}
+@keyframes aurora-drift {
+    from { transform: translate3d(-2%, -2%, 0); }
+    to   { transform: translate3d(2%, 2%, 0); }
+}
+
+// Material form-field colors look reasonable on dark by default with M3, but we
+// override the field outline to match brand.
+.mat-mdc-form-field {
+    width: 100%;
+}
