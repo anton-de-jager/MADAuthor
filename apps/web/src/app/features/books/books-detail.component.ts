@@ -5,6 +5,7 @@ import { Subscription } from 'rxjs';
 import {
   AuthorSummary,
   BookAsset,
+  BookCharacterDto,
   BookDetail,
   BookExportRow,
   BooksApi,
@@ -241,6 +242,84 @@ import { OutlineEditorComponent } from './outline-editor.component';
           </div>
         }
 
+        <!-- Characters -->
+        <div class="mb-10">
+          <div class="flex items-center justify-between mb-3">
+            <h2 class="font-display text-xl">Characters</h2>
+            <button (click)="toggleCharacterForm()"
+              class="text-sm text-brand-300 hover:text-brand-200">
+              {{ showCharacterForm() ? 'Cancel' : '+ Add character' }}
+            </button>
+          </div>
+          @if (showCharacterForm()) {
+            <div class="glass rounded-xl p-5 mb-4">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <label class="block">
+                  <span class="text-xs uppercase tracking-wider text-ink-400">Name</span>
+                  <input [(ngModel)]="newCharacter.name" [disabled]="savingCharacter()"
+                    class="mt-1 w-full bg-ink-900 border border-ink-700 rounded-md px-3 py-2 text-sm text-ink-100 disabled:opacity-50" />
+                </label>
+                <label class="block">
+                  <span class="text-xs uppercase tracking-wider text-ink-400">Personality</span>
+                  <input [(ngModel)]="newCharacter.personality" [disabled]="savingCharacter()"
+                    class="mt-1 w-full bg-ink-900 border border-ink-700 rounded-md px-3 py-2 text-sm text-ink-100 disabled:opacity-50" />
+                </label>
+                <label class="block md:col-span-2">
+                  <span class="text-xs uppercase tracking-wider text-ink-400">Description</span>
+                  <textarea [(ngModel)]="newCharacter.description" [disabled]="savingCharacter()" rows="2"
+                    class="mt-1 w-full bg-ink-900 border border-ink-700 rounded-md px-3 py-2 text-sm text-ink-100 disabled:opacity-50"></textarea>
+                </label>
+                <label class="block">
+                  <span class="text-xs uppercase tracking-wider text-ink-400">Background</span>
+                  <input [(ngModel)]="newCharacter.background" [disabled]="savingCharacter()"
+                    class="mt-1 w-full bg-ink-900 border border-ink-700 rounded-md px-3 py-2 text-sm text-ink-100 disabled:opacity-50" />
+                </label>
+                <label class="block">
+                  <span class="text-xs uppercase tracking-wider text-ink-400">Goals</span>
+                  <input [(ngModel)]="newCharacter.goals" [disabled]="savingCharacter()"
+                    class="mt-1 w-full bg-ink-900 border border-ink-700 rounded-md px-3 py-2 text-sm text-ink-100 disabled:opacity-50" />
+                </label>
+                <label class="block md:col-span-2">
+                  <span class="text-xs uppercase tracking-wider text-ink-400">Conflicts</span>
+                  <input [(ngModel)]="newCharacter.conflicts" [disabled]="savingCharacter()"
+                    class="mt-1 w-full bg-ink-900 border border-ink-700 rounded-md px-3 py-2 text-sm text-ink-100 disabled:opacity-50" />
+                </label>
+              </div>
+              <button (click)="addCharacter()" [disabled]="savingCharacter() || !newCharacter.name.trim()"
+                class="mt-3 bg-gradient-to-r from-brand-600 to-fuchsia-600 hover:from-brand-500 hover:to-fuchsia-500 text-white font-medium rounded-lg px-4 py-2 text-sm disabled:opacity-50">
+                {{ savingCharacter() ? 'Saving…' : 'Add character' }}
+              </button>
+            </div>
+          }
+          @if (characters().length === 0 && !showCharacterForm()) {
+            <div class="glass rounded-xl p-6 text-center text-ink-400 text-sm">
+              No characters added yet.
+            </div>
+          } @else {
+            <div class="space-y-2">
+              @for (ch of characters(); track ch.id) {
+                <div class="glass rounded-lg p-4 flex items-start justify-between gap-4">
+                  <div class="min-w-0 flex-1">
+                    <div class="font-medium text-ink-100">{{ ch.name }}</div>
+                    @if (ch.personality) {
+                      <div class="text-xs text-brand-300 mt-0.5">{{ ch.personality }}</div>
+                    }
+                    @if (ch.description) {
+                      <div class="text-sm text-ink-400 mt-1">{{ ch.description }}</div>
+                    }
+                    <div class="flex flex-wrap gap-x-4 gap-y-1 mt-1 text-xs text-ink-500">
+                      @if (ch.background) { <span>Background: {{ ch.background }}</span> }
+                      @if (ch.goals) { <span>Goals: {{ ch.goals }}</span> }
+                      @if (ch.conflicts) { <span>Conflicts: {{ ch.conflicts }}</span> }
+                    </div>
+                  </div>
+                  <button (click)="deleteCharacter(ch.id)" class="text-xs text-ink-400 hover:text-rose-300 shrink-0">Delete</button>
+                </div>
+              }
+            </div>
+          }
+        </div>
+
         <!-- Cover picker -->
         <div class="mb-10">
           <app-cover-picker
@@ -435,6 +514,11 @@ export class BooksDetailComponent implements OnInit, OnDestroy {
   saving = signal(false);
   saveError = signal<string | null>(null);
   authors = signal<AuthorSummary[]>([]);
+
+  characters = signal<BookCharacterDto[]>([]);
+  showCharacterForm = signal(false);
+  savingCharacter = signal(false);
+  newCharacter = { name: '', description: '', personality: '', background: '', goals: '', conflicts: '' };
   editForm: {
     title: string; subtitle: string; genre: string; targetAudience: string;
     writingTone: string; language: string; targetWordCount: number | null;
@@ -483,6 +567,7 @@ export class BooksDetailComponent implements OnInit, OnDestroy {
     this.fetch();
     this.fetchAssets();
     this.fetchExports();
+    this.fetchCharacters();
 
     this.notifications.joinProject(this.id).then(() => this.live.set(true));
     this.sub = this.notifications.jobProgress$.subscribe((evt: JobProgressEvent) => {
@@ -582,6 +667,42 @@ export class BooksDetailComponent implements OnInit, OnDestroy {
         this.saveError.set(err?.error?.error ?? 'Save failed.');
       },
     });
+  }
+
+  private fetchCharacters() {
+    this.api.listCharacters(this.id).subscribe((list) => this.characters.set(list));
+  }
+
+  toggleCharacterForm() {
+    const next = !this.showCharacterForm();
+    if (next) {
+      this.newCharacter = { name: '', description: '', personality: '', background: '', goals: '', conflicts: '' };
+    }
+    this.showCharacterForm.set(next);
+  }
+
+  addCharacter() {
+    if (!this.newCharacter.name.trim()) return;
+    this.savingCharacter.set(true);
+    this.api.createCharacter(this.id, {
+      name: this.newCharacter.name,
+      description: this.newCharacter.description || null,
+      personality: this.newCharacter.personality || null,
+      background: this.newCharacter.background || null,
+      goals: this.newCharacter.goals || null,
+      conflicts: this.newCharacter.conflicts || null,
+    }).subscribe({
+      next: () => {
+        this.savingCharacter.set(false);
+        this.showCharacterForm.set(false);
+        this.fetchCharacters();
+      },
+      error: () => this.savingCharacter.set(false),
+    });
+  }
+
+  deleteCharacter(characterId: string) {
+    this.api.deleteCharacter(this.id, characterId).subscribe(() => this.fetchCharacters());
   }
 
   // Refresh the book detail so the chapter list updates, then close the editor.

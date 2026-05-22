@@ -112,6 +112,26 @@ export interface SubmitBookRequest {
   priority: number;
 }
 
+export interface BookCharacterDto {
+  id: string;
+  name: string;
+  description?: string | null;
+  personality?: string | null;
+  background?: string | null;
+  goals?: string | null;
+  conflicts?: string | null;
+  createdDate: string;
+}
+
+export interface CreateBookCharacterRequest {
+  name: string;
+  description?: string | null;
+  personality?: string | null;
+  background?: string | null;
+  goals?: string | null;
+  conflicts?: string | null;
+}
+
 export interface BookAsset {
   id: string;
   assetType: string;
@@ -211,6 +231,18 @@ export class BooksApi {
       `/api/books/${id}/chapters/${chapterId}/regenerate`,
       {},
     );
+  }
+
+  listCharacters(id: string): Observable<BookCharacterDto[]> {
+    return this.http.get<BookCharacterDto[]>(`/api/books/${id}/characters`);
+  }
+
+  createCharacter(id: string, req: CreateBookCharacterRequest): Observable<BookCharacterDto> {
+    return this.http.post<BookCharacterDto>(`/api/books/${id}/characters`, req);
+  }
+
+  deleteCharacter(bookId: string, characterId: string): Observable<void> {
+    return this.http.delete<void>(`/api/books/${bookId}/characters/${characterId}`);
   }
 
   listAssets(id: string): Observable<BookAsset[]> {
