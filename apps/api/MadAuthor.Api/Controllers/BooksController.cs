@@ -1,3 +1,4 @@
+using MadAuthor.Application.Audit;
 using MadAuthor.Application.Auth;
 using MadAuthor.Contracts.Books;
 using MadAuthor.Domain.Entities;
@@ -14,7 +15,8 @@ namespace MadAuthor.Api.Controllers;
 [Route("api/books")]
 public class BooksController(
     MadAuthorDbContext db,
-    ICurrentUserService currentUser) : ControllerBase
+    ICurrentUserService currentUser,
+    IAuditService audit) : ControllerBase
 {
     [HttpGet]
     public async Task<ActionResult<IReadOnlyList<BookSummary>>> List()
@@ -61,6 +63,9 @@ public class BooksController(
         };
         db.BookProjects.Add(project);
         await db.SaveChangesAsync();
+
+        await audit.LogAsync("BookProject", project.Id.ToString(), "Created",
+            new { project.Title, project.Genre, project.AuthorId });
 
         return CreatedAtAction(nameof(Get), new { id = project.Id },
             new BookSummary(project.Id, project.Title, project.Subtitle, project.Genre,
@@ -138,6 +143,8 @@ public class BooksController(
 
         project.UpdatedDate = DateTime.UtcNow;
         await db.SaveChangesAsync(ct);
+
+        await audit.LogAsync("BookProject", project.Id.ToString(), "Updated", req);
 
         var authorName = project.AuthorId.HasValue
             ? await db.Authors.Where(a => a.Id == project.AuthorId.Value).Select(a => a.PenName).FirstOrDefaultAsync(ct)
