@@ -1,4 +1,4 @@
-@MadAuthor.Api_HostAddress = http://localhost:4212
+@MadAuthor.Api_HostAddress = http://localhost:3012
 
 GET {{MadAuthor.Api_HostAddress}}/weatherforecast/
 Accept: application/json

@@ -80,6 +80,19 @@ if (-not $apiHost -or -not $apiUser -or -not $apiPass -or -not $apiPath) {
 if (-not $apiPath.StartsWith('/')) { $apiPath = "/$apiPath" }
 if (-not $apiPath.EndsWith('/'))   { $apiPath = "$apiPath/" }
 
+$ftpTlsRaw = if ($envVars.ContainsKey('FTP_TLS')) {
+    $envVars['FTP_TLS'].ToLowerInvariant()
+} elseif ($envVars.ContainsKey('API_FTP_USE_TLS') -and $envVars['API_FTP_USE_TLS'].ToLowerInvariant() -eq 'false') {
+    'false'
+} else {
+    'explicit'
+}
+$ftpCurlArgs = @()
+if ($ftpTlsRaw -ne 'false') {
+    $ftpCurlArgs += '--ssl-reqd'
+    $ftpCurlArgs += '--insecure'
+}
+
 $curl = (Get-Command curl.exe).Source
 $tempOffline = Join-Path $env:TEMP "madauthor_app_offline.htm"
 
@@ -100,7 +113,7 @@ Write-Host ""
 Write-Host "==> Forcing API app pool recycle via app_offline.htm" -ForegroundColor Cyan
 
 # 1. PUT app_offline.htm so IIS sees it and unloads the app domain.
-& $curl --silent --show-error --ssl-reqd --insecure --ftp-create-dirs `
+& $curl --silent --show-error @ftpCurlArgs --ftp-create-dirs `
         --user "${apiUser}:${apiPass}" `
         --upload-file $tempOffline $remoteUrl
 if ($LASTEXITCODE -ne 0) {
@@ -113,7 +126,7 @@ Write-Host "    + app_offline.htm uploaded - IIS unloading app domain."
 Start-Sleep -Seconds 3
 
 # 3. DELETE app_offline.htm so the next request reloads with the new DLLs.
-& $curl --silent --show-error --ssl-reqd --insecure `
+& $curl --silent --show-error @ftpCurlArgs `
         --user "${apiUser}:${apiPass}" `
         --quote "DELE ${apiPath}app_offline.htm" `
         "ftp://${apiHost}/" | Out-Null

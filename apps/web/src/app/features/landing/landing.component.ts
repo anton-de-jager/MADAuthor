@@ -2,6 +2,21 @@ import { Component, computed, inject, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../core/auth/auth.service';
 
+const MAD_UNIVERSE_APPS = [
+  { name: 'MAD Prospects', url: 'https://madprospects.com/', logo: 'https://madprospects.com/media/logo-wide-madprospects.png' },
+  { name: 'MADai', url: 'https://madai.madprospects.com/', logo: 'https://madprospects.com/media/logo-wide-MADai.png' },
+  { name: 'MADAuthor', url: 'https://madauthor.madprospects.com/', logo: 'https://madprospects.com/media/logo-wide-MADAuthor.png' },
+  { name: 'MAD Cloud', url: 'https://madcloud.madprospects.com/', logo: '' },
+  { name: 'MADCreate', url: 'https://madcreate.madprospects.com/', logo: 'https://madprospects.com/media/logo-wide-MADCreate.png' },
+  { name: 'MADHub', url: 'https://madhub.madprospects.com/', logo: 'https://madprospects.com/media/logo-wide-MADHub.png' },
+  { name: 'MADLeads', url: 'https://madleads.madprospects.com/', logo: 'https://madprospects.com/media/logo-wide-MADLeads.png' },
+  { name: 'MADLearn', url: 'https://madlearn.madprospects.com/', logo: 'https://madprospects.com/media/logo-wide-MADLearn.png' },
+  { name: 'MADLove', url: 'https://madlove.madprospects.com/', logo: 'https://madprospects.com/media/logo-wide-MADLove.png' },
+  { name: 'MADMultisciple', url: 'https://madmultisciple.madprospects.com/', logo: 'https://madprospects.com/media/logo-wide-MADMultisciple.png' },
+  { name: 'MADPulse', url: 'https://madpulse.madprospects.com/', logo: 'https://madprospects.com/media/logo-wide-MADPulse.png' },
+  { name: 'MADRecruiting', url: 'https://madrecruiting.madprospects.com/', logo: 'https://madprospects.com/media/logo-wide-MADRecruiting.png' },
+] as const;
+
 @Component({
   selector: 'app-landing',
   standalone: true,
@@ -65,7 +80,7 @@ import { AuthService } from '../../core/auth/auth.service';
               } @else {
                 <a routerLink="/register"
                    class="group relative inline-flex items-center gap-2 bg-gradient-to-r from-brand-600 to-fuchsia-600 hover:from-brand-500 hover:to-fuchsia-500 text-white font-medium rounded-xl px-7 py-4 text-lg transition shadow-2xl shadow-brand-900/50">
-                  Start your first book
+                  Start writing my book
                   <span class="transition-transform group-hover:translate-x-1">→</span>
                   <span class="absolute inset-0 rounded-xl ring-2 ring-brand-400/0 group-hover:ring-brand-400/40 transition"></span>
                 </a>
@@ -137,6 +152,25 @@ import { AuthService } from '../../core/auth/auth.service';
                   <span class="text-ink-500">≈ 4 days</span>
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="mad-universe-strip" aria-label="Explore the MAD universe">
+        <div class="mad-universe-inner">
+          <p class="mad-universe-kicker"><span aria-hidden="true">*</span> The MAD universe</p>
+          <div class="mad-universe-marquee">
+            <div class="mad-universe-track">
+              @for (app of madUniverseApps.concat(madUniverseApps); track app.name + $index) {
+                <a class="mad-universe-link" [href]="app.url" target="_blank" rel="noopener" [attr.aria-label]="app.name">
+                  @if (app.logo) {
+                    <img [src]="app.logo" [alt]="app.name" loading="lazy" decoding="async" />
+                  } @else {
+                    <span class="mad-universe-text">{{ app.name }}</span>
+                  }
+                </a>
+              }
             </div>
           </div>
         </div>
@@ -343,7 +377,7 @@ import { AuthService } from '../../core/auth/auth.service';
               } @else {
                 <a routerLink="/register"
                    class="inline-flex items-center gap-2 bg-gradient-to-r from-brand-600 to-fuchsia-600 hover:from-brand-500 hover:to-fuchsia-500 text-white font-medium rounded-xl px-8 py-4 text-lg transition shadow-2xl shadow-brand-900/50">
-                  Start writing &mdash; free →
+                  Start writing my book &mdash; free →
                 </a>
                 <div class="mt-4 text-xs text-ink-500">No credit card · No setup · Cancel any time</div>
               }
@@ -370,11 +404,111 @@ import { AuthService } from '../../core/auth/auth.service';
       0%, 100% { background-position: 0% 50%; }
       50%      { background-position: 100% 50%; }
     }
+    .mad-universe-strip {
+      position: relative;
+      overflow: hidden;
+      background: #0d1628;
+      border-top: 1px solid rgba(148, 163, 184, 0.16);
+      border-bottom: 1px solid rgba(148, 163, 184, 0.16);
+      padding: 16px 0;
+    }
+    .mad-universe-inner {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+    .mad-universe-kicker {
+      flex: 0 0 auto;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin: 0;
+      color: #7dd3fc;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      line-height: 1;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    .mad-universe-kicker span { color: #38bdf8; }
+    .mad-universe-marquee {
+      flex: 1 1 auto;
+      min-width: 0;
+      overflow: hidden;
+      -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+      mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+    }
+    .mad-universe-track {
+      display: flex;
+      align-items: center;
+      gap: 36px;
+      width: max-content;
+      animation: madUniverseScroll 44s linear infinite;
+    }
+    .mad-universe-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: max-content;
+      opacity: 0.78;
+      text-decoration: none;
+      transition: opacity 160ms ease, transform 160ms ease;
+    }
+    .mad-universe-link:hover { opacity: 1; transform: translateY(-1px); }
+    .mad-universe-link img {
+      display: block;
+      width: auto;
+      max-width: 168px;
+      height: 24px;
+      object-fit: contain;
+      filter: drop-shadow(0 0 12px rgba(255,255,255,0.08));
+    }
+    .mad-universe-text {
+      color: #cbd5e1;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      line-height: 1;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    @keyframes madUniverseScroll {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+    @media (max-width: 760px) {
+      .mad-universe-inner {
+        align-items: stretch;
+        flex-direction: column;
+        gap: 12px;
+        padding: 0 18px;
+      }
+      .mad-universe-kicker { justify-content: center; }
+      .mad-universe-track { gap: 28px; animation-duration: 52s; }
+      .mad-universe-link img { height: 20px; max-width: 142px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .mad-universe-track {
+        animation: none;
+        flex-wrap: wrap;
+        justify-content: center;
+        width: auto;
+      }
+      .mad-universe-marquee {
+        -webkit-mask-image: none;
+        mask-image: none;
+      }
+    }
   `],
 })
 export class LandingComponent {
   private auth = inject(AuthService);
 
+  protected readonly madUniverseApps = MAD_UNIVERSE_APPS;
   signedIn = computed(() => this.auth.isAuthenticated());
 
   year = new Date().getFullYear();

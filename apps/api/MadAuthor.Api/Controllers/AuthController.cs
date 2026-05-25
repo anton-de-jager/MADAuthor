@@ -115,6 +115,7 @@ public class AuthController(
     }
 
     [HttpPost("login")]
+    [HttpPost("signin")]
     public async Task<ActionResult<AuthResponse>> Login([FromBody] LoginRequest req)
     {
         var user = await users.FindByEmailAsync(req.Email);

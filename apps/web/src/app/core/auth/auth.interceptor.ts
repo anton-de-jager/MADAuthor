@@ -4,14 +4,14 @@ import { catchError, switchMap, throwError } from 'rxjs';
 import { AuthService } from './auth.service';
 import { environment } from '../../../environments/environment';
 
-const PUBLIC_ENDPOINTS = ['/api/auth/login', '/api/auth/register', '/api/auth/refresh'];
+const PUBLIC_ENDPOINTS = ['/api/auth/signin', '/api/auth/register', '/api/auth/refresh'];
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const auth = inject(AuthService);
   const token = auth.accessToken();
 
   // Rewrite relative /api/* and /hubs/* paths to the absolute API URL in production.
-  // Dev keeps relative paths and lets the ng-serve proxy forward to localhost:4212.
+  // Dev keeps relative paths and lets the ng-serve proxy forward to localhost:3012.
   const isRelativeApi =
     (req.url.startsWith('/api/') || req.url.startsWith('/hubs/')) &&
     !!environment.apiBase;

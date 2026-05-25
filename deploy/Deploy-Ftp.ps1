@@ -85,7 +85,16 @@ $fePath  = Require-Var 'FE_FTP_PATH'
 #   'explicit' / 'true'  → ftp://  + --ssl-reqd  (port 21, AUTH TLS upgrade)
 #   'implicit'           → ftps:// (port 990, old-style, rare)
 #   'false'              → plain ftp:// (no encryption - only on a trusted LAN)
-$ftpTlsRaw = if ($envVars.ContainsKey('FTP_TLS')) { $envVars['FTP_TLS'].ToLowerInvariant() } else { 'explicit' }
+$ftpTlsRaw = if ($envVars.ContainsKey('FTP_TLS')) {
+    $envVars['FTP_TLS'].ToLowerInvariant()
+} elseif (
+    ($envVars.ContainsKey('API_FTP_USE_TLS') -and $envVars['API_FTP_USE_TLS'].ToLowerInvariant() -eq 'false') -and
+    ($envVars.ContainsKey('FE_FTP_USE_TLS') -and $envVars['FE_FTP_USE_TLS'].ToLowerInvariant() -eq 'false')
+) {
+    'false'
+} else {
+    'explicit'
+}
 switch ($ftpTlsRaw) {
     'implicit' { $scheme = 'ftps'; $tlsFlag = $null }
     'false'    { $scheme = 'ftp';  $tlsFlag = $null }

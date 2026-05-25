@@ -58,6 +58,8 @@ if (builder.Environment.IsDevelopment())
     EnsureSqlDatabaseExists(connStr);
     EnsureSqlDatabaseExists(hangfireConnStr);
 }
+var appDbAvailable = CanOpenSqlConnection(connStr, "App");
+var hangfireAvailable = CanOpenSqlConnection(hangfireConnStr, "Hangfire");
 
 // --- Persistence + Identity -----------------------------------------------
 builder.Services.AddMadAuthorPersistence(connStr);
@@ -189,24 +191,38 @@ builder.Services.AddSingleton<IJwtService, JwtService>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 builder.Services.AddScoped<MadAuthor.Application.Audit.IAuditService, MadAuthor.Infrastructure.Audit.AuditService>();
-builder.Services.AddHostedService<JobProgressBroadcaster>();
-builder.Services.AddHostedService<PipelineOrchestrator>();
-builder.Services.AddHostedService<ExportRendererService>();
+if (appDbAvailable)
+{
+    builder.Services.AddHostedService<JobProgressBroadcaster>();
+    builder.Services.AddHostedService<PipelineOrchestrator>();
+    builder.Services.AddHostedService<ExportRendererService>();
+}
+else
+{
+    Log.Warning("Database-backed hosted services are disabled because the app SQL database is unavailable.");
+}
 
 // QuestPDF is free for non-commercial use under the Community license; required to set.
 QuestPDF.Settings.License = QuestPDF.Infrastructure.LicenseType.Community;
 
 // --- Hangfire (deterministic background jobs - exports, notifications) ----
-builder.Services.AddHangfire(cfg => cfg
-    .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
-    .UseSimpleAssemblyNameTypeSerializer()
-    .UseRecommendedSerializerSettings()
-    .UseSqlServerStorage(hangfireConnStr, new SqlServerStorageOptions
-    {
-        PrepareSchemaIfNecessary = true,
-        QueuePollInterval = TimeSpan.FromSeconds(5),
-    }));
-builder.Services.AddHangfireServer();
+if (hangfireAvailable)
+{
+    builder.Services.AddHangfire(cfg => cfg
+        .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
+        .UseSimpleAssemblyNameTypeSerializer()
+        .UseRecommendedSerializerSettings()
+        .UseSqlServerStorage(hangfireConnStr, new SqlServerStorageOptions
+        {
+            PrepareSchemaIfNecessary = true,
+            QueuePollInterval = TimeSpan.FromSeconds(5),
+        }));
+    builder.Services.AddHangfireServer();
+}
+else
+{
+    Log.Warning("Hangfire is disabled because the Hangfire SQL database is unavailable.");
+}
 
 // --- ASP.NET basics --------------------------------------------------------
 // NOTE: we deliberately do NOT register JsonStringEnumConverter globally.
@@ -238,11 +254,11 @@ builder.Services.AddSwaggerGen(c =>
 });
 builder.Services.AddSignalR();
 
-// CORS - dev (Angular at localhost:3012) + prod (madauthor.madprospects.com) + any extras
+// CORS - dev (Angular at localhost:4212) + prod (madauthor.madprospects.com) + any extras
 // from CORS_ORIGINS env var (comma-separated). Credentials allowed for the refresh cookie.
 var corsOrigins = new List<string>
 {
-    "http://localhost:3012",
+    "http://localhost:4212",
     "https://madauthor.madprospects.com",
 };
 var extraOrigins = Environment.GetEnvironmentVariable("CORS_ORIGINS");
@@ -261,28 +277,50 @@ var app = builder.Build();
 
 // Apply any pending EF migrations on startup. Cheap for our small schema, and removes the
 // "deployed but forgot to run dotnet ef database update" failure mode. Logged so it's visible.
-using (var scope = app.Services.CreateScope())
+if (appDbAvailable)
 {
-    var dbCtx = scope.ServiceProvider.GetRequiredService<MadAuthorDbContext>();
-    try
+    using (var scope = app.Services.CreateScope())
     {
-        var pending = (await dbCtx.Database.GetPendingMigrationsAsync()).ToList();
-        if (pending.Count > 0)
+        var dbCtx = scope.ServiceProvider.GetRequiredService<MadAuthorDbContext>();
+        try
         {
-            Log.Information("Applying {Count} pending EF migration(s): {Names}",
-                pending.Count, string.Join(", ", pending));
-            await dbCtx.Database.MigrateAsync();
-            Log.Information("EF migrations applied.");
+            var pending = (await dbCtx.Database.GetPendingMigrationsAsync()).ToList();
+            if (pending.Count > 0)
+            {
+                Log.Information("Applying {Count} pending EF migration(s): {Names}",
+                    pending.Count, string.Join(", ", pending));
+                await dbCtx.Database.MigrateAsync();
+                Log.Information("EF migrations applied.");
+            }
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, "EF migration step failed - the app will still start, but some features may misbehave.");
         }
     }
-    catch (Exception ex)
-    {
-        Log.Error(ex, "EF migration step failed - the app will still start, but some features may misbehave.");
-    }
+}
+else
+{
+    Log.Warning("Skipping EF migrations because the app SQL database is unavailable.");
 }
 
-// Seed roles + publishing platforms on every startup (idempotent).
-await DbSeeder.SeedAsync(app.Services);
+// Seed roles + publishing platforms on every startup (idempotent). Do not let
+// transient/credential DB failures prevent the API from answering health/CORS.
+try
+{
+    if (appDbAvailable)
+    {
+        await DbSeeder.SeedAsync(app.Services);
+    }
+    else
+    {
+        Log.Warning("Skipping database seed because the app SQL database is unavailable.");
+    }
+}
+catch (Exception ex)
+{
+    Log.Error(ex, "Database seed step failed - the app will still start, but login/data features may fail.");
+}
 
 // JobProgressBroadcaster is registered as a HostedService - see Realtime/.
 
@@ -332,10 +370,10 @@ app.Use(async (ctx, next) =>
     await next();
 });
 
+app.UseRouting();
 app.UseCors("default");
 // Catch everything below this point - including auth + controllers - and surface a JSON body.
 app.UseMiddleware<GlobalExceptionMiddleware>();
-app.UseRouting();
 
 // /claude worker-token bypass. Runs before UseAuthentication so a successful match
 // pre-fills ctx.User with a forged Admin/Owner principal; the downstream
@@ -386,10 +424,13 @@ app.MapControllers();
 app.MapHub<NotificationHub>("/hubs/notifications");
 
 // Hangfire dashboard gated by Admin/Owner role (or MADAUTHOR_HANGFIRE_OPEN=true for dev bootstrap).
-app.UseHangfireDashboard("/hangfire", new DashboardOptions
+if (hangfireAvailable)
 {
-    Authorization = new[] { new HangfireDashboardAuthFilter() },
-});
+    app.UseHangfireDashboard("/hangfire", new DashboardOptions
+    {
+        Authorization = new[] { new HangfireDashboardAuthFilter() },
+    });
+}
 
 // --- Angular SPA (served when wwwroot has content - i.e. in the Docker image) ---
 // In dev, wwwroot is empty and `ng serve` handles the SPA via the proxy. In prod
@@ -478,4 +519,23 @@ static string NormalizeConnectionString(string input)
         MultipleActiveResultSets = true,
     };
     return b.ConnectionString;
+}
+
+static bool CanOpenSqlConnection(string connectionString, string label)
+{
+    try
+    {
+        var b = new SqlConnectionStringBuilder(connectionString)
+        {
+            ConnectTimeout = 3,
+        };
+        using var conn = new SqlConnection(b.ConnectionString);
+        conn.Open();
+        return true;
+    }
+    catch (Exception ex)
+    {
+        Log.Error(ex, "{Label} SQL connection check failed.", label);
+        return false;
+    }
 }
