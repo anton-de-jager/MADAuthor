@@ -483,14 +483,12 @@ $RECYCLE.BIN/
 # Vim temporary swap files
 *.swp
 
-# .NET Core API specific patterns (apps/api)
+# .NET Core API
 apps/api/[Bb]in/
 apps/api/[Oo]bj/
 apps/api/*.user
-apps/api/appsettings.Development.json
 
-# Angular Web specific patterns (apps/web)
+# Angular Web
 apps/web/node_modules/
 apps/web/dist/
 apps/web/.angular/
-apps/web/*.log
