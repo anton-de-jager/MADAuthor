@@ -24,7 +24,7 @@ public static class HumanVoice
     {
         if (string.IsNullOrWhiteSpace(raw)) return null;
 
-        // Hide any diagnostic / system-internal release notes outright — these come
+        // Hide any diagnostic / system-internal release notes outright - these come
         // from the worker's `release` subcommand or developer-side test claims.
         var lower = raw.ToLowerInvariant();
         if (lower.Contains("diagnostic")
@@ -49,7 +49,7 @@ public static class HumanVoice
             {
                 AIJobType.PlanBook        => "Our planner hit a small snag and is starting again.",
                 AIJobType.DraftChapter    => "Our writer hit a small snag on this chapter and is having another go.",
-                AIJobType.EditChapter     => "Our editor needs another pass — circling back now.",
+                AIJobType.EditChapter     => "Our editor needs another pass - circling back now.",
                 AIJobType.ResearchTopic   => "The research desk needs another moment to confirm sources.",
                 AIJobType.ContinuityCheck => "Our continuity reader is double-checking a few details.",
                 AIJobType.GenerateCover   => "The cover designer is trying a fresh angle.",
@@ -86,7 +86,7 @@ public static class HumanVoice
     }
 
     /// <summary>
-    /// User-facing status label. Hides "Claimed" entirely — to the user, "Claimed" and
+    /// User-facing status label. Hides "Claimed" entirely - to the user, "Claimed" and
     /// "InProgress" both just mean "someone on the team is on it right now".
     /// </summary>
     public static string HumanizeStatus(AIJobStatus s) => s switch
@@ -113,7 +113,7 @@ public static class HumanVoice
     };
 
     /// <summary>
-    /// Each role on the AI book team gets a name. Static for now — one persona per role —
+    /// Each role on the AI book team gets a name. Static for now - one persona per role -
     /// so the user sees consistent "people" across the lifecycle of a book.
     /// </summary>
     public static string Persona(AIJobType jobType) => jobType switch

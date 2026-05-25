@@ -17,7 +17,7 @@ public class UnsplashOptions
 /// Minimal Unsplash REST client. Honors the Unsplash API guidelines:
 ///  - Uses the documented <c>links.download_location</c> tracking endpoint when fetching photo bytes.
 ///  - Returns the full photo record so attribution (photographer name + profile URL) can be stored.
-/// Requires a free Access Key from https://unsplash.com/developers — read from <c>UNSPLASH_ACCESS_KEY</c>.
+/// Requires a free Access Key from https://unsplash.com/developers - read from <c>UNSPLASH_ACCESS_KEY</c>.
 /// </summary>
 public class UnsplashClient : IUnsplashClient
 {
@@ -88,7 +88,7 @@ public class UnsplashClient : IUnsplashClient
             if (tracking?.Url is null)
                 throw new InvalidOperationException("Unsplash did not return a download URL.");
 
-            // 2. Fetch the actual image bytes — Unsplash CDN doesn't require auth headers.
+            // 2. Fetch the actual image bytes - Unsplash CDN doesn't require auth headers.
             using var cdn = new HttpClient();
             cdn.DefaultRequestHeaders.UserAgent.TryParseAdd($"{_options.AppName}/1.0");
             using var resp = await cdn.GetAsync(tracking.Url, ct);

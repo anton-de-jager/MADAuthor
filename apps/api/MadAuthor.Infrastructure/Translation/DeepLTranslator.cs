@@ -13,7 +13,7 @@ public sealed class DeepLTranslatorOptions
 
 /// <summary>
 /// DeepL Markdown translator. DeepL preserves Markdown reasonably well when called with
-/// <c>preserve_formatting=1</c> — line breaks, list markers, and emphasis tend to survive,
+/// <c>preserve_formatting=1</c> - line breaks, list markers, and emphasis tend to survive,
 /// though heading hashes and fenced code blocks are not guaranteed. We don't use
 /// <c>tag_handling=xml</c> because that mode expects XML/HTML tags, not Markdown.
 ///

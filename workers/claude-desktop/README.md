@@ -1,4 +1,4 @@
-# Claude Code Desktop worker — setup
+# Claude Code Desktop worker - setup
 
 This folder holds the standing prompt and SQL helpers for the AI worker. The actual work is done by [`apps/api/MadAuthor.Worker`](../../apps/api/MadAuthor.Worker) (a typed CLI the agent invokes for each DB operation).
 
@@ -13,7 +13,7 @@ cd C:\Code\madauthor\apps\api
 dotnet build MadAuthor.Worker -c Release
 ```
 
-This produces `MadAuthor.Worker/bin/Release/net8.0/madauthor-worker.exe`. The exe reads the same `appsettings.json` / `appsettings.Local.json` / `.env` as the API — no separate config.
+This produces `MadAuthor.Worker/bin/Release/net8.0/madauthor-worker.exe`. The exe reads the same `appsettings.json` / `appsettings.Local.json` / `.env` as the API - no separate config.
 
 ### 2. Smoke-test the CLI
 
@@ -23,7 +23,7 @@ cd C:\Code\madauthor\apps\api
 .\MadAuthor.Worker\bin\Release\net8.0\madauthor-worker.exe claim
 ```
 
-If `claim` prints `{"ok":true,"claimed":false}` you're good — no jobs pending. If a job is pending (you ran the create-book wizard in the web app), it'll print job details. Don't worry: the claim is now held for 15 minutes; the next cycle will see it as `InProgress`.
+If `claim` prints `{"ok":true,"claimed":false}` you're good - no jobs pending. If a job is pending (you ran the create-book wizard in the web app), it'll print job details. Don't worry: the claim is now held for 15 minutes; the next cycle will see it as `InProgress`.
 
 ### 3. Schedule a Claude Code session
 
@@ -45,7 +45,7 @@ That's it. The schedule wakes Claude Code, the prompt makes it claim a job, run 
 If you want to dry-run without waiting for the schedule:
 
 1. In Claude Code (this repo), say: *"Read `workers/claude-desktop/PROMPT.md` and execute its loop."*
-2. Watch the transcript — it should claim one job and complete it within ~30s.
+2. Watch the transcript - it should claim one job and complete it within ~30s.
 3. Refresh the book detail page in the Angular app. Chapters should appear.
 
 ## Where credentials come from
@@ -54,17 +54,17 @@ The worker CLI loads (in order, last wins):
 
 1. `apps/api/MadAuthor.Worker/bin/Release/net8.0/appsettings.json` (if present after build copy)
 2. `appsettings.Local.json` (gitignored, recommended for creds)
-3. Environment variables — including those from `.env` at the repo root (loaded via DotNetEnv on startup)
+3. Environment variables - including those from `.env` at the repo root (loaded via DotNetEnv on startup)
 
-For local dev, your existing root `.env` (with `DB_HOST`/`DB_USERNAME`/`DB_PASSWORD`/`DB_DATABASE`) is enough — but only if you run the worker from a directory the `.env` walker can reach. Easiest: run from the repo root.
+For local dev, your existing root `.env` (with `DB_HOST`/`DB_USERNAME`/`DB_PASSWORD`/`DB_DATABASE`) is enough - but only if you run the worker from a directory the `.env` walker can reach. Easiest: run from the repo root.
 
 ## Future: dedicated `madauthor_worker` SQL login
 
-For now, the worker uses the same SQL login as the API (`madproducts` per your `.env`). The architecture doc calls for a separate `madauthor_worker` principal with limited grants. Add when convenient:
+For now, the worker uses the same SQL login as the API from your `.env`. The architecture doc calls for a separate `madauthor_worker` principal with limited grants. Add when convenient:
 
 ```sql
 CREATE LOGIN madauthor_worker WITH PASSWORD = '<strong-random>';
-USE madapi;
+USE madauthor;
 CREATE USER madauthor_worker FOR LOGIN madauthor_worker;
 GRANT SELECT ON dbo.BookProjects, dbo.BookRequests, dbo.BookChapters,
                 dbo.BookCharacters, dbo.AIJobQueue TO madauthor_worker;

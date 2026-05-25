@@ -1,0 +1,23 @@
+{
+  "name": "MADAuthor",
+  "short_name": "MADAuthor",
+  "description": "AI-assisted book authoring and publishing studio.",
+  "start_url": "/home",
+  "display": "standalone",
+  "background_color": "#080d1a",
+  "theme_color": "#080d1a",
+  "icons": [
+    {
+      "src": "icon-MADAuthor.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-MADAuthor.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

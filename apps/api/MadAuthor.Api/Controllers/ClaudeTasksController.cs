@@ -17,13 +17,13 @@ namespace MadAuthor.Api.Controllers;
 /// <summary>
 /// Operator/dev task queue. See <c>docs/08-claude-task-system.md</c>. Surface area:
 /// <list type="bullet">
-///   <item><c>GET    /api/claude-tasks</c> — bucketed (active / to-deploy / terminal).</item>
-///   <item><c>GET    /api/claude-tasks/next</c> — worker poll. 200 <c>{task}</c> or 204.</item>
+///   <item><c>GET    /api/claude-tasks</c> - bucketed (active / to-deploy / terminal).</item>
+///   <item><c>GET    /api/claude-tasks/next</c> - worker poll. 200 <c>{task}</c> or 204.</item>
 ///   <item><c>GET    /api/claude-tasks/{id}</c></item>
 ///   <item><c>POST   /api/claude-tasks</c></item>
-///   <item><c>PATCH  /api/claude-tasks/{id}</c> — partial; terminal statuses need <c>?override=true</c>.</item>
+///   <item><c>PATCH  /api/claude-tasks/{id}</c> - partial; terminal statuses need <c>?override=true</c>.</item>
 ///   <item><c>DELETE /api/claude-tasks/{id}</c></item>
-///   <item><c>POST   /api/claude-tasks/import-bulk</c> — dedupe by trim+lowercase title vs PENDING+IN_PROGRESS.</item>
+///   <item><c>POST   /api/claude-tasks/import-bulk</c> - dedupe by trim+lowercase title vs PENDING+IN_PROGRESS.</item>
 ///   <item><c>POST   /api/claude-tasks/{id}/attachments</c> (multipart)</item>
 ///   <item><c>GET    /api/claude-tasks/{id}/attachments/{filename}/download</c></item>
 ///   <item><c>DELETE /api/claude-tasks/{id}/attachments/{filename}</c></item>

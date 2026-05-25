@@ -12,7 +12,7 @@ public static class MediaProcessingDependencyInjection
 {
     public static IServiceCollection AddMadAuthorMediaProcessing(this IServiceCollection services)
     {
-        // IHttpClientFactory is shared by Whisper + Vision clients. Idempotent — safe to call
+        // IHttpClientFactory is shared by Whisper + Vision clients. Idempotent - safe to call
         // even if AddHttpClient was already invoked elsewhere.
         services.AddHttpClient();
 

@@ -1,0 +1,164 @@
+﻿# Managing Up, Managing Sideways
+
+There is a quiet shock that arrives in the working life of a man who has spent his career looking after the people below him, and it arrives the first time he realises that the harder, slipperier, more career-shaping work is being done in the other two directions. Up the line, where the people who pay him and judge him sit. Sideways across the line, where the peers and the rivals and the long-suffering heads of other functions sit. He has spent years learning to lead a crew. He has read his men, settled their disputes, protected them from the weather above. He is, by any honest measure, good at that part. And then one Thursday afternoon, in a meeting he did not chair and could not leave, he watches a decision get made that will undo six months of his work, and he realises that nobody in the room is being insubordinate, nobody is being lazy, nobody is being a bad person at all, and yet the wrong answer is winning, comfortably, on points.
+
+That is the meeting that begins this chapter for me. I will not name the room or the people. The point is not the room. The point is the small, ugly recognition that arrived in me on the drive home that night, which was that I had been spending almost all of my management energy aimed downwards, where I was comfortable, and had been quietly neglecting two directions of work that were, in truth, doing more to shape what my team could and could not achieve than anything I was doing on the floor.
+
+This chapter is about those two directions. Up and across. The work of being trusted by people more senior than you, and of being heard by people who are, on paper, your equals but who are, in practice, competing with you for time and attention and budget. I will also touch, towards the end, on the third unavoidable population in a manager's life that nobody really teaches you about — the client — because in most businesses they sit somewhere between **up** and **sideways** depending on the day, and the same instincts apply.
+
+I want to say, before I start, that I am not going to tell you any of this is easy. I have been doing it for a long time and I still get it wrong. What I can tell you is that it is teachable. It is not a personality trait. It is a craft, like welding is a craft, and like welding it rewards patience and punishes hurry.
+
+## Why we all start by pointing downwards
+
+The first thing I want to be honest about is why so many of us, when we are promoted into management, instinctively spend all of our political energy looking at our own team.
+
+It is partly habit. It is what you were doing before. You came up through the trade. You learned to read the room you were standing in, which was the workshop, and the people whose opinions mattered to you were the men next to you. When you become a supervisor, and then a manager, the workshop simply gets a little larger and the men a little more various, but the instinct is the same: turn to your people, look at them properly, and tend to them.
+
+It is also partly comfort. You are good at it. There is real, immediate satisfaction in a well-managed team. You can see the work. You can see the morale. You can hear, in the way people answer you in the corridor, whether you are doing it right. Pointing your attention downwards is rewarding in a way that pointing it upwards almost never is, because the people upwards do not give you the same kind of warm, ongoing signal. They are busy. They are distracted. They are, frequently, being managed badly themselves, by somebody further up, and have learned not to spend their feelings cheaply.
+
+And finally — and this is the part we do not say out loud — pointing downwards is safer. Below you, you have authority. Above you, you have only persuasion. Sideways, you have only the relationship you have bothered to build before you needed it. Most of us, in our early years of management, simply prefer the part of the job where we are allowed to be right by appointment.
+
+The cost of this preference is invisible for a long time. The team is happy. The work goes out. The numbers, more or less, hold. And then one of those Thursday afternoon meetings happens, and you understand, very late, that you have been losing arguments in rooms you barely set foot in, and that your good and loyal team is being slowly squeezed by decisions you did not influence because you were not, in any real sense, present in the conversation when they were taken.
+
+I do not want you to make that mistake for as long as I did. So let us talk about up first, because in my experience that is where most of the avoidable damage gets done.
+
+## Managing up is not flattery
+
+I want to be very precise about what **managing up** means, because the phrase has a bad smell to it in workshops and on shop floors, and not for no reason.
+
+When most tradesmen hear *managing up*, they picture a particular kind of person. They picture the man who laughs slightly too loudly at the wrong jokes. The man who is in the boss's office for longer than the conversation seems to warrant. The man whose opinions in any meeting drift, almost imperceptibly, towards whatever the most senior person in the room said last. We have all worked with him. We have, most of us, at one bad moment, wondered if we should become him. He gets promoted slightly faster than he should, and he is forgotten slightly faster than he hopes.
+
+That is not what I am talking about. That is **flattery up**, and it is a different trade entirely. Flattery up is short-term and corrosive. It works for a year or two, until the person being flattered notices, which they always do in the end, because nobody senior enough to be worth flattering is also stupid enough to enjoy it indefinitely.
+
+Managing up, properly understood, is something else. It is the disciplined work of making it easier for the people above you to do their job well, in a way that also makes it easier for you to do yours. It is not about telling them what they want to hear. It is about telling them what they actually need to know, in the form they can actually use, at the time they can actually act on it.
+
+There are, in my experience, four parts to it, and I want to take them one at a time.
+
+### Know what their job actually is
+
+Most people, when they describe what their boss does, describe it in terms of what their boss does *to them*. He approves leave. He signs purchase orders. He sits in on the monthly review and asks awkward questions about the variance.
+
+That is not his job. That is the small visible bit of his job that intersects with yours. His real job is happening in rooms you are not in, against pressures you do not always see, with a clock you are not always told about. He has people above him. He has board members or owners or shareholders. He has a quarterly something to deliver. He has a politics, often, with peers of his own, which is exactly the sideways problem we are coming to in a moment, only one floor up.
+
+The single most useful thing I ever did for my relationship with the people above me was to spend a quiet six months — and it was that long — trying to work out, without ever asking the question directly, what their actual job was. What were they being measured on. What did they go home worrying about. Whose phone calls did they dread. Which numbers, on which reports, were they reading first. I did not do this so that I could *anticipate their needs* in some smarmy management-book sense. I did it because I had finally understood that if I did not know what game they were playing, I could not usefully help them win it, and if I could not help them win it, I was just one more demand on their time.
+
+Some of what I learned surprised me. The thing my boss was most quietly anxious about was almost never the thing he spent the most words on in our meetings. The thing he spent the most words on was usually whatever was easiest to talk about that week. The real worry sat underneath, and showed itself only sideways, in the way he asked about cash, or stock, or a particular client, or a particular man. Once you can hear that under-conversation, you become genuinely useful to him. Until you can hear it, you are just another head he has to manage.
+
+### Bring solved problems, not raw ones
+
+The second part of managing up, and the one tradesmen tend to find most foreign at first, is the discipline of how you bring a problem upwards.
+
+On the floor, you bring problems raw. There is a leaking line. There is a piece of stock that has not arrived. There is a man who has been off three days running. You walk up to the foreman and you say so. He nods. He sorts it. That is the contract.
+
+In an office, that contract does not hold any more, and a lot of newly promoted tradesmen, including me, get badly burned by not noticing the change in time. If you walk into a director's office with a raw problem, you are not bringing him useful information. You are bringing him extra work. He has just acquired your problem on top of his. He may smile and thank you. He will not, the next time around, be quite as glad to see you.
+
+What you owe him, instead, is the same problem with three things attached to it. What you think it is. What you have already done about it. And what you are asking him to do, specifically, if anything, that you cannot do yourself.
+
+Even when the answer to the third question is *nothing — I just need you to know* — phrasing it that way changes the whole shape of the conversation. He is no longer being handed a hand-grenade. He is being briefed on a situation that you are already on top of, and that he can either trust you to handle or, if he chooses, lean into and help. You have respected his time. You have demonstrated that you have thought. And you have, almost incidentally, advertised your own competence without having to claim it.
+
+This is not, by the way, a trick. If you do it as a trick, the people above you will smell it inside a month. It works because it is true. It works because, before you walk through their door, you have actually done the thinking that the foreman on the floor used to do for you. You have stopped outsourcing your judgement upwards.
+
+### Tell the truth early, especially the bad kind
+
+The third thing, and the one that earns you trust in the senior ranks faster than anything else, is this: you tell bad news early, accurately, and without dressing.
+
+I cannot stress this enough. Every manager I have ever respected, looking up the chain, has had the same single quality at the centre of them, which is that when something went wrong, you heard about it from them before you heard about it from anybody else. Every manager I have ever quietly stopped trusting, looking up the chain, has had the opposite quality, which was that bad news arrived through a side door, days late, dressed up in qualifications, with a small story already attached about why it was not really as bad as it sounded.
+
+There is a cost to telling the truth early. The cost is that you sometimes look worse, in the short term, than the man who is hiding the same problem behind a curtain. He looks calm. You look anxious. He is, for that brief week, the favourite. And then, four weeks later, his problem detonates without warning, and yours has already been quietly drained, and the senior people in the building notice — they always notice — who they heard from first.
+
+I learned this the hard way once, early in my career, when I sat on a piece of bad news for forty-eight hours because I wanted to "have a plan" before I walked in with it. By the time I walked in, somebody else had already mentioned it in passing, and my boss had spent a day and a half wondering, quite reasonably, why he was hearing about it from a third party. He did not shout. He never shouted. He just looked at me for a long, even second and said, in a voice I can still hear, *Next time, come in without the plan. I would rather build it with you than read about it from somebody else.* I have never forgotten that sentence. I have, on many occasions since, repeated it almost word-for-word to the people below me.
+
+### Make their boss look good through them
+
+The fourth and last part of managing up properly is something that took me almost a decade to understand, and I want to put it as plainly as I can.
+
+Your boss has a boss. Your boss's job, in part, is to make that person's life easier. If you can do work that makes your boss visibly more useful to *his* boss, you are no longer just an employee to him. You are a quiet asset.
+
+This is not about claiming credit. It is, in fact, the precise opposite. It is about doing work in such a way that your boss can carry it upwards as his own without embarrassment, because in some real sense it *is* his — he set the conditions, he held the cover, he made the call to bet on you in the first place. The instinct that wants every win to come back to your own desk is a very young instinct. It will hold you, if you let it, at the level you are currently at, for years longer than you need to be there.
+
+I am not telling you to be a doormat. I am telling you that, in a healthy organisation, credit flows naturally upwards through good managers and naturally downwards through them too, and that if you trust the flow long enough it will, in time, deposit a great deal of it on your own desk in forms you did not expect. If you do not trust the flow — if you grab at every visible piece of credit while it is still warm — the flow will quietly route around you, and you will not understand why.
+
+## Managing sideways: the most underrated craft in management
+
+If managing up is misunderstood, managing sideways is barely talked about at all in the kind of workplaces I came up in, and yet it is, in my experience, the single largest determinant of how far a competent manager actually rises.
+
+By *sideways* I mean your peers. The other department heads. The other site managers. The finance person who is, on paper, your equal. The sales head whose targets are the reason your factory is running hot. The HR manager whose policies you privately think are written for a company very different from the one you both work in. None of these people work for you. None of them work for the same boss as you, in most cases. None of them, in the strict sense, owe you anything. And yet you cannot do your job, and they cannot do theirs, without each other.
+
+Most fights inside a company are not fights between bosses and workers. They are fights between peers who have failed, sometimes for years, to manage each other.
+
+I have come to think that the people who get this right share three habits, and I want to walk through them, because they are not natural and they have to be practised.
+
+### Visit when nothing is wrong
+
+The first habit is, in some ways, the simplest, and it is the one that newly promoted tradesmen find hardest to do because it feels, at first, like a waste of time.
+
+The habit is this: you walk into your peers' worlds when nothing is on fire.
+
+You go to the finance manager's office on a quiet Wednesday and you ask him, sincerely, how the month is shaping up. You do not have a request. You do not have a problem. You are just there. You drink the bad office coffee. You let him talk. You listen for what is hard for him this week — not so that you can extract a favour, but so that you actually know.
+
+You do the same with the sales head. You do the same with the safety officer. You do the same with the HR manager, even if — *especially* if — you have privately thought of HR as a function that gets in the way of your work. You go into their world while it is calm.
+
+The reason this matters is the reason that every old foreman I ever respected used to walk the floor once a day for no reason. When something goes wrong — and something always, eventually, goes wrong — the relationship is already there. You are not knocking on a stranger's door asking for help. You are continuing a conversation with somebody who already knows you, already trusts you a little, and already has a working picture of what your world looks like. Help arrives faster, and with less politics, when the relationship was built before the crisis.
+
+The mistake the younger version of me made, repeatedly, was to treat my peers as people I dealt with when I needed something from them. They learned, quite naturally, to treat me the same way. We had, between us, a long-running negotiation with no warmth in it, and every interaction cost more than it needed to.
+
+I remember one particular finance manager I worked with for several years, a careful, dry man who I had, in my first year, written off as an obstacle. He flagged my purchase orders. He queried my overtime. He sent emails that read like polite refusals before I had even asked the question. I started, late, to go and sit in his office for ten minutes a week. No agenda. I asked him what was hard. I listened. Inside three months we were a different pair of people to each other. He was not, it turned out, an obstacle. He was a man trying to hold a line in his own world, against pressures I had not bothered to learn, and once I knew what those pressures were I could phrase my own requests in a way that did not, by accident, make his job harder. He started, quietly, finding ways to make mine easier. We never had a single dramatic conversation. The whole shift took place in those small, no-agenda Wednesday visits, and I have, ever since, treated the office down the corridor from mine as the most important room I do not work in.
+
+### Concede the small ones early
+
+The second habit is harder, because it goes against a great deal of how a working tradesman is wired.
+
+You concede the small ones early.
+
+Not the big ones. Not the ones where your team's safety or dignity or output is on the line. Those you fight for, and you fight for them clearly. The small ones. The ones where, if you are honest with yourself, you only want to win because losing would feel like losing.
+
+A meeting room scheduling dispute. A small piece of budget that another department would benefit from more than yours. A policy detail that costs you a little but costs them a lot to argue about. The colour, frankly, of a sign in the corridor. There are dozens of these every month in any real business, and a younger manager will, by reflex, contest most of them because contesting feels like leadership.
+
+Older managers do the opposite. They give the small ones up almost automatically. Not because they do not care. Because they have understood that their store of political credit with their peers is a finite resource, and that they would rather spend it on the three or four arguments a year that genuinely matter than bleed it slowly across a hundred skirmishes that will be forgotten by month-end.
+
+When you concede the small ones early, two things happen. The first is that your peers start, quietly, to like working with you. The second, and more important, is that when you do dig your heels in on something, they assume — usually correctly — that it must actually matter to you. Your *no* acquires weight precisely because your *yes* has been cheap.
+
+The man who fights every fight teaches the room that his fights mean nothing. The man who concedes the small ones teaches the room that when he stops conceding, they should pay attention.
+
+### Disagree the way you would want to be disagreed with
+
+The third habit is about how to disagree, and it is the one I have spent the most years getting wrong.
+
+You will, inevitably, sometimes need to oppose a peer in a public room. There is no avoiding this. The honest version of management is not one in which everyone politely agrees with each other while the business slowly goes off the road. The honest version requires that you sometimes say, in front of other people, *I do not agree, and here is why*.
+
+The question is how you do it. And the test I have learned, over years of getting it wrong, is the simplest one you can ask of yourself: *would I be alright being disagreed with this way?*
+
+That sounds soft. It is not soft. It is a discipline, and it has hard edges.
+
+It means you disagree with the *idea*, not the person. You do not say *I think Joe is wrong.* You say *I think the plan, as it sits, has a problem.* The difference looks small on paper and is enormous in the room.
+
+It means you steel-man the idea you are about to oppose. Before you say what is wrong with it, you describe what is right with it, in their words, until they nod. Then, and only then, do you say what concerns you. Anybody who has been disagreed with in this way knows the strange, disarming effect of it. You go in ready to defend, and you find there is, suddenly, very little to defend against, because the person across from you has already done you the courtesy of taking your idea seriously.
+
+It means you offer them, if at all possible, a way to win the next one. *I am asking the room to go a different way on this. I know that costs you. On the warehouse question next week, I think your view is the right one and I will say so.* That is not a deal. It is not horse-trading. It is the public acknowledgement that you and they are going to be in this building together for a long time, and that today's disagreement is one move in a long, repeated game.
+
+And it means, finally, that when the room has decided, even if it has decided against you, you commit to the decision in front of the same people. You do not walk out and tell your team a different story in the corridor. You do not slow-walk the implementation. You disagreed, openly. You lost, openly. You execute, openly. The next time you disagree, your peers will know that your opposition was honest, because they have seen what happens when you lose.
+
+## A short note on the client, who is both up and sideways at once
+
+I cannot finish this chapter honestly without saying something about clients, because in any business that survives long enough to be worth writing about, the client is the third presence in every meeting, even when nobody from their side is in the room.
+
+The client is, in a strange way, both an *up* and a *sideways*. They are up because they pay you, and what they think of you eventually finds its way back to whoever owns the business you work in. They are sideways because, on a good day, you are running a working relationship between two organisations, and the people on their side have their own bosses and their own peers and their own politics, all of which are invisible to you and all of which are shaping what you can get done together.
+
+I will not write a chapter on clients here — that would be a different book. But I will say this much: every single one of the lessons in this chapter, with very little modification, applies to them. You learn what their job actually is, not just the part of it that touches you. You bring them solved problems, not raw ones. You tell them bad news early, especially the kind that costs you something to tell. You visit when nothing is wrong. You concede the small ones. You disagree, when you must, with the idea, not the person, and you commit when the decision has been made.
+
+If you do those things consistently, with clients as with colleagues as with bosses, you stop being a supplier and start being a trusted hand. That is a different commercial position to occupy. It is also, not coincidentally, a much harder one for a competitor to dislodge you from.
+
+## What this looks like on a Tuesday
+
+I want to land this chapter where I land most of them, which is on an ordinary morning, because the truth of all of this is that it is not done in dramatic gestures. It is done in small, repeated, almost invisible acts of attention.
+
+A Tuesday on which you are managing up, sideways and across well looks, from the outside, very dull. You spend ten minutes in the finance manager's office on the way to your own, and you ask about the cash position not because you need anything from him but because you want to know. You read your boss's diary for the week before you go in to see him, so that you know what kind of pressure he is sitting under that day, and you adjust the way you bring your news accordingly. You let the small argument about parking go, in the morning meeting, even though you were technically right. You walk past the sales head's office at lunchtime and ask, sincerely, how the big tender is going, and then you actually listen to the answer.
+
+And in the afternoon, in a meeting that is going the wrong way, you say, in a calm voice, *I see why we are leaning towards this. I would not lean the same way, and here is what I am worried about.* And the room, because you have spent your week well, gives you the floor.
+
+None of that, written down like that, sounds like leadership. It sounds, almost, like good manners.
+
+That is the secret, in the end, of managing up and sideways. It looks like good manners. It is, in fact, the slow, deliberate construction of a working life in which the people around you and above you are genuinely glad you are in the building. They will return the favour in a thousand small ways that you will never be able to point to on an organogram, and that will, by the time you look back on your career, have done at least half of the work that you imagined, at the start, your own two hands would do.
+
+The other half, the half you do downwards, towards your team, is the subject of the next chapter. It is the easier half, in some ways. It is the half that, by this point in the journey, you already half know how to do. What you may not yet know is that you cannot do it well, no matter how hard you try, unless you have first done the upward and sideways work properly. A team is only ever as well led as the manager above them is well supported. That is the line I want you to hold in your head as you turn the page.
+

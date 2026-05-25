@@ -1,4 +1,4 @@
-# 03 — Worker and job lifecycle
+# 03 - Worker and job lifecycle
 
 This is the load-bearing piece of MADAuthor's design and the one that diverges most from a conventional SaaS architecture. The AI worker is **Claude Code Desktop itself**, scheduled to wake up periodically, poll the database for pending jobs, and process them as agentic sessions.
 
@@ -97,7 +97,7 @@ Key points:
 
 - `UPDLOCK, READPAST` together mean "lock the row I'm reading, and skip rows other transactions have already locked." This is the standard SQL Server FIFO-queue pattern.
 - The lock is held only for the duration of the `UPDATE`, not the duration of the job. The `LockExpiresAt` column extends the logical lock so other workers know not to touch the row.
-- A worker that crashes or hangs leaves `LockExpiresAt` in the past after 15 minutes. The next polling cycle reclaims the row (RetryCount stays the same — this is a "lease expired" recovery, not a retry).
+- A worker that crashes or hangs leaves `LockExpiresAt` in the past after 15 minutes. The next polling cycle reclaims the row (RetryCount stays the same - this is a "lease expired" recovery, not a retry).
 
 ## 4. Scheduling Claude Code Desktop
 
@@ -107,36 +107,36 @@ Setup, run once by Anton (this becomes a script under `workers/claude-desktop/`)
 
 1. Open Claude Code in `C:\Code\madauthor\workers\claude-desktop\`.
 2. Run `/schedule` (the schedule skill) to create a cron entry.
-3. Schedule: every 60 seconds during working hours (e.g. `*/1 8-22 * * *`) or every 30 seconds (`*/1 * * * *` with intra-minute sleeps) — see §6 for cadence rationale.
+3. Schedule: every 60 seconds during working hours (e.g. `*/1 8-22 * * *`) or every 30 seconds (`*/1 * * * *` with intra-minute sleeps) - see §6 for cadence rationale.
 4. Prompt: a literal pointer to `workers/claude-desktop/PROMPT.md`.
 
 When the schedule fires, Claude Code wakes, reads `PROMPT.md`, runs the workflow described there, exits.
 
-**Idle behavior.** If no jobs are pending, the prompt instructs Claude to upsert a heartbeat row and exit immediately. Cheap and fast — no LLM tokens consumed beyond reading the prompt and running the SQL.
+**Idle behavior.** If no jobs are pending, the prompt instructs Claude to upsert a heartbeat row and exit immediately. Cheap and fast - no LLM tokens consumed beyond reading the prompt and running the SQL.
 
 ## 5. The standing worker prompt (`PROMPT.md`)
 
 This is the prompt the scheduled task feeds Claude every wake-up. The actual file will be more detailed; this is the structural skeleton.
 
 ```markdown
-# MADAuthor Worker — Standing Instructions
+# MADAuthor Worker - Standing Instructions
 
 You are the MADAuthor AI worker. Each time you wake, you do this loop:
 
-## Step 1 — Heartbeat
+## Step 1 - Heartbeat
 
 Execute `workers/claude-desktop/heartbeat.sql` to upsert this worker's row in
 WorkerHeartbeats. Pass `$env:COMPUTERNAME-$PID` as @workerId.
 
-## Step 2 — Claim a job
+## Step 2 - Claim a job
 
 Execute `workers/claude-desktop/claim-job.sql`. If no row is returned, EXIT
-SILENTLY — there is nothing to do. Do NOT continue or speculate.
+SILENTLY - there is nothing to do. Do NOT continue or speculate.
 
 If a row is returned, you now own job @jobId with type @jobType and input
 @inputJson until LockExpiresAt.
 
-## Step 3 — Dispatch
+## Step 3 - Dispatch
 
 Look up @jobType. Use the Agent tool with the matching subagent and prompt
 template from `packages/prompts/`:
@@ -155,7 +155,7 @@ template from `packages/prompts/`:
 Hand the subagent: the BookProject + BookRequest context (read from DB), the
 prompt template, and the job input JSON.
 
-## Step 4 — Persist results
+## Step 4 - Persist results
 
 As the subagent produces output:
 - Chapters → INSERT/UPDATE BookChapters
@@ -166,7 +166,7 @@ As the subagent produces output:
 Use `workers/claude-desktop/update-progress.sql` between subagent calls to
 write Stage and Progress to AIJobQueue.
 
-## Step 5 — Complete or fail
+## Step 5 - Complete or fail
 
 On success:
 - UPDATE AIJobQueue SET Status = 3 (Completed), CompletedDate = SYSUTCDATETIME(),
@@ -180,7 +180,7 @@ On failure:
   ErrorMessage = <message>.
 - Otherwise: UPDATE Status = 4 (Failed), ErrorMessage = <message>.
 
-## Step 6 — Exit
+## Step 6 - Exit
 
 Do not look for another job in the same wake-up. The next schedule tick picks
 up the next one. Keeping each wake-up to one job bounds the runtime and
@@ -195,9 +195,9 @@ Claude Code's prompt cache has a 5-minute TTL. Sleeping past 300 seconds means t
 
 Options:
 
-- **Every 30s during active hours** — fast pickup, cheap because the standing prompt is small and stays cached.
-- **Every 60s always** — slower pickup, simpler.
-- **Every 5 minutes** — cache miss every wake-up, very slow pickup. Don't.
+- **Every 30s during active hours** - fast pickup, cheap because the standing prompt is small and stays cached.
+- **Every 60s always** - slower pickup, simpler.
+- **Every 5 minutes** - cache miss every wake-up, very slow pickup. Don't.
 
 Recommendation: **30s polling** during 8am–10pm local, **5 minute polling** overnight. The schedule skill supports cron expressions, so this is one entry per band.
 
@@ -214,7 +214,7 @@ How progress reaches the frontend:
 3. For each row it pushes a `JobProgress` event to the SignalR group `project:{BookProjectId}`.
 4. Subscribed clients see the progress bar update.
 
-The 2s latency is fine for a generation that takes minutes per chapter. If lower latency is ever needed, switch the recurring job to a `BackgroundService` doing `WaitForChangesAsync` over a SQL Service Broker or polling at 200ms — not necessary for Phase 1.
+The 2s latency is fine for a generation that takes minutes per chapter. If lower latency is ever needed, switch the recurring job to a `BackgroundService` doing `WaitForChangesAsync` over a SQL Service Broker or polling at 200ms - not necessary for Phase 1.
 
 ## 8. Failure handling
 
@@ -228,13 +228,13 @@ Failure categories:
 | Subagent refuses or produces empty output | Mark Failed retryable. Bump RetryCount. |
 | MaxRetries exceeded | Mark Failed terminal. INSERT a `Notification` for the user. |
 
-`MaxRetries` defaults to 3, configurable per `JobType` (Cover generation might be 5 — provider flakiness).
+`MaxRetries` defaults to 3, configurable per `JobType` (Cover generation might be 5 - provider flakiness).
 
 ## 9. Cancellation
 
 The API exposes `POST /api/jobs/{jobId}/cancel`. It sets `Status = 5 (Cancelled)`.
 
-The worker checks for `Status = 5` at every stage transition (before each subagent call). If cancelled, it exits its loop, writes a final progress entry, and releases the lock. Mid-stage cancellation is best-effort — Claude can't be interrupted mid-token-generation cleanly, but the next stage gate stops the work.
+The worker checks for `Status = 5` at every stage transition (before each subagent call). If cancelled, it exits its loop, writes a final progress entry, and releases the lock. Mid-stage cancellation is best-effort - Claude can't be interrupted mid-token-generation cleanly, but the next stage gate stops the work.
 
 ## 10. Single-worker constraint and future scaling
 
@@ -242,9 +242,9 @@ For Phase 1, only one worker exists (Anton's desktop). The locking protocol is f
 
 When scaling out:
 
-- **Hosted variant of Claude Code Desktop** — if Anthropic provides this in the future, schedule it the same way on a cloud VM.
-- **API-key worker fallback** — a .NET BackgroundService implementing the same `IJobExecutor` interface, calling the Anthropic SDK. Useful for high-volume workloads.
-- **Manual override** — Anton can manually claim and process a job from a future Admin UI for difficult cases.
+- **Hosted variant of Claude Code Desktop** - if Anthropic provides this in the future, schedule it the same way on a cloud VM.
+- **API-key worker fallback** - a .NET BackgroundService implementing the same `IJobExecutor` interface, calling the Anthropic SDK. Useful for high-volume workloads.
+- **Manual override** - Anton can manually claim and process a job from a future Admin UI for difficult cases.
 
 All three variants present the same DB contract.
 
@@ -270,6 +270,6 @@ When we're ready to wire this up:
 
 ## 13. Open questions
 
-- **Worker observability** — should the worker emit structured logs back to the DB (`WorkerLogs` table) for the Admin UI to read, or just rely on Claude Code's local transcript? Recommend a thin `WorkerLogs` table with INFO/WARN/ERROR rows so the Admin UI has something to render.
-- **Concurrency cap per project** — if many jobs queue for one book, do we want to serialize them so chapters complete in order? Recommend YES — claim filter excludes jobs whose `BookProjectId` already has an `InProgress` job, unless the JobType is independent (Cover, Marketing).
-- **Cold-start cache strategy** — first wake-up of the morning incurs a cache miss. Acceptable. Don't over-engineer.
+- **Worker observability** - should the worker emit structured logs back to the DB (`WorkerLogs` table) for the Admin UI to read, or just rely on Claude Code's local transcript? Recommend a thin `WorkerLogs` table with INFO/WARN/ERROR rows so the Admin UI has something to render.
+- **Concurrency cap per project** - if many jobs queue for one book, do we want to serialize them so chapters complete in order? Recommend YES - claim filter excludes jobs whose `BookProjectId` already has an `InProgress` job, unless the JobType is independent (Cover, Marketing).
+- **Cold-start cache strategy** - first wake-up of the morning incurs a cache miss. Acceptable. Don't over-engineer.

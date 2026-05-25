@@ -7,7 +7,7 @@ namespace MadAuthor.Infrastructure.Covers;
 public sealed class StabilityImageGeneratorOptions
 {
     public string ApiKey { get; set; } = string.Empty;
-    /// <summary>Optional pinned model — defaults to Stable Image Core's current version.</summary>
+    /// <summary>Optional pinned model - defaults to Stable Image Core's current version.</summary>
     public string Model { get; set; } = "stable-image-core";
 }
 
@@ -58,7 +58,7 @@ public sealed class StabilityImageGenerator : IImageGenerator
         http.DefaultRequestHeaders.Accept.Clear();
         http.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("image/*"));
 
-        // Stability's v2beta endpoints reject application/x-www-form-urlencoded — must be
+        // Stability's v2beta endpoints reject application/x-www-form-urlencoded - must be
         // multipart/form-data with the API key in Authorization (not in the form). The empty
         // "none"-form trick is needed because the API expects a file part to be possible.
         using var form = new MultipartFormDataContent

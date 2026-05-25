@@ -49,7 +49,7 @@ public sealed class OpenAiWhisperTranscriber : IAudioTranscriber
             return null;
         }
 
-        // Buffer to a known size — multipart needs a Content-Length and Whisper rejects > 25 MB.
+        // Buffer to a known size - multipart needs a Content-Length and Whisper rejects > 25 MB.
         // For typical voice notes (a few MB) this is cheap; large files are bounded by the API
         // controller's 50 MB upload cap anyway.
         byte[] bytes;

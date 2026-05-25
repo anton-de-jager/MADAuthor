@@ -45,9 +45,19 @@ builder.Host.UseSerilog();
 // DB_* env vars so prod hosting can ship without a Local file. The result
 // is normalized to ensure TLS flags suit a self-signed/IP-based SQL Server.
 var rawConnStr =
-    builder.Configuration.GetConnectionString("DefaultConnection")
+    NonBlank(builder.Configuration.GetConnectionString("DefaultConnection"))
     ?? ComposeConnectionStringFromEnv();
+
+var rawHangfireConnStr =
+    NonBlank(builder.Configuration.GetConnectionString("Hangfire"))
+    ?? ComposeHangfireConnectionStringFromEnv();
+var hangfireConnStr = NormalizeConnectionString(rawHangfireConnStr);
 var connStr = NormalizeConnectionString(rawConnStr);
+if (builder.Environment.IsDevelopment())
+{
+    EnsureSqlDatabaseExists(connStr);
+    EnsureSqlDatabaseExists(hangfireConnStr);
+}
 
 // --- Persistence + Identity -----------------------------------------------
 builder.Services.AddMadAuthorPersistence(connStr);
@@ -73,6 +83,11 @@ builder.Services.AddHttpClient<MadAuthor.Application.Covers.IUnsplashClient,
 // --- AI image generation (OpenAI DALL-E preferred, Stability fallback, NoOp otherwise) --
 MadAuthor.Infrastructure.Covers.ImageGenDependencyInjection.AddMadAuthorImageGen(builder.Services);
 
+// --- Cover composer (QuestPDF-based typography overlay + print-wrap PDF) ----
+// Singleton because the composer is stateless and there's no per-request setup.
+builder.Services.AddSingleton<MadAuthor.Application.Covers.ICoverComposer,
+    MadAuthor.Infrastructure.Covers.QuestPdfCoverComposer>();
+
 // --- Translation (OpenAI primary, DeepL alternate, NoOp fallback) ---------
 MadAuthor.Infrastructure.Translation.TranslationDependencyInjection.AddMadAuthorTranslation(builder.Services);
 
@@ -81,7 +96,7 @@ builder.Services.AddMadAuthorFileScanner(
     clamAvHost: Environment.GetEnvironmentVariable("CLAMAV_HOST"),
     clamAvPort: int.TryParse(Environment.GetEnvironmentVariable("CLAMAV_PORT"), out var clamPort) ? clamPort : 3310);
 
-// --- Email (SMTP — falls back to no-op log if not configured) -------------
+// --- Email (SMTP - falls back to no-op log if not configured) -------------
 builder.Services.AddMadAuthorEmail(new MadAuthor.Infrastructure.Email.SmtpEmailOptions
 {
     Host = Environment.GetEnvironmentVariable("SMTP_HOST"),
@@ -109,10 +124,10 @@ builder.Services.AddSingleton(jwtOptions);
 // environment via `[Convert]::ToHexString([System.Security.Cryptography.RandomNumberGenerator]::GetBytes(32)).ToLower()`
 // and stored in .env as CLAUDE_WORKER_TOKEN. Compared with `CryptographicOperations.FixedTimeEquals`
 // in the middleware below to prevent timing attacks. See docs/08-claude-task-system.md section 4.
-var claudeWorkerToken = Environment.GetEnvironmentVariable("CLAUDE_WORKER_TOKEN") ?? string.Empty;
+var claudeWorkerToken = NormalizeSecret(Environment.GetEnvironmentVariable("CLAUDE_WORKER_TOKEN"));
 if (string.IsNullOrWhiteSpace(claudeWorkerToken))
 {
-    Log.Warning("CLAUDE_WORKER_TOKEN is not set — the /claude worker + scanner cannot authenticate. " +
+    Log.Warning("CLAUDE_WORKER_TOKEN is not set - the /claude worker + scanner cannot authenticate. " +
                 "Generate one and add to .env before running them.");
 }
 
@@ -158,7 +173,7 @@ if (!string.IsNullOrWhiteSpace(jwtOptions.SigningKey))
 }
 else
 {
-    Log.Warning("JWT_SIGNING_KEY is not set — auth endpoints will reject requests. " +
+    Log.Warning("JWT_SIGNING_KEY is not set - auth endpoints will reject requests. " +
                 "Add it to .env or appsettings.Local.json before testing auth.");
 }
 
@@ -181,20 +196,24 @@ builder.Services.AddHostedService<ExportRendererService>();
 // QuestPDF is free for non-commercial use under the Community license; required to set.
 QuestPDF.Settings.License = QuestPDF.Infrastructure.LicenseType.Community;
 
-// --- Hangfire (deterministic background jobs — exports, notifications) ----
+// --- Hangfire (deterministic background jobs - exports, notifications) ----
 builder.Services.AddHangfire(cfg => cfg
     .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
     .UseSimpleAssemblyNameTypeSerializer()
     .UseRecommendedSerializerSettings()
-    .UseSqlServerStorage(connStr, new SqlServerStorageOptions
+    .UseSqlServerStorage(hangfireConnStr, new SqlServerStorageOptions
     {
-        SchemaName = "hangfire",
         PrepareSchemaIfNecessary = true,
         QueuePollInterval = TimeSpan.FromSeconds(5),
     }));
 builder.Services.AddHangfireServer();
 
 // --- ASP.NET basics --------------------------------------------------------
+// NOTE: we deliberately do NOT register JsonStringEnumConverter globally.
+// Project DTOs (BookSummary.Status, WorkflowStage, BookChapter.Status, etc.) serialize
+// enums-as-integers, and the SPA's TS types are numeric literal unions with integer-keyed
+// label maps (STATUS_LABELS, STAGE_LABELS). The narrow "I'm-a-string-on-the-wire" enums
+// (CoverTemplate, CoverSide) carry the [JsonConverter] attribute on the enum itself.
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
@@ -219,12 +238,12 @@ builder.Services.AddSwaggerGen(c =>
 });
 builder.Services.AddSignalR();
 
-// CORS — dev (Angular at localhost:4200) + prod (madauthor.madproducts.co.za) + any extras
+// CORS - dev (Angular at localhost:3012) + prod (madauthor.madprospects.com) + any extras
 // from CORS_ORIGINS env var (comma-separated). Credentials allowed for the refresh cookie.
 var corsOrigins = new List<string>
 {
-    "http://localhost:4200",
-    "https://madauthor.madproducts.co.za",
+    "http://localhost:3012",
+    "https://madauthor.madprospects.com",
 };
 var extraOrigins = Environment.GetEnvironmentVariable("CORS_ORIGINS");
 if (!string.IsNullOrWhiteSpace(extraOrigins))
@@ -258,14 +277,14 @@ using (var scope = app.Services.CreateScope())
     }
     catch (Exception ex)
     {
-        Log.Error(ex, "EF migration step failed — the app will still start, but some features may misbehave.");
+        Log.Error(ex, "EF migration step failed - the app will still start, but some features may misbehave.");
     }
 }
 
 // Seed roles + publishing platforms on every startup (idempotent).
 await DbSeeder.SeedAsync(app.Services);
 
-// JobProgressBroadcaster is registered as a HostedService — see Realtime/.
+// JobProgressBroadcaster is registered as a HostedService - see Realtime/.
 
 if (app.Environment.IsDevelopment())
 {
@@ -288,7 +307,7 @@ app.UseSerilogRequestLogging();
 //   /_p  → PUT
 //   /_h  → PATCH (since 'p' is taken)
 // Each suffix is 2 chars, starts with underscore (not a normal route segment),
-// has no HTTP-verb keyword in it, isn't a guid — slips past all four IIS/WAF
+// has no HTTP-verb keyword in it, isn't a guid - slips past all four IIS/WAF
 // filters. This middleware reads the suffix, strips it, and swaps the method
 // back before routing, so [HttpDelete] / [HttpPut] / [HttpPatch] endpoints
 // match normally.
@@ -314,7 +333,7 @@ app.Use(async (ctx, next) =>
 });
 
 app.UseCors("default");
-// Catch everything below this point — including auth + controllers — and surface a JSON body.
+// Catch everything below this point - including auth + controllers - and surface a JSON body.
 app.UseMiddleware<GlobalExceptionMiddleware>();
 app.UseRouting();
 
@@ -328,7 +347,7 @@ if (!string.IsNullOrWhiteSpace(claudeWorkerToken))
     var expectedBytes = Encoding.UTF8.GetBytes(claudeWorkerToken);
     app.Use(async (ctx, next) =>
     {
-        var presented = ctx.Request.Headers["X-Worker-Token"].ToString();
+        var presented = NormalizeSecret(ctx.Request.Headers["X-Worker-Token"].ToString());
         if (!string.IsNullOrEmpty(presented))
         {
             var presentedBytes = Encoding.UTF8.GetBytes(presented);
@@ -372,7 +391,7 @@ app.UseHangfireDashboard("/hangfire", new DashboardOptions
     Authorization = new[] { new HangfireDashboardAuthFilter() },
 });
 
-// --- Angular SPA (served when wwwroot has content — i.e. in the Docker image) ---
+// --- Angular SPA (served when wwwroot has content - i.e. in the Docker image) ---
 // In dev, wwwroot is empty and `ng serve` handles the SPA via the proxy. In prod
 // the multi-stage Dockerfile copies the Angular build into wwwroot, and these
 // middlewares serve it. SPA fallback only catches non-API/hub routes.
@@ -412,8 +431,40 @@ static string Required(string key)
     return value;
 }
 
+static string NormalizeSecret(string? value) =>
+    (value ?? string.Empty).Trim().Trim('"');
+
+static string? NonBlank(string? value) =>
+    string.IsNullOrWhiteSpace(value) ? null : value;
+
+static void EnsureSqlDatabaseExists(string connectionString)
+{
+    var target = new SqlConnectionStringBuilder(connectionString);
+    if (string.IsNullOrWhiteSpace(target.InitialCatalog)) return;
+
+    var databaseName = target.InitialCatalog;
+    target.InitialCatalog = "master";
+
+    using var conn = new SqlConnection(target.ConnectionString);
+    conn.Open();
+    using var cmd = conn.CreateCommand();
+    cmd.CommandText = $"""
+        IF DB_ID(@databaseName) IS NULL
+        BEGIN
+            DECLARE @sql nvarchar(max) = N'CREATE DATABASE ' + QUOTENAME(@databaseName);
+            EXEC (@sql);
+        END
+        """;
+    cmd.Parameters.AddWithValue("@databaseName", databaseName);
+    cmd.ExecuteNonQuery();
+}
+
 static string ComposeConnectionStringFromEnv() =>
     $"Server={Required("DB_HOST")};Database={Required("DB_DATABASE")};" +
+    $"User Id={Required("DB_USERNAME")};Password={Required("DB_PASSWORD")};";
+
+static string ComposeHangfireConnectionStringFromEnv() =>
+    $"Server={Required("DB_HOST")};Database={Required("DB_HANGFIRE_DATABASE")};" +
     $"User Id={Required("DB_USERNAME")};Password={Required("DB_PASSWORD")};";
 
 static string NormalizeConnectionString(string input)

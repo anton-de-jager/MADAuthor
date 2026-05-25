@@ -20,7 +20,7 @@ import {
 interface EditableRow {
   /** Stable client-side key used for @for tracking. Survives reorder. */
   key: string;
-  /** Server id — null for newly-added rows that haven't been saved yet. */
+  /** Server id - null for newly-added rows that haven't been saved yet. */
   id: string | null;
   title: string;
   summary: string;

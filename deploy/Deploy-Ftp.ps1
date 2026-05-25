@@ -29,7 +29,7 @@
       - App pool identity has read/write on the site folder (storage/, logs/)
     FE site:
       - URL Rewrite module installed (web.config falls back to index.html)
-      - Static files only — no app pool requirements
+      - Static files only - no app pool requirements
 #>
 
 [CmdletBinding(SupportsShouldProcess = $true)]
@@ -84,7 +84,7 @@ $fePath  = Require-Var 'FE_FTP_PATH'
 # FTP_TLS values (default 'explicit' which is what Plesk uses on port 21):
 #   'explicit' / 'true'  → ftp://  + --ssl-reqd  (port 21, AUTH TLS upgrade)
 #   'implicit'           → ftps:// (port 990, old-style, rare)
-#   'false'              → plain ftp:// (no encryption — only on a trusted LAN)
+#   'false'              → plain ftp:// (no encryption - only on a trusted LAN)
 $ftpTlsRaw = if ($envVars.ContainsKey('FTP_TLS')) { $envVars['FTP_TLS'].ToLowerInvariant() } else { 'explicit' }
 switch ($ftpTlsRaw) {
     'implicit' { $scheme = 'ftps'; $tlsFlag = $null }
@@ -118,13 +118,15 @@ function Invoke-NativeBuild {
 if (-not $SkipBuild) {
     if (-not $ApiOnly) {
         Write-Host "==> Building Angular (production)" -ForegroundColor Cyan
-        Push-Location $webDir
+        Push-Location $repoRoot
         try {
-            $ngCmd = "$env:APPDATA\npm\node_modules\@angular\cli\bin\ng.js"
-            if (-not (Test-Path $ngCmd)) {
-                throw "Angular CLI not found at $ngCmd. Run: npm install -g @angular/cli@19"
+            $pnpmCmd = Get-Command pnpm.cmd -ErrorAction SilentlyContinue
+            if (-not $pnpmCmd) { $pnpmCmd = Get-Command pnpm -ErrorAction SilentlyContinue }
+            if (-not $pnpmCmd) {
+                throw "pnpm not found on PATH. Install pnpm 11 and rerun deploy."
             }
-            Invoke-NativeBuild 'Angular build' { node $ngCmd build --configuration production }
+            Invoke-NativeBuild 'pnpm install' { & $pnpmCmd.Source install --frozen-lockfile }
+            Invoke-NativeBuild 'Angular build' { & $pnpmCmd.Source --filter web exec ng build --configuration production }
         } finally {
             Pop-Location
         }
@@ -148,8 +150,9 @@ if (-not $SkipBuild) {
 
         Write-Host "==> Staging API: web.config + sanitized .env + logs/ + storage/" -ForegroundColor Cyan
         Copy-Item (Join-Path $PSScriptRoot 'web.config') (Join-Path $apiStaging 'web.config') -Force
+        Remove-Item (Join-Path $apiStaging 'appsettings.Local.json') -Force -ErrorAction SilentlyContinue
 
-        # Server only needs runtime config — strip FTP_* and other deploy-only vars.
+        # Server only needs runtime config - strip FTP_* and other deploy-only vars.
         $serverEnv = Get-Content $envFile | Where-Object {
             $line = $_.Trim()
             if (-not $line -or $line.StartsWith('#')) { return $true }
@@ -261,23 +264,46 @@ function Push-OneFile {
 
 function Remove-OneFile {
     param([string]$RemoteHost, [string]$RemotePath, [string]$FileName, [string]$User, [string]$Pass)
-    # Plesk's FTP user lands in their CHROOT home, which is NOT the same as the deploy path
-    # (e.g. home=/, deploy=/madauthorapi.madproducts.co.za/). `DELE app_offline.htm` against
-    # the parent-dir URL silently 550s because it's looking in home. Use the absolute server
-    # path so the DELE targets the right file regardless of where the user was placed.
+    # Plesk's FTP user can land anywhere depending on CHROOT config. Try both shapes:
+    # absolute path (the common case) and the relative-to-host-root variant. Retry each
+    # up to 3 times on transient curl failures. All output captured into the deploy log
+    # via the same stream the parent script uses, so a silent failure is impossible.
     $absolute = ($RemotePath.TrimEnd('/')) + '/' + $FileName
-    $url = "${scheme}://${RemoteHost}/"
-    $cargs = @('--silent', '--show-error', '--user', "${User}:${Pass}",
-        '-Q', "DELE ${absolute}", $url, '-o', 'NUL')
-    if ($tlsFlag) { $cargs += $tlsFlag }
-    $cargs += '--insecure'
+    $candidates = @($absolute, $FileName)   # try absolute first, then bare filename
+    $hostUrl = "${scheme}://${RemoteHost}/"
+
     $prev = $ErrorActionPreference
     $ErrorActionPreference = 'Continue'
     try {
-        & $curl @cargs 2>&1 | Out-Null
-        if ($LASTEXITCODE -ne 0) {
-            Write-Host "  ! Failed to delete $absolute (FTP exit $LASTEXITCODE)" -ForegroundColor Yellow
+        foreach ($target in $candidates) {
+            for ($attempt = 1; $attempt -le 3; $attempt++) {
+                $cargs = @('--silent', '--show-error', '--user', "${User}:${Pass}",
+                    '--ftp-method', 'nocwd',
+                    '-Q', "DELE $target",
+                    $hostUrl, '-o', 'NUL')
+                if ($tlsFlag) { $cargs += $tlsFlag }
+                $cargs += '--insecure'
+
+                $output = & $curl @cargs 2>&1 | Out-String
+                $code = $LASTEXITCODE
+
+                # Exit 0: DELE accepted (server returned 250).
+                if ($code -eq 0) {
+                    Write-Host "  Deleted '$target' (try $attempt)." -ForegroundColor DarkGray
+                    return
+                }
+
+                # Exit 21 with "550" body: file already absent - treat as success too.
+                if ($code -eq 21 -and ($output -match '\b550\b|file unavailable|cannot find|no such')) {
+                    Write-Host "  '$target' already absent (server 550 on try $attempt)." -ForegroundColor DarkGray
+                    return
+                }
+
+                Write-Host "  Delete '$target' try $attempt failed: curl exit=$code$([Environment]::NewLine)    $($output.Trim())" -ForegroundColor Yellow
+                Start-Sleep -Milliseconds 800
+            }
         }
+        Write-Host "  ! Could not delete '$FileName' from any candidate path after retries." -ForegroundColor Red
     } finally { $ErrorActionPreference = $prev }
 }
 
@@ -304,6 +330,10 @@ if (-not $FeOnly) {
     # IIS needs a beat to notice and shut the worker.
     Start-Sleep -Seconds 4
 
+    Write-Host "==> Removing stale appsettings.Local.json from API root" -ForegroundColor Cyan
+    Remove-OneFile -RemoteHost $apiHost -RemotePath $apiPath `
+        -FileName 'appsettings.Local.json' -User $apiUser -Pass $apiPass
+
     $ok = Upload-Tree -LocalRoot $apiStaging -Scheme $scheme `
         -RemoteHost $apiHost -RemotePath $apiPath `
         -User $apiUser -Pass $apiPass -Label 'API'
@@ -325,11 +355,52 @@ if ($apiOfflineStaged -and (Test-Path $apiOfflineStaged)) { Remove-Item $apiOffl
 
 if (-not $allOk) { exit 1 }
 
+# Post-deploy: poll API health to catch a stuck app_offline.htm (or any other startup
+# failure) immediately instead of finding out next time a user hits the site. We only
+# do this when we deployed the API; FE-only deploys don't restart anything.
+if (-not $FeOnly) {
+    Write-Host ""
+    Write-Host "==> Verifying API is back online" -ForegroundColor Cyan
+    $healthUrl = "https://${apiHost}/api/health/ready"
+    # If the public API host differs from the FTP host (most setups), the script could
+    # know it from the domain in the path. But the simplest signal is the production
+    # frontend's apiBase pointing at madauthorapi.madprospects.com, so use that.
+    $publicApi = 'https://madauthorapi.madprospects.com/api/health/ready'
+    $maxAttempts = 12
+    $online = $false
+    for ($i = 1; $i -le $maxAttempts; $i++) {
+        try {
+            $r = Invoke-WebRequest -Uri $publicApi -TimeoutSec 10 -UseBasicParsing
+            if ($r.StatusCode -eq 200) {
+                Write-Host "  $publicApi -> 200 OK (try $i)" -ForegroundColor Green
+                $online = $true
+                break
+            }
+            Write-Host "  $publicApi -> $($r.StatusCode) (try $i)" -ForegroundColor Yellow
+        } catch [System.Net.WebException] {
+            $code = if ($_.Exception.Response) { [int]$_.Exception.Response.StatusCode } else { 0 }
+            Write-Host "  $publicApi -> $code (try $i)" -ForegroundColor Yellow
+            # If we got a 503, the app is stopped -- likely app_offline.htm still around.
+            # Force one more cleanup attempt.
+            if ($code -eq 503 -and $i -eq 3) {
+                Write-Host "  Still 503 after 3 attempts -- forcing another app_offline.htm delete." -ForegroundColor Yellow
+                Remove-OneFile -RemoteHost $apiHost -RemotePath $apiPath `
+                    -FileName 'app_offline.htm' -User $apiUser -Pass $apiPass
+            }
+        }
+        Start-Sleep -Seconds 5
+    }
+    if (-not $online) {
+        Write-Host "  ! API did not become healthy within $($maxAttempts * 5)s. Manually delete app_offline.htm from the API site root or check Plesk." -ForegroundColor Red
+        exit 2
+    }
+}
+
 Write-Host ""
 Write-Host "==> Deploy complete." -ForegroundColor Green
 Write-Host ""
 Write-Host "Post-deploy checklist:" -ForegroundColor Cyan
 Write-Host "  1. Recycle the API app pool in Plesk (or wait ~5 min for IIS to pick up the new DLLs)."
-Write-Host "  2. https://madauthorapi.madproducts.co.za/api/health/ready  →  should return db: true"
-Write-Host "  3. https://madauthor.madproducts.co.za/                     →  Angular SPA"
-Write-Host "  4. https://madauthor.madproducts.co.za/books/new            →  refreshing must NOT 404 (URL Rewrite working)"
+Write-Host "  2. https://madauthorapi.madprospects.com/api/health/ready  ->  should return db: true"
+Write-Host "  3. https://madauthor.madprospects.com/                     ->  Angular SPA"
+Write-Host "  4. https://madauthor.madprospects.com/books/new            ->  refreshing must NOT 404 (URL Rewrite working)"

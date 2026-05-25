@@ -19,6 +19,28 @@ public static class MarkdownFlattener
     public static IReadOnlyList<MarkdownBlock> Flatten(string markdown)
     {
         var doc = Markdig.Markdown.Parse(markdown ?? string.Empty, Pipeline);
+        return FlattenCore(doc);
+    }
+
+    /// <summary>Flatten markdown for renderers that draw a chapter title themselves
+    /// (PDF chapter opening). Drops a leading H1 whose text equals <paramref name="chapterTitle"/>
+    /// (case-insensitive, trimmed) so the title isn't rendered twice. Other consumers
+    /// (DOCX/EPUB) should keep using <see cref="Flatten"/>.</summary>
+    public static IReadOnlyList<MarkdownBlock> FlattenStrippingTitleH1(string markdown, string? chapterTitle)
+    {
+        var all = Flatten(markdown);
+        if (all.Count == 0 || string.IsNullOrWhiteSpace(chapterTitle)) return all;
+        if (all[0] is HeadingBlock h && h.Level == 1)
+        {
+            var headText = (h.Text ?? string.Empty).Trim();
+            if (string.Equals(headText, chapterTitle.Trim(), StringComparison.OrdinalIgnoreCase))
+                return all.Skip(1).ToList();
+        }
+        return all;
+    }
+
+    private static IReadOnlyList<MarkdownBlock> FlattenCore(MdBlock.MarkdownDocument doc)
+    {
         var blocks = new List<MarkdownBlock>();
 
         foreach (var block in doc)

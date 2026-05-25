@@ -19,11 +19,7 @@ import { ToastsComponent } from '../core/ui/toasts.component';
       <!-- Sidebar -->
       <aside class="hidden md:flex w-64 flex-col border-r border-ink-800/70 bg-ink-900/40 backdrop-blur">
         <div class="px-6 py-5 border-b border-ink-800/70">
-          <div class="font-display text-xl font-semibold tracking-tight">
-            <span class="bg-gradient-to-r from-brand-400 to-fuchsia-400 bg-clip-text text-transparent">
-              MAD
-            </span>Author
-          </div>
+          <img src="/logo-wide-MADAuthor.png" alt="MADAuthor" class="h-11 w-auto object-contain" />
           <div class="text-xs text-ink-400 mt-1">AI publishing OS</div>
         </div>
         <nav class="flex-1 px-3 py-4 space-y-1 text-sm">
@@ -84,7 +80,7 @@ export class ShellComponent implements OnInit, OnDestroy {
     { path: '/dashboard', label: 'Dashboard', exact: true },
     { path: '/books', label: 'Books' },
     { path: '/admin/queue', label: 'Worker queue', adminOnly: true },
-    { path: '/admin/claude', label: 'Claude Tasks', adminOnly: true },
+    { path: '/admin/claude', label: 'MAD Cloud', adminOnly: true },
   ];
   visibleNav = computed(() => {
     const roles = this.auth.user()?.roles ?? [];
@@ -99,7 +95,7 @@ export class ShellComponent implements OnInit, OnDestroy {
     try {
       await this.notifications.ensureConnected();
     } catch {
-      // Silent — the user doesn't need to see infra errors. Logs in the browser console.
+      // Silent - the user doesn't need to see infra errors. Logs in the browser console.
     }
 
     // Render every milestone toast SignalR pushes. milestoneToast is set server-side

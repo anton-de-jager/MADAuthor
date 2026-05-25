@@ -27,6 +27,14 @@ public class BookProject : IAuditableEntity, ITenantEntity, ISoftDeleteEntity
     public string? Isbn { get; set; }
     public string? CopyrightText { get; set; }
     public string? PublishingGoal { get; set; }
+    /// <summary>
+    /// Body-text font face for PDF exports. Free-form string passed straight to QuestPDF's
+    /// <c>FontFamily()</c>; null means "use the renderer's default" (Georgia). Only the font
+    /// faces installed on the rendering server are guaranteed to work; the UI restricts
+    /// selection to a known-installed list (Georgia, Times New Roman, Cambria, Constantia,
+    /// Palatino Linotype, Book Antiqua).
+    /// </summary>
+    public string? BodyFont { get; set; }
     public DateTime? Deadline { get; set; }
     public bool RequireOutlineApproval { get; set; } = true;
     public DateTime? OutlineApprovedAt { get; set; }

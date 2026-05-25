@@ -1,0 +1,116 @@
+{
+  "narrativeArc": "A first-person memoir tracing the author's ascent from apprentice boilermaker on the shop floor to managing director, framed as a practical compass for anyone climbing from low-end work into management. The through-line is how disciplined craftsmanship, hard-won resilience, and the right mentors at the right moments compound into leadership capacity over decades.",
+  "themes": [
+    "Leadership grown from the shop floor",
+    "Resilience under hardship",
+    "Mentorship and reciprocal teaching",
+    "Craftsmanship as a foundation for management",
+    "Trust, integrity and personal reputation",
+    "Lifelong learning and self-reinvention",
+    "Service to the people you lead"
+  ],
+  "estimatedWordCount": 90000,
+  "estimatedPageCount": 360,
+  "chapters": [
+    {
+      "number": 1,
+      "title": "Sparks in the Dust",
+      "summary": "Open on the shop floor: the noise, the heat, the smell of cutting oil, and a young apprentice with no real plan beyond the next shift. Establish where the story starts and the world the reader is being invited into.",
+      "targetWordCount": 6000
+    },
+    {
+      "number": 2,
+      "title": "Tools in Hand",
+      "summary": "The early apprentice years, learning to be a boilermaker the proper way under hard-edged but fair tradesmen. Show how craft discipline, attention to detail, and respect for the work quietly install the habits that will later make a manager.",
+      "targetWordCount": 6500
+    },
+    {
+      "number": 3,
+      "title": "The First Hard Lesson",
+      "summary": "A defining mistake, accident, or setback early in the trade that could have ended the journey. Reflect on how owning failure honestly is the first real act of leadership, long before any title arrives.",
+      "targetWordCount": 6000
+    },
+    {
+      "number": 4,
+      "title": "Men Who Took a Chance",
+      "summary": "Portraits of the first mentors: foremen, charge-hands, older tradesmen who saw something and invested. Examine what mentorship actually looks like in a working-class environment, and what the apprentice owed them in return.",
+      "targetWordCount": 6500
+    },
+    {
+      "number": 5,
+      "title": "Earning the Ticket",
+      "summary": "Qualifying as a tradesman and the quiet pride of that moment. Use it to explore identity, status, and the trap of believing the qualification is the destination rather than the starting line.",
+      "targetWordCount": 6000
+    },
+    {
+      "number": 6,
+      "title": "Leading Without a Title",
+      "summary": "The first time others started looking to the author for direction, without any formal authority. Unpack how influence is earned through competence and reliability long before it is granted on an org chart.",
+      "targetWordCount": 6000
+    },
+    {
+      "number": 7,
+      "title": "The Step Up to Supervisor",
+      "summary": "Crossing the line from doing the work to being responsible for other people's work. The awkwardness of supervising former peers, and the first real taste of how lonely the job above the toolbox can be.",
+      "targetWordCount": 6500
+    },
+    {
+      "number": 8,
+      "title": "Hard Years, Lean Years",
+      "summary": "Economic downturns, retrenchments, projects gone wrong, and personal cost. Show resilience as a daily practice rather than a slogan: getting up, showing up, and protecting the team when there is no easy answer.",
+      "targetWordCount": 6500
+    },
+    {
+      "number": 9,
+      "title": "Learning the Numbers",
+      "summary": "The deliberate effort to move beyond the trade into how a business actually makes money: costing, margins, contracts, scheduling. Argue that management without numeracy is just opinion in a clean shirt.",
+      "targetWordCount": 6000
+    },
+    {
+      "number": 10,
+      "title": "Managing Up, Managing Sideways",
+      "summary": "Navigating directors, owners, clients, and peers, not just subordinates. Practical lessons on how to disagree, how to be trusted, and how to be heard by people more senior or more political than yourself.",
+      "targetWordCount": 5500
+    },
+    {
+      "number": 11,
+      "title": "Building a Team You Would Follow",
+      "summary": "Hiring, training, and developing people from the ground up, often from the same kind of background the author started in. The duty to give others the chance you were given, and the cost of choosing the wrong people.",
+      "targetWordCount": 6000
+    },
+    {
+      "number": 12,
+      "title": "The Office Door",
+      "summary": "Stepping into a true management role with an office, a budget, and answerability to a board or owner. Confront imposter syndrome head-on and explain how craftsmanship roots help when the title still feels borrowed.",
+      "targetWordCount": 6000
+    },
+    {
+      "number": 13,
+      "title": "Crisis Without a Manual",
+      "summary": "A major operational, financial, or human crisis where there was no playbook. Walk through the decisions made, what was lost, what was saved, and what only became clear in hindsight.",
+      "targetWordCount": 6000
+    },
+    {
+      "number": 14,
+      "title": "Becoming Managing Director",
+      "summary": "The moment of taking the top operational seat. Reflect on what changes, what does not, and why arriving at the destination quietly raises the bar rather than ending the climb.",
+      "targetWordCount": 6000
+    },
+    {
+      "number": 15,
+      "title": "The Compass",
+      "summary": "Distil the principles the journey has produced into a usable compass for readers still on the floor or in the middle: a short, plain-spoken framework for showing up, leading, and lasting. Close with a charge to the next apprentice.",
+      "targetWordCount": 4500
+    }
+  ],
+  "researchTopics": [
+    "History and structure of the boilermaker trade and apprenticeship system",
+    "Career progression pathways from skilled trades into operational management",
+    "Industrial relations and economic conditions affecting heavy industry over the past 30-40 years",
+    "Foundational management and leadership frameworks accessible to non-academic readers",
+    "Mentorship models in trade and industrial environments",
+    "Common operational and financial metrics a managing director is accountable for",
+    "Crisis leadership and turnaround case studies in industrial businesses",
+    "Workplace safety culture and its relationship to leadership credibility"
+  ]
+}

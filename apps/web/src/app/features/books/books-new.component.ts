@@ -88,7 +88,7 @@ const MAX_UPLOAD_BYTES = 50 * 1024 * 1024;
               @if (projectId()) {
                 <p class="text-[11px] text-ink-500">
                   Draft project saved. Edits to title/subtitle/genre on this step won't be re-saved
-                  — the project keeps the values you set when you first advanced.
+                  - the project keeps the values you set when you first advanced.
                 </p>
               }
             </form>
@@ -105,7 +105,7 @@ const MAX_UPLOAD_BYTES = 50 * 1024 * 1024;
                   <span class="text-xs uppercase tracking-wider text-ink-400">POV</span>
                   <select formControlName="povStyle"
                     class="mt-1 w-full bg-ink-900/60 border border-ink-700 focus:border-brand-500 focus:ring-1 focus:ring-brand-500/40 outline-none rounded-lg px-3 py-2.5">
-                    <option value="">—</option>
+                    <option value="">-</option>
                     <option value="First">First person</option>
                     <option value="Third">Third person</option>
                     <option value="Omniscient">Omniscient</option>
@@ -240,21 +240,21 @@ const MAX_UPLOAD_BYTES = 50 * 1024 * 1024;
                 </div>
                 <div class="bg-ink-900/60 border border-ink-700 rounded-lg p-3">
                   <div class="text-xs uppercase tracking-wider text-ink-400">Genre</div>
-                  <div class="text-ink-100">{{ projectForm.value.genre || '—' }}</div>
+                  <div class="text-ink-100">{{ projectForm.value.genre || '-' }}</div>
                 </div>
               </div>
               <div class="bg-ink-900/60 border border-ink-700 rounded-lg p-3">
                 <div class="text-xs uppercase tracking-wider text-ink-400">Tone &middot; POV &middot; Chapter length &middot; Target words</div>
                 <div class="text-ink-100">
-                  {{ styleForm.value.writingTone || '—' }} ·
-                  {{ styleForm.value.povStyle || '—' }} ·
+                  {{ styleForm.value.writingTone || '-' }} ·
+                  {{ styleForm.value.povStyle || '-' }} ·
                   {{ styleForm.value.chapterLength }} ·
-                  {{ styleForm.value.targetWordCount || '—' }}
+                  {{ styleForm.value.targetWordCount || '-' }}
                 </div>
               </div>
               <div class="bg-ink-900/60 border border-ink-700 rounded-lg p-3">
                 <div class="text-xs uppercase tracking-wider text-ink-400">Prompt</div>
-                <div class="text-ink-100 whitespace-pre-wrap">{{ contentForm.value.ideaPrompt || '—' }}</div>
+                <div class="text-ink-100 whitespace-pre-wrap">{{ contentForm.value.ideaPrompt || '-' }}</div>
               </div>
               <div class="bg-ink-900/60 border border-ink-700 rounded-lg p-3">
                 <div class="text-xs uppercase tracking-wider text-ink-400">
@@ -359,7 +359,7 @@ export class BooksNewComponent {
     aIInstructions: [''],
   });
 
-  // FormGroup.valid is a plain getter — bridge each form's statusChanges/valueChanges into
+  // FormGroup.valid is a plain getter - bridge each form's statusChanges/valueChanges into
   // signals so `computed` can react to user input.
   private projectStatus = toSignal(this.projectForm.statusChanges, {
     initialValue: this.projectForm.status,
@@ -397,7 +397,7 @@ export class BooksNewComponent {
 
     // Crossing from step 1 → 2 is when we create the draft BookProject (once). All
     // uploads in step 3 attach to that project. Later edits to step-1 fields aren't
-    // re-saved — by design for now (no PATCH endpoint), surfaced as a hint in the UI.
+    // re-saved - by design for now (no PATCH endpoint), surfaced as a hint in the UI.
     if (this.currentStep() === 'project' && !this.projectId()) {
       this.busy.set(true);
       this.error.set(null);
@@ -459,7 +459,7 @@ export class BooksNewComponent {
   private uploadFiles(files: File[]) {
     const projectId = this.projectId();
     if (!projectId) {
-      this.error.set('Draft project not created yet — go back to step 1 and click Continue.');
+      this.error.set('Draft project not created yet - go back to step 1 and click Continue.');
       return;
     }
 

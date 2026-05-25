@@ -10,9 +10,7 @@ import { AuthService } from '../../core/auth/auth.service';
   template: `
     <div class="aurora min-h-screen flex items-center justify-center p-6">
       <div class="glass rounded-2xl w-full max-w-md p-8">
-        <h1 class="font-display text-3xl font-semibold tracking-tight">
-          <span class="bg-gradient-to-r from-brand-400 to-fuchsia-400 bg-clip-text text-transparent">MAD</span>Author
-        </h1>
+        <img src="/logo-wide-MADAuthor.png" alt="MADAuthor" class="h-16 w-auto object-contain" />
         <p class="text-ink-400 mt-1 mb-8 text-sm">Sign in to continue building.</p>
 
         <form [formGroup]="form" (ngSubmit)="submit()" class="space-y-4">

@@ -21,7 +21,7 @@ public sealed class OpenAiVisionOcr : IOcrService
 
     private const string Instruction =
         "Extract all visible text from this image, preserving paragraph breaks and reading order. " +
-        "Output ONLY the extracted text — no commentary, no markdown, no headers. " +
+        "Output ONLY the extracted text - no commentary, no markdown, no headers. " +
         "If there's no text, output an empty string.";
 
     private static readonly JsonSerializerOptions JsonOpts = new()

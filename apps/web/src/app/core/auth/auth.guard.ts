@@ -9,7 +9,7 @@ export const authGuard: CanActivateFn = () => {
 
   if (auth.isAuthenticated()) return true;
 
-  // Not authenticated yet — try silent refresh once before bouncing to /login.
+  // Not authenticated yet - try silent refresh once before bouncing to /login.
   return auth.refresh().pipe(
     map(() => true),
     catchError(() => {

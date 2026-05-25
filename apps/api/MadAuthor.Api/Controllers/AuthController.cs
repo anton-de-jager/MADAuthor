@@ -51,7 +51,7 @@ public class AuthController(
             CreatedDate = DateTime.UtcNow,
         };
 
-        // First user in the system gets Admin/Owner roles automatically — bootstraps the
+        // First user in the system gets Admin/Owner roles automatically - bootstraps the
         // workspace without a separate admin console. Subsequent users are plain Users.
         var isFirstUser = await users.Users.AsNoTracking().AnyAsync() == false;
 
@@ -188,6 +188,21 @@ public class AuthController(
         return Ok(new { sent = true });
     }
 
+    /// <summary>
+    /// Refresh-token replay grace window. When the SPA boots, multiple parallel HTTP calls
+    /// can each present the same refresh-token cookie before any of them has received the
+    /// rotated cookie back. The first one rotates the token in DB; subsequent ones arrive
+    /// with the now-revoked old token. Without grace we treat them as replay and clear the
+    /// cookie, signing the user out of their just-loaded page.
+    ///
+    /// Within this window, a revoked token whose ReplacedByTokenHash chain is intact is
+    /// treated as the legitimate predecessor of the current session - we issue a fresh
+    /// access token without further rotating. Replays AFTER this window are still treated
+    /// as compromise (a legitimate client would have the new cookie by then). 30s is a
+    /// generous bound for SPA-bootstrap fan-out without weakening reuse detection.
+    /// </summary>
+    private static readonly TimeSpan RefreshRotationGrace = TimeSpan.FromSeconds(30);
+
     [HttpPost("refresh")]
     public async Task<ActionResult<AuthResponse>> Refresh()
     {
@@ -196,8 +211,54 @@ public class AuthController(
 
         var hash = jwt.HashRefreshToken(raw);
         var token = await db.RefreshTokens.FirstOrDefaultAsync(t => t.TokenHash == hash);
-        if (token is null || token.RevokedAt is not null || token.ExpiresAt < DateTime.UtcNow)
+
+        if (token is null || token.ExpiresAt < DateTime.UtcNow)
         {
+            ClearRefreshCookie();
+            return Unauthorized(new { error = "Refresh token invalid or expired." });
+        }
+
+        // ---- Rotation-grace path ------------------------------------------
+        // Token revoked, but recently - and a replacement exists. Most likely a legitimate
+        // SPA-bootstrap race: another parallel refresh on the same cookie already rotated
+        // it. Walk the ReplacedBy chain forward to the live tip and issue a fresh access
+        // token without further rotating - idempotent under retry.
+        if (token.RevokedAt is not null)
+        {
+            var revokedAt = token.RevokedAt.Value;
+            var insideGrace = DateTime.UtcNow - revokedAt <= RefreshRotationGrace;
+            if (insideGrace && !string.IsNullOrEmpty(token.ReplacedByTokenHash))
+            {
+                // Follow chain - cap at a few hops to bound work in case of pathological data.
+                var current = token;
+                for (var hops = 0; hops < 5 && !string.IsNullOrEmpty(current.ReplacedByTokenHash); hops++)
+                {
+                    var next = await db.RefreshTokens.FirstOrDefaultAsync(t => t.TokenHash == current.ReplacedByTokenHash);
+                    if (next is null) break;
+                    current = next;
+                    if (current.RevokedAt is null) break;
+                }
+
+                if (current.RevokedAt is null && current.ExpiresAt > DateTime.UtcNow)
+                {
+                    var graceUser = await users.FindByIdAsync(current.UserId.ToString());
+                    if (graceUser is not null && graceUser.IsActive)
+                    {
+                        // Cookie stays as-is - the caller is presenting an older raw token,
+                        // but the SPA-side dedupe means most callers will already have the
+                        // fresh cookie. This response just hands them a valid access token.
+                        var graceCompanyId = await ResolveCompanyId(graceUser.Id);
+                        var graceRoles = await users.GetRolesAsync(graceUser);
+                        var (access, expiresAt) = jwt.IssueAccessToken(
+                            graceUser.Id, graceUser.Email!, graceCompanyId, graceRoles);
+                        return new AuthResponse(access, expiresAt, new UserSummary(
+                            graceUser.Id, graceUser.Email!, graceUser.FirstName, graceUser.LastName,
+                            graceUser.AvatarUrl, graceCompanyId, (IReadOnlyList<string>)graceRoles));
+                    }
+                }
+            }
+
+            // Past the grace window, or no live tip - treat as replay.
             ClearRefreshCookie();
             return Unauthorized(new { error = "Refresh token invalid or expired." });
         }
@@ -285,7 +346,7 @@ public class AuthController(
             Expires = DateTimeOffset.UtcNow.AddDays(jwtOptions.RefreshTokenDays),
         };
         // In prod the SPA + API live on sibling subdomains; setting Domain to the parent
-        // (.madproducts.co.za) lets the cookie flow on requests from the SPA to the API.
+        // (.madprospects.com) lets the cookie flow on requests from the SPA to the API.
         // Configured via COOKIE_DOMAIN env var so dev (localhost) stays unchanged.
         var domain = Environment.GetEnvironmentVariable("COOKIE_DOMAIN");
         if (!string.IsNullOrWhiteSpace(domain)) opts.Domain = domain;

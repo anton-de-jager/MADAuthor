@@ -13,7 +13,7 @@ namespace MadAuthor.Api.Realtime;
 /// Watches AIJobQueue for Completed jobs and enqueues the next pipeline stage:
 ///   PlanBook → DraftChapter × N → EditChapter × N → ContinuityCheck → GenerateMetadata → GenerateMarketing
 ///
-/// Orchestration is stateless and idempotent — every "enqueue follow-up" call first checks
+/// Orchestration is stateless and idempotent - every "enqueue follow-up" call first checks
 /// whether the follow-up job already exists for that project/chapter, so a restart that
 /// re-scans recent completed jobs won't duplicate work.
 ///
@@ -40,7 +40,7 @@ public class PipelineOrchestrator(
             try { await Tick(ct); }
             catch (Exception ex) { log.LogWarning(ex, "PipelineOrchestrator tick failed."); }
 
-            // State-based reconciler — heals orchestration gaps that the event-driven
+            // State-based reconciler - heals orchestration gaps that the event-driven
             // Tick can miss (e.g. completions during API downtime, or follow-ups whose
             // SaveChanges silently dropped). Runs at a slower cadence than Tick.
             if (DateTime.UtcNow - _lastReconcileAt >= ReconcileInterval)
@@ -58,7 +58,7 @@ public class PipelineOrchestrator(
     /// Periodic sweep: for every non-terminal project with at least one Completed job,
     /// re-invoke HandleCompleted for each of that project's completions. Every handler
     /// short-circuits if the follow-up it would create already exists, so this is
-    /// idempotent and self-healing — gaps caused by downtime or transient failures
+    /// idempotent and self-healing - gaps caused by downtime or transient failures
     /// get filled within ReconcileInterval.
     /// </summary>
     private async Task ReconcileGaps(CancellationToken ct)
@@ -66,23 +66,26 @@ public class PipelineOrchestrator(
         using var scope = scopes.CreateScope();
         var db = scope.ServiceProvider.GetRequiredService<MadAuthorDbContext>();
 
-        var liveProjectIds = await db.BookProjects.IgnoreQueryFilters()
-            .Where(p => p.IsDeleted == false
-                     && p.Status != BookProjectStatus.Completed
-                     && p.Status != BookProjectStatus.Archived)
-            .Select(p => p.Id)
-            .ToListAsync(ct);
-
-        if (liveProjectIds.Count == 0) return;
-
+        // NOTE on the query shape: an earlier version of this used a materialized
+        // `liveProjectIds.Contains(j.BookProjectId)` Where clause which EF Core 8
+        // translates as `WHERE BookProjectId IN (SELECT value FROM OPENJSON(@list) WITH (...))`.
+        // SQL Server requires the statement preceding OPENJSON to end with `;`; EF
+        // doesn't always emit that. Switch to an EXISTS subquery so SQL Server sees
+        // a plain JOIN-style predicate and the OPENJSON path is never taken.
         var cutoff = DateTime.UtcNow.AddDays(-30);
         var jobs = await db.AIJobQueue
             .Where(j => j.Status == AIJobStatus.Completed
                      && j.CompletedDate != null
                      && j.CompletedDate > cutoff
-                     && liveProjectIds.Contains(j.BookProjectId))
+                     && db.BookProjects.IgnoreQueryFilters()
+                            .Any(p => p.Id == j.BookProjectId
+                                   && p.IsDeleted == false
+                                   && p.Status != BookProjectStatus.Completed
+                                   && p.Status != BookProjectStatus.Archived))
             .OrderBy(j => j.CompletedDate)
             .ToListAsync(ct);
+
+        if (jobs.Count == 0) return;
 
         foreach (var job in jobs)
         {
@@ -93,8 +96,7 @@ public class PipelineOrchestrator(
             }
         }
 
-        log.LogDebug("Reconciler swept {Jobs} completions across {Projects} live projects.",
-            jobs.Count, liveProjectIds.Count);
+        log.LogDebug("Reconciler swept {Jobs} completions.", jobs.Count);
     }
 
     private async Task Tick(CancellationToken ct)
@@ -150,7 +152,7 @@ public class PipelineOrchestrator(
             project.WorkflowStage = BookProjectWorkflowStage.Planning;
             project.UpdatedDate = DateTime.UtcNow;
             await db.SaveChangesAsync(ct);
-            log.LogInformation("Project {ProjectId} requires outline approval — pausing pipeline.", project.Id);
+            log.LogInformation("Project {ProjectId} requires outline approval - pausing pipeline.", project.Id);
             return;
         }
 
@@ -360,7 +362,7 @@ public class PipelineOrchestrator(
 
         // Idempotency guard: the reconciler re-invokes HandleCompleted on every Completed job on
         // every tick. The column updates below are idempotent, but the InApp notification and the
-        // owner email further down are NOT — without this guard a finished book spams the owner
+        // owner email further down are NOT - without this guard a finished book spams the owner
         // every 2 minutes forever. Treat "we've already inserted the JobCompleted notification
         // pointing at this project" as the marker that we've fired the once-only side effects.
         var alreadyNotified = await db.Notifications.AnyAsync(n =>
@@ -370,7 +372,7 @@ public class PipelineOrchestrator(
         if (alreadyNotified)
         {
             // Still ensure project columns reflect the terminal state in case anyone edited them.
-            // No SaveChangesAsync needed if values match — EF tracks changes.
+            // No SaveChangesAsync needed if values match - EF tracks changes.
             project.Status = BookProjectStatus.ReadyForReview;
             project.WorkflowStage = BookProjectWorkflowStage.Publishing;
             project.CompletionPercentage = 100;
@@ -434,7 +436,7 @@ public class PipelineOrchestrator(
                 <p>Hi {System.Net.WebUtility.HtmlEncode(owner.FirstName)},</p>
                 <p><strong>{System.Net.WebUtility.HtmlEncode(project.Title)}</strong> finished generation.
                 Open it in MADAuthor to read, regenerate chapters, and export.</p>
-                <p style="margin-top:16px;">— MADAuthor</p>
+                <p style="margin-top:16px;">- MADAuthor</p>
                 """;
             await email.SendAsync(owner.Email!, $"{owner.FirstName} {owner.LastName}".Trim(), subject, html, ct);
         }

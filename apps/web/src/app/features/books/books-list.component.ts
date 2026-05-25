@@ -26,7 +26,7 @@ import { DatePipe } from '@angular/common';
         <div class="glass rounded-xl p-12 text-center">
           <div class="text-2xl mb-2">📚</div>
           <div class="font-display text-xl mb-1">No books yet</div>
-          <div class="text-ink-400 text-sm mb-6">Drop an idea or upload notes — the worker takes it from there.</div>
+          <div class="text-ink-400 text-sm mb-6">Drop an idea or upload notes - the worker takes it from there.</div>
           <a routerLink="/books/new"
              class="inline-block bg-gradient-to-r from-brand-600 to-fuchsia-600 hover:from-brand-500 hover:to-fuchsia-500 text-white font-medium rounded-lg px-4 py-2.5 transition">
             Create your first book

@@ -1,0 +1,161 @@
+# The Office Door
+
+There is a particular sound an office door makes when it closes behind you for the first time as the person whose name is on it. It is not loud. It is not dramatic. It is a soft, almost apologetic click, the kind of sound a workshop man learns to distrust because nothing important on a shop floor ever happens quietly. Real work announces itself. Real work hisses, grinds, sparks, swears. A door that closes like that, on carpet, in a corridor that smells of printer toner and instant coffee, sounds like it might be lying to you.
+
+I stood on my side of that door for a long moment before I sat down. The desk had been cleaned for me. Someone had wiped it that morning, probably the same someone who would later bring me tea I had not asked for, in a cup I would feel oddly guilty about not washing myself. There was a chair that swivelled. There was a window. There was a phone with more buttons than I had ever needed in my life, and a computer waiting with a login screen that did not yet know who I was.
+
+I remember thinking, very clearly: *They have made a mistake. They will work it out by Friday.*
+
+That thought is the subject of this chapter. Where it comes from. Why it is louder for some of us than others. And, more usefully, what to do with it on the mornings when it will not be quiet.
+
+## The borrowed title
+
+When the title comes, it does not feel like yours. It feels like a coat someone has handed you at a function and asked you to wear because the owner has gone outside for a smoke. You put it on. It fits, more or less. People speak to you as if it has always been yours. And the whole time, somewhere behind your ribs, there is a small, embarrassed voice waiting for the real owner to come back through the door and ask, politely, for it back.
+
+In my case the coat was the word **manager**. Not a foreman, not a charge-hand, not a senior tradesman who happened to be looking after a crew. Manager. With an office. With a budget. With a line on an organogram that had a box above me and several boxes below, and a quiet, terrifying understanding that the boxes below were now, in some real sense, my responsibility before they were anyone else's.
+
+I had worked for managers before. I had cursed a few of them under my breath, the way every tradesman does. I had also, by then, worked for two or three I would have walked through a wall for. I knew, in theory, what the job was. I knew what it looked like done well and what it looked like done badly. None of that knowledge, it turned out, helped me very much on the first morning.
+
+Because knowing what the job looks like from the outside and knowing what it feels like from the inside are two different qualifications, and only one of them is granted by appointment letter.
+
+## A short, honest definition of imposter syndrome
+
+There is a phrase that gets used for this feeling now. **Imposter syndrome.** I did not have that phrase when I needed it. We did not really talk about feelings on the shop floor, and nobody in my world had a name for the suspicion that you had been promoted by accident. We just got on with it, or we drank too much, or we became hard in ways that did not serve us later. Sometimes all three.
+
+The phrase, when I finally heard it, was a relief. Not because it solved anything, but because it named the thing. A named thing can be discussed. An unnamed thing just sits on your chest in the early hours and tells you you are a fraud.
+
+So let me give it a working definition, the way I have come to understand it, in plain language and without any psychology degree:
+
+> Imposter syndrome is the gap between how competent you feel on the inside and how competent other people are treating you on the outside, when you secretly believe their version is wrong.
+
+That is all it is. It is not a character flaw. It is not weakness. It is a measurement error, in the most literal sense — you are using a yardstick on yourself that you do not use on anyone else.
+
+Notice what the definition does not say. It does not say you are not competent. It does not say the people who promoted you are fools. It does not say you will be found out. It only says that you, the person who has the most data about your own shortcomings, are weighting that data far more heavily than anyone else is. Of course you are. You were there for all of it. You remember every weld that had to be ground out, every quote that came back wrong, every conversation you wish you had handled better. They remember the bridge that is still standing and the team that did not walk.
+
+Both sets of memories are real. Only one of them is being used to make the decision.
+
+## Why craftsmen feel it harder
+
+I want to spend a moment on something specific, because I think it matters for anyone who has come up from a trade into management, and it does not get said enough.
+
+People who learn a craft for a living develop a particular relationship with the truth. A weld is good or it is not. A measurement is right or it is wrong. A part fits or it has to be cut again. There is no boardroom in which you can talk a bad weld into being a good weld. The metal does not care about your tone of voice, your relationships, or how busy you have been. The metal tells you, every time, exactly what you are.
+
+That is a brutal teacher, and it is also a gift. It produces people who know, in their bones, the difference between *I did this work* and *I talked about doing this work*. It produces people who flinch, physically flinch, at bluster.
+
+The problem is what happens when you put one of those people behind a desk.
+
+Management work, especially in its first weeks, does not look like work to a tradesman. You sit in meetings. You read emails. You sign things. You ask people questions and write down their answers. At the end of the day there is no length of finished steel to point at. There is no part you can hand to the inspector. There is, instead, a feeling that you spent eight hours doing nothing while other people did real work, and that you are now being paid more for it than they are.
+
+That feeling is the engine of imposter syndrome in a tradesman-turned-manager. It is not that you doubt your intelligence. It is that you have been trained, deeply, to distrust anything that does not leave a mark.
+
+The first useful thing I learned in that office was that management *does* leave a mark. It just does not leave it on the work in front of you. It leaves it on the work in front of everyone else. A decision you made on a Tuesday morning shows up two months later as a project that came in on budget, or a person who stayed instead of leaving, or a near-miss that did not become an injury. The marks are real. You just have to learn to read them, and you have to be patient enough to wait for them to appear.
+
+## The first morning, in detail
+
+I want to tell you about that first morning properly, because I think the details matter more than the lesson.
+
+I had come in early. Earlier than I needed to, because I had not slept well and the house felt small. The car park was almost empty. I let myself in with the new access card they had given me, which felt slightly ridiculous, like a child's toy. The cleaners were finishing in the corridor. One of them, a woman I had passed for years on the shop floor, nodded at me in a way that was both warmer and more formal than it had been the week before. Word had got around. I was on the carpet side now.
+
+I sat down. I did not know what to do. There was no work in front of me in any sense I recognised. There were files in the cabinet from my predecessor, who had retired, and an email inbox that someone had pre-loaded with three hundred unread messages, most of which had nothing to do with me but had been copied to the position rather than the person. The phone rang once and stopped. I jumped slightly. I was grateful no one had seen.
+
+The first thing I did, I am almost embarrassed to admit, was walk back out onto the shop floor.
+
+I had told myself I was going to do a round. Get the temperature of the place. Be visible. All of those phrases that managers use when what they actually mean is that the office is too quiet and they do not yet know how to be in it. I walked the bays. I greeted people. I asked one of the welders, a man I had served my apprenticeship near, how his daughter was. He told me. He was polite. He was also, very slightly, careful with me in a way he had not been careful the previous Friday, and I felt that carefulness like a draught under a door.
+
+That was the moment, I think, that I understood the office was not a reward. It was a reassignment.
+
+The people I had stood beside for half my working life were not going to stand beside me in quite the same way again. Not because they did not respect me — many of them, I think, did — but because the role had changed the geometry of the room. There was now a line between us that had not been there the week before, and we were both going to have to learn how to talk across it.
+
+I went back to the office. I closed the door, more deliberately this time. And I sat down to do the actual work, which was, as it turned out, almost entirely about other people.
+
+## What the craftsman brings to the desk
+
+This is where the rest of the chapter has to earn its keep, because I do not want to leave you only with the feeling. I want to leave you with what to do about it.
+
+If you are a tradesman, or a technician, or anyone who has come up through doing the work with your hands before being asked to do it with your signature, you bring three things to a management role that the people who arrived by a different route often do not have. I want you to know what they are, because on the mornings when the title feels borrowed, these are the things that are actually yours.
+
+### One. You know what real work feels like.
+
+You have stood in heat. You have lifted things that were heavier than you. You have come home with your hands cut and your back sore and gone back the next morning. This means several things, all of which are useful behind a desk.
+
+It means you can tell, with reasonable accuracy, when someone is telling you a job is harder than it is. You have done the job. You have a felt sense, not just a written sense, of what a fair day's output looks like.
+
+It means you know the difference between a tired team and a lazy one. There is a difference. Tired teams need rest, food, or a problem solved upstream. Lazy teams need a different kind of conversation. Mistaking one for the other is one of the most common failures of new managers, and the trade protects you from it if you keep listening to it.
+
+And it means you have a built-in test for your own decisions. Before you sign a memo, before you change a process, before you announce a new policy, you can ask yourself a very simple question: *if I were still on the floor, what would I think of the person who just did this?* It will not always give you the answer you want. But it will almost always give you an honest one.
+
+### Two. You know what dignity costs.
+
+You have been treated like a number. Most tradesmen have, at some point. You have been spoken to as if you were not in the room, by someone in a clean shirt who did not know your name. You remember exactly how that felt, and you remember exactly what it did to your willingness to go the extra mile that day.
+
+That memory is worth more than any management course. It will not let you become the manager you used to complain about, provided you do not let yourself forget it. The day you stop remembering what it felt like to be on the other side of your own desk is the day you start becoming the kind of person you used to write off as out of touch.
+
+Keep the memory. Do not romanticise it. Just keep it.
+
+### Three. You know that the work is the point.
+
+This sounds obvious. It is not, in management. Management has its own internal weather system of meetings, reports, politics, and performance theatre, and it is entirely possible to spend a year of your life being very busy inside that weather without ever actually moving the work forward. Many managers do. Some build whole careers out of it.
+
+You will be tempted. The temptation looks different from the inside than I am making it sound. It is not lazy or cynical. It is, mostly, a slow drift towards the activities that other managers reward, because those are the activities your peers can see. The shop floor cannot see your strategy deck. The board cannot see your shift handover. So you start, almost without noticing, optimising for the audience that grades you rather than the work that pays everyone.
+
+Your trade is the antidote to this. You know, in a way that cannot be unlearned, that the work is the point. The bridge has to stand. The order has to ship. The team has to go home with their fingers. Everything else is in service of that, or it is in the way of it. If you can keep that lens, even one or two days a week, you will be a different kind of manager from the average. Not better at everything. But oriented correctly, which matters more.
+
+## Sitting with the discomfort
+
+I want to be honest about something, because I do not believe in the kind of business book that promises you a trick that makes a hard thing easy. The discomfort of that first office did not go away because I had a good attitude about it. It went away slowly, over months, and only because I did the work in front of me, badly at first and then less badly, until one morning I realised I had not thought about whether I deserved to be there in some weeks.
+
+That is, in the end, the only real cure I know for imposter syndrome. Not affirmations. Not pep talks. Certainly not pretending. Just time, plus honest work, plus the willingness to be visibly bad at the parts of the new job you have not learned yet, in front of people who knew you when you were good at the old one.
+
+That last bit is the hardest. A tradesman is used to being competent. You walked into that workshop and people knew, within a week, whether you could be trusted with a torch. You may have been junior, but you were competent. Becoming a manager means, briefly, being incompetent again. Not at the technical work — you can still do that better than most — but at the thing the role actually requires, which is making decisions about other people and other people's work, often with too little information, often under time pressure, and often with consequences you cannot fully see.
+
+You will be bad at it for a while. There is no shame in this, but there is also no shortcut around it. The senior managers I most respected, looking back, were the ones who allowed themselves to be openly learning in their first year. They asked questions in meetings that they could have pretended to know the answers to. They said, *I have not done this before, walk me through it.* They were not weakened by this. They were trusted more for it, by anyone whose trust was worth having.
+
+The ones who came in pretending to know everything had a harder time. Their teams clocked them within a fortnight. Tradesmen, in particular, can smell pretence at fifty paces. It is one of the gifts of the work. So if you are coming up from the floor, do not pretend. You will not get away with it among your own, and you will not respect yourself for trying.
+
+## A few practical things
+
+I am wary of turning this chapter into a checklist, because the truth of that first office was not a checklist. It was a feeling, and the feeling had to be lived through. But there are a handful of practical habits I wish someone had put in front of me on day one, so let me put them in front of you.
+
+- **Keep a notebook.** A paper one. Write down what you decided, what you promised, and what you noticed about people. Re-read it on Fridays. You will be amazed how quickly your own first impressions stop being available to you once the role has reshaped your view.
+- **Walk the floor at least once a day, with no agenda.** Not to inspect. Not to fix. Just to be in the place where the work is happening. The day you stop doing this is the day you start drifting, even if you do not feel it yet.
+- **Find one peer who is not in your reporting line and is honest with you.** Another manager at your level, a former colleague who has done this longer, someone outside the company entirely. You need a person who can tell you when you are being a fool, who will not lose anything by saying it.
+- **Block time on your calendar for thinking.** Two hours, twice a week, with the door closed. If you do not protect it, it will be eaten. Thinking is part of the job, and almost no one will treat it that way for you.
+- **Resist the urge to do the work yourself.** This will be the strongest pull of all, especially when something goes wrong on the floor and you can see, exactly, how you would fix it. Resist. Coach the person in front of you. Your job is no longer to make the part. Your job is to make the people who make the parts.
+
+That last one took me the longest. I still feel the pull, on a hard day. Some part of me always will. But the role, properly done, asks you to step back from the metal and trust the hands you have trained. If you cannot do that, the office will eventually break you, because there is too much for one person to do and you are no longer one person — you are a multiplier, and a multiplier that insists on also being a single worker is just a tired worker with a bigger title.
+
+## The door, again
+
+I want to end where I started, with that door.
+
+A few years into the role, I had occasion to close it behind me on a difficult day. A project had gone sideways, a client was unhappy, a member of my team had made a decision I would not have made, and I needed five minutes to think before I responded. I closed the door. It made the same soft, carpeted click it had made on the first morning.
+
+This time, it sounded different.
+
+It did not sound apologetic. It sounded like a tool. A door, properly used, is part of the equipment of management. It is not a barrier between you and the work. It is a space where the work of thinking can happen without interruption, so that when you open it again, what comes out is considered rather than reactive. That, I had finally understood, was part of what the office was for.
+
+The chair I sat in was, by then, mine. Not because anyone had granted it to me a second time, but because I had been the person in it long enough to have made a number of decisions, some good and some bad, that the place now bore the marks of. The marks were real. I had learned to read them.
+
+I do not want to overstate the transformation. Imposter syndrome does not vanish. It comes back at intervals — when the role grows, when the company changes, when a new and harder seat appears above you and you start the climb again. I will tell you, in a later chapter, about the day I was asked to take a seat I genuinely did not believe I was ready for, and how some of the same feelings came back almost unchanged. The voice does not leave. It just gets quieter, and you get better at recognising it for what it is: a habit of mind, not a diagnosis.
+
+If you are sitting on the other side of an office door right now, with your name on the wrong side of it and a feeling in your chest that it is all a misunderstanding, I want you to do two things.
+
+First, do the work in front of you today. Not the work of proving you belong. Just the work. Answer the email. Take the meeting. Make the decision you have been putting off because you are afraid of getting it wrong. The fastest way out of the feeling is through it, and through it is paved with completed small tasks, not with breakthroughs.
+
+Second, remember what you brought with you through the door. Hands that have done real work. A memory of being on the other side. An instinct for what is true that the metal taught you and that no amount of corporate weather can take away.
+
+The door will keep making its soft little click. Let it. It is only a door. You are the person who decides what happens on either side of it now, and you have been preparing for this longer than you think.
+
+## What this chapter has been about
+
+If I had to compress what I have just told you into a few lines for the apprentice version of myself, sitting in that chair on that first morning, it would be these:
+
+- The title is not a verdict on your worth. It is a description of where you have been placed in a system. Treat it as a job to learn, not a judgement to defend.
+- The discomfort you are feeling is not a sign that you do not belong. It is the natural friction of becoming competent at a new thing while still being competent at the old one. It will fade with use.
+- Your trade is not a thing you have left behind. It is the equipment you are bringing into the new role. Use it.
+- The work is still the point. Optimise for it, even when no one in the room is grading you on it. The grades that matter will arrive later, in the form of a team that stays, a job that ships, a place that runs well.
+- Be visibly learning. The people whose respect is worth having will respect you more for it, not less.
+
+And close the door behind you, when you need to. Quietly. On purpose. Like a tool.
+
+That is the chapter. The next one is harder, because the next one is about what happens when something goes badly wrong and there is no manual on the shelf for it — and the office, with its clean desk and its swivelling chair, is exactly the place you have to sit and decide what to do anyway.

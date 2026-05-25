@@ -38,6 +38,45 @@ function Write-Log {
     Add-Content -Path $logPath -Value $line -Encoding UTF8
 }
 
+function Invoke-ClaudeHidden {
+    param(
+        [string]$ClaudeBin,
+        [string]$Prompt,
+        [string]$RepoRoot,
+        [string]$LogPath
+    )
+
+    $psi = New-Object System.Diagnostics.ProcessStartInfo
+    $psi.FileName = $ClaudeBin
+    $psi.WorkingDirectory = $RepoRoot
+    $psi.UseShellExecute = $false
+    $psi.CreateNoWindow = $true
+    $psi.RedirectStandardInput = $true
+    $psi.RedirectStandardOutput = $true
+    $psi.RedirectStandardError = $true
+    $psi.WindowStyle = [System.Diagnostics.ProcessWindowStyle]::Hidden
+    $safeRepoRoot = $RepoRoot -replace '"', '\"'
+    $psi.Arguments = ('--print --dangerously-skip-permissions --add-dir "{0}"' -f $safeRepoRoot)
+
+    $process = New-Object System.Diagnostics.Process
+    $process.StartInfo = $psi
+    [void]$process.Start()
+    $process.StandardInput.Write($Prompt)
+    $process.StandardInput.Close()
+    $stdout = $process.StandardOutput.ReadToEnd()
+    $stderr = $process.StandardError.ReadToEnd()
+    $process.WaitForExit()
+
+    foreach ($line in ($stdout -split "`r?`n")) {
+        if ($line.Length -gt 0) { Add-Content -Path $LogPath -Value "  $line" -Encoding UTF8 }
+    }
+    foreach ($line in ($stderr -split "`r?`n")) {
+        if ($line.Length -gt 0) { Add-Content -Path $LogPath -Value "  STDERR $line" -Encoding UTF8 }
+    }
+
+    return $process.ExitCode
+}
+
 # --- main -------------------------------------------------------------------
 
 if (-not (Test-Path $claudeBin)) {
@@ -60,12 +99,7 @@ try {
     # lets the scanner run unattended (even though it should only read +
     # POST -- the worker prompt is the actual guard against writes).
     $start = Get-Date
-    $prompt | & $claudeBin `
-        --print `
-        --dangerously-skip-permissions `
-        --add-dir $repoRoot 2>&1 |
-        ForEach-Object { Add-Content -Path $logPath -Value "  $_" -Encoding UTF8 }
-    $exit = $LASTEXITCODE
+    $exit = Invoke-ClaudeHidden -ClaudeBin $claudeBin -Prompt $prompt -RepoRoot $repoRoot -LogPath $logPath
     $elapsed = (Get-Date) - $start
     Write-Log ("DONE  claude exit={0} elapsed={1:N0}s" -f $exit, $elapsed.TotalSeconds)
 } finally {

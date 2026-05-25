@@ -21,11 +21,11 @@ public class ClamAvOptions
 /// chunks framed by 4-byte big-endian length prefixes, then terminates the stream with a zero
 /// length. clamd responds with one of:
 /// <list type="bullet">
-///   <item><c>stream: OK</c> — clean</item>
-///   <item><c>stream: &lt;ThreatName&gt; FOUND</c> — infected</item>
-///   <item><c>... ERROR</c> — scanner error; treated as Skipped + logged so uploads still succeed</item>
+///   <item><c>stream: OK</c> - clean</item>
+///   <item><c>stream: &lt;ThreatName&gt; FOUND</c> - infected</item>
+///   <item><c>... ERROR</c> - scanner error; treated as Skipped + logged so uploads still succeed</item>
 /// </list>
-/// All errors fall back to <see cref="ScanStatus.Skipped"/> — virus scanning is a defense-in-depth
+/// All errors fall back to <see cref="ScanStatus.Skipped"/> - virus scanning is a defense-in-depth
 /// layer, not a blocker for legit users, and we don't want a clamd outage to take down uploads.
 /// </summary>
 public sealed class ClamAvFileScanner(ClamAvOptions options, ILogger<ClamAvFileScanner> log) : IFileScanner
@@ -50,7 +50,7 @@ public sealed class ClamAvFileScanner(ClamAvOptions options, ILogger<ClamAvFileS
             net.ReadTimeout = options.ScanTimeoutMs;
             net.WriteTimeout = options.ScanTimeoutMs;
 
-            // 1. Send "zINSTREAM\0" — the 'z' prefix asks clamd to terminate replies with NUL.
+            // 1. Send "zINSTREAM\0" - the 'z' prefix asks clamd to terminate replies with NUL.
             var hello = Encoding.ASCII.GetBytes("zINSTREAM\0");
             await net.WriteAsync(hello, ct);
 

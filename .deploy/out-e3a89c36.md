@@ -1,0 +1,161 @@
+# The Step Up to Supervisor
+
+There is a particular morning, in the life of any tradesman who is going to end up running things, when somebody pulls him aside between the urn and the noticeboard and tells him, in the kind of voice that does not invite a discussion, that he is going to be the man holding the clipboard now. Mine came on a Tuesday. I remember the day of the week because the diesel delivery used to come on Tuesdays and the smell of it was hanging in the yard while the foreman was talking, and the part of me that was trying to listen properly was also, embarrassingly, half-tracking whether the driver was going to pull the hose to the wrong tank again, the way he had done the month before.
+
+The foreman did not make a ceremony of it. He almost never made a ceremony of anything. He said, in roughly so many words, that the company was promoting me. There would be a small bump in pay. There would be a different jacket, although I would still wear it over my overalls. There would be a section of the floor — three bays, four men, sometimes five if a contract was running hot — that was, from Monday next, going to be my responsibility. He said he had been watching me for a while. He said he thought I would do alright. He said that if I did not do alright he would tell me, and that I should not, under any circumstances, find this out from anybody else. Then he tapped the noticeboard with the end of his pen and went back inside, leaving me standing in a faint cloud of diesel with a feeling I did not yet have a name for.
+
+The feeling was not pride, although there was some pride in it. It was not fear, although there was a fair bit of that too. It was, I now think, the first proper taste of a particular flavour of loneliness that the job above the toolbox carries with it, and that nobody had warned me about in any of the years leading up to that morning, because in the trade I came up in, the people who knew that flavour did not, on the whole, talk about it.
+
+This chapter is about the line I crossed that Tuesday. What I thought it was. What it actually was. And what happened, in the months that followed, when I had to look five men I had worked next to for years in the face and start being, for them, a slightly different kind of person than the one they had been buying a Coke for at lunchtime the week before.
+
+## The line itself
+
+I want to be precise, before I describe the awkwardness of it, about what the line actually was, because the word *supervisor* gets thrown around now in a way that does not quite match what it meant in the world I am describing.
+
+A supervisor on the floor I came up on was not a manager. He did not have an office. He did not have a secretary. He did not, in most cases, even have a desk of his own. What he had was a clipboard, a hard hat with a different colour band on it, a quiet expectation from the foreman above him that the work in his section was going to go out the door on time and to standard, and a quiet expectation from the men below him that he was not going to forget what it was like to be one of them.
+
+He was, in other words, the first link in the chain where you stopped being paid mainly for what your own hands did and started being paid mainly for what other people's hands did. That is the line. It sounds small, written down like that. It is not small. It is one of the largest single shifts in the working life of a person, and I have come, over the years, to think that an awful lot of what goes wrong in middle management — in any industry, not just the trade — goes wrong because the people who crossed that line did not understand, at the time, what they were actually crossing.
+
+On one side of the line, your job is to do the work. On the other side, your job is to be responsible for the work, which is a different job, and which requires, eventually, a different shape of attention.
+
+The two jobs look similar. They use most of the same vocabulary. The supervisor is still on the floor. He is still in overalls. He still picks up a tool occasionally, when a job is in trouble and he is the nearest competent pair of hands. The men around him are still doing the same work he was doing the week before. The plate is the same plate. The welds are the same welds. The radio in the canteen is still playing the same station nobody chose.
+
+But underneath, the centre of gravity has moved.
+
+When you were a tradesman, your good day was a day on which your own work had gone well. The thing you had set out to make in the morning was standing, square and sound, on the bench in front of you at four o'clock. You went home tired and quietly satisfied. The feedback loop was short. The steel had told you, in the same plain language it always used, whether you had done what you said you were going to do.
+
+When you are a supervisor, your good day is a day on which five other men's work has gone well, and you can no longer hear the steel directly. You can only hear it through them. If one of them is hiding a problem, the steel does not get to tell you. He does. And if he does not, the first you find out about it is when the foreman is standing in front of your clipboard on a Friday afternoon asking why a job that was supposed to ship has not. The feedback loop has stretched. The information now travels through people instead of through your own hands. And people, unlike steel, do not always tell the truth.
+
+That is the line. That is what crossing it actually means. Most of the rest of this chapter is about the small, embarrassing, painful set of lessons that I had to learn, in the first year on the other side, in order to begin to do the new job properly.
+
+## Supervising the men I had been
+
+The hardest part of the first year was not the work. The work, oddly enough, was the part of it I understood. I knew what was coming out of those three bays. I had been making it myself, six months earlier. I knew how long each piece took. I knew which jobs were going to give trouble. I knew where the templates were, where the offcuts went, where the leads were going to tangle if you did not move them, and which welder, of the three I had inherited, would quietly do twenty per cent more than was on his card if you put a hot job in front of him and stayed out of his way.
+
+The hard part was the men.
+
+Four of them, when I started, had been working in those bays before I arrived as an apprentice. They had been there when I was sweeping floors. They had taught me, in various small ways, how to do the trade. One of them, in particular, had been the man who had handed back my first three wire-brushed pieces with the same flat *again*, *properly*, until I had begun to understand what he meant. He was now standing in a bay, three metres to my left, looking at a job card I had clipped to the side of his bench, with a small unreadable expression on his face that I had no idea how to interpret.
+
+The fifth man was younger than me by a year and a half. He had been an apprentice at the same time as me. We had carpooled, occasionally, when his car would not start. He had been at my wedding. He had stood next to me at the urn for most of two thousand mornings. And now, by some quiet decision in an office I had not been in, I was the man whose name was at the top of his job card and whose initials had to be on the bottom of it before it went anywhere.
+
+I did not know what to do with my face for the first two weeks.
+
+I want to describe this honestly, because I have noticed, over the years, that the awkwardness of supervising former peers is something that nobody quite explains to a new supervisor, and most of the bad behaviour I have seen from new supervisors, in any industry I have been around, is, in the end, a small attempt to manage that awkwardness without admitting to it.
+
+There is a temptation, when you are suddenly in charge of men you used to be one of, to do one of two things, and both of them are wrong.
+
+The first wrong thing is to over-correct into authority. You decide, on the bus ride in, that you are going to make it clear from day one that things have changed. You walk into the bay with your clipboard held a little too high. You issue an instruction that does not really need to be issued, just so that everybody can see you issuing it. You correct a small thing on a piece of work that you would not have corrected the week before, in order to demonstrate that you are now the kind of person who corrects things. The men see straight through it. They have seen, in their own time, a dozen new supervisors arrive holding the clipboard a little too high, and they know, by lunchtime, exactly which kind of man you have decided to be. The good ones will give you about three weeks to find your feet and come back down. The less patient ones will write you off by Wednesday and quietly start working around you, which is one of the most damaging things that can happen to a young supervisor and almost impossible to undo once it has set in.
+
+The second wrong thing is to over-correct the other way, into false democracy. You decide that, because you used to be one of them, you will pretend that nothing has changed. You stand at the urn in the morning and joke as if you are still on the same side of the line. You ask their opinion on things you should not be asking their opinion on, because the decision is, in fact, yours to make and they know it. You shy away from saying the unpopular thing because you are afraid of losing the friendship you have with the man in the third bay. You let small problems run, in the early weeks, that you would not have let run if they had been somebody else's problems, because you do not, yet, know how to tell a man you have known for ten years that the weld he just laid is not good enough. The men see through that too. They had not expected nothing to change. They had expected the change to be small and dignified, and you have, by trying to pretend there is no change at all, made it large and undignified instead.
+
+I am ashamed to say that I tried both of these, in different proportions, in different weeks, before I worked out what the third option was.
+
+The third option, which is the only one that holds up over time, is to say the thing plainly.
+
+I went, eventually, after about a fortnight of fumbling, to each of the five men individually. I did not make a meeting of it. I caught them, separately, at moments when nobody else was within earshot — at the urn, on the way back from the toilet, on the small loading ramp where the smokers used to stand. With each of them I said roughly the same short thing, in roughly the same plain words. I said that I knew the situation was awkward. I said that I had not asked for this job, but that having been given it, I was going to try to do it properly. I said that I would not pretend nothing had changed, because it had, and we both knew it had. I said that I was going to need their help in the early months and that I would say so when I needed it. I said that if I started behaving like a fool, I would prefer to hear it from them, quietly, in private, before I heard it from the foreman, publicly, in a meeting. And I said that I was, regardless of what happened from here, going to remember that they had taught me most of what I knew about the trade, and that nothing about the new arrangement was going to change that.
+
+I had not prepared a speech. I did not write it down. I am not sure I said exactly those words to any one of them. But the shape of the thing was the same in each case. And in each case, the man on the other side of the conversation nodded, said something small and unembarrassed, and went back to his bay.
+
+It was the first piece of supervisory work I ever did, although I did not know it at the time. I had thought, until then, that supervisory work was things like balancing the workload across the bays and making sure the right material was on the right bench. Those are tasks. Those are not the work. The work, I was beginning to learn, was the awkward, slightly unromantic business of being honest with the people you were now in charge of about the fact that you were in charge of them, and that you intended to be in charge of them in a way that did not require either of you to pretend.
+
+After those conversations the floor settled. Not perfectly. Not immediately. But the air on those three bays loosened by a degree or two, and I stopped having to manage my face when I walked past their benches in the mornings.
+
+## The clipboard
+
+I want to say a word about the clipboard, because it is small and slightly ridiculous and yet it changed, in a way I did not anticipate, the actual shape of what I did all day.
+
+The first week I had a clipboard, I did not really know what to do with it. The foreman had given me one. The previous supervisor had used one. The other supervisors on the floor carried one. It was clearly part of the kit. So I carried it. I clipped a stack of job cards to it. I walked around with it under my arm. I felt, for about three days, like a small boy who had been given a folder full of his father's papers and told to look busy with them.
+
+The thing the clipboard taught me, after a while, was that it was not a prop. It was a discipline tool, exactly the way the small ugly notebook had been a discipline tool in my first six months as an apprentice.
+
+The clipboard, used properly, forces you to look at the floor in a particular way. You cannot carry a clipboard around for eight hours without, at some point, putting marks on it. And the marks you put on it, if you are being honest, are a record of what you noticed. *Bay two, job 4471, half a day behind, talk to Piet about why.* *Bay one, plate from the last delivery has a bad edge on it, check the lot.* *Bay three, the youngest welder is leaning on his elbow when he should not be, mention it, gently.* *Material list for next week has nothing about the brackets for the Coetzee job, ask the storeman.*
+
+None of those were big things, on their own. None of them would have been worth a conversation in their own right. But the clipboard, by existing, by being in my hand at all times, made me write them down, and writing them down made me look for them, and looking for them made me see them, and seeing them was, it turned out, ninety per cent of what the new job was about. I was no longer paid for the work my own hands did. I was paid, mostly, for what I noticed before anybody else did. The clipboard, in its small ridiculous way, was the tool that trained me to notice.
+
+I have, since, sat in management meetings in companies many sizes larger than that workshop, where the clipboard had been replaced by a laptop and the job cards had been replaced by a spreadsheet, and I have noticed that the supervisors and managers who actually had the floor under control were, almost without exception, the ones who had developed some private version of the clipboard. Not as a performance. As a discipline. They were writing things down. They were noticing. They were not relying on their memory for anything that mattered, because they had learned, somewhere along the way, that memory is the one thing in a workshop, or in any organisation, that quietly fails first under load.
+
+I owe that habit to the small piece of hardboard with the metal clip on it that the foreman handed me on the second Monday and that I did not really understand the point of until about month three.
+
+## The lonely walk to the gate
+
+The other thing about the supervisor's job that nobody had warned me about was the walk to the gate at the end of the day.
+
+For the years I had been a tradesman, the walk to the gate had been a sociable walk. You left your bay at five, you washed your hands at the long sink, you put your kit away, and you fell in with two or three of the men you had been working alongside all day. You walked out together. You complained about the day together. You made a joke about the foreman, or about the radio, or about whichever apprentice had done something particularly daft that afternoon. By the time you were at the gate you had, in the company of those men, more or less left the day behind. You went home lighter than you had been at four.
+
+The first day I walked out of the workshop as a supervisor, I noticed, about halfway across the yard, that I was walking on my own.
+
+It was not that the men were avoiding me. They were not. They had nodded at me on their way out, in the same unhurried way they always had. But the rhythm of the walk had changed. They were in a small loose group, about ten paces ahead, and I was, without anybody having to say anything, no longer part of that group. I was not on a different side of the yard. I was on the same side. I was just, by the new arrangement, walking a few steps behind, alone, with the clipboard tucked under my arm.
+
+I want to be careful not to over-dramatise this. It was not a tragedy. I went home that evening, I had supper with my wife, I slept badly for one night and then better the next, and by the following week I had got used to it. But it was the first physical, daily, almost embarrassingly small piece of evidence that the line I had crossed on the Tuesday morning was a real line. I was, from now on, going to do a slightly different walk to the gate. Not because anybody was excluding me. Because the job itself required a small piece of distance, and the men, who had seen a great many supervisors in their time, had simply made that distance for me without making a thing of it.
+
+That piece of distance is, I have come to think, the most under-discussed part of stepping into any first leadership role.
+
+The men who promoted you are not, on the whole, going to talk to you about it. They will talk to you about workload, scheduling, quality, safety, the things you can put on a list. They will not talk to you about the fact that the walk to the gate is going to be a little quieter, that the canteen banter is going to fall a fraction softer when you sit down at the table, that the men in the bay are going to ease, very slightly, off the rougher edge of their conversation when you come within earshot, not because they do not like you, but because they now know that you are, in some small, irreducible sense, no longer entirely one of them.
+
+You do not lose them. They are still your friends, in most cases. You will still see them at weddings and funerals and braais for years. They will still let you into the rougher edge of the conversation when you are off the clock and away from the workshop. But the thing that used to be unconscious — the easy assumption that the man next to you was the same kind of man as you, with the same incentives and the same problems — has, by the act of promotion, been put on a slightly different footing. They now know that there is a clipboard somewhere with their name on it and that you are the one carrying it. They do not, mostly, hold it against you. But they remember it, in a small way, every time you are within earshot, and the air between you takes on the small careful shape that air takes when one of the two people knows something the other one does not have to know.
+
+That is the loneliness. It is not dramatic. It is not, on most days, even visible. It is just a small adjustment in the temperature of the room when you walk into it, and the recognition, on the part of the new supervisor, that the room is not going to be quite the same temperature again, regardless of how decently he behaves.
+
+I would not want to talk anyone out of taking the step. The step is, in almost every case, the right step. But I would want anyone taking it to know what they are paying for it, because the price gets paid in small daily currency rather than in one large dramatic transaction, and the people who do not know they are paying it tend to mishandle it the worst.
+
+## Three small mistakes I made in the first year
+
+I want to set out three of the mistakes I made in that first year, in plain language, because the lessons under them have stayed with me through every supervisory and managerial role I have done since, and because nothing about them was clever. They were the ordinary mistakes of a new supervisor, and they are, in my experience, the ordinary mistakes of nearly every new supervisor I have watched come up through the trade since.
+
+**The first mistake was that I did not delegate enough.**
+
+I had been a tradesman the week before. My hands knew how to do nearly everything that was happening in those three bays. So when a job ran into trouble — when a weld would not lie down properly, when a piece of plate had been cut a millimetre out, when a fit-up was refusing to come square — my instinct was to step in. I would put the clipboard down. I would pick up a grinder. I would stand at the bench with the man whose job it was, and I would, between us, get the thing right.
+
+I felt very useful when I did this. The job got back on track. The man was grateful. The foreman, when he came past, saw that things were moving again. Everyone went home happy.
+
+What I did not see, for a long time, was the cost. The cost was that the man whose job it was did not, on those days, finish learning to handle that kind of trouble himself. I had taken the difficulty off him. I had relieved him of the small, uncomfortable, character-forming experience of having to sort it out on his own, which was the same experience that had made me the tradesman who could now sort it out for him. By stepping in, I had robbed him of the next piece of his development, and I had also, more quietly, taught him that when a job got hard, the supervisor would do it for him. That second lesson, once it sets in, is extremely hard to unwind, and I have seen whole sections of factories slowly degrade in capability because the supervisor was too useful with his hands and not patient enough with his mouth.
+
+The cure, when I finally worked it out, was to ask, when I was tempted to step in, *if I do not pick up this tool now, what will this man learn by the end of the day*. If the answer was *something useful*, I left the tool on the bench and stood next to him with my hands behind my back, which is one of the most physically uncomfortable things a tradesman ever learns to do. If the answer was *nothing, because he is genuinely stuck and the job is going to fail*, I would help, but I would help in the smallest possible way, and I would talk while I helped, so that he was being taught, not rescued.
+
+**The second mistake was that I corrected in public.**
+
+The first time I had to tell one of the men that a piece of his work was not good enough, I did it next to his bench, with three other men within earshot, because that was where the work was. I did not raise my voice. I did not embarrass him on purpose. I simply pointed at the weld and said, plainly, that it was not what we needed and that he would have to redo it. He nodded. He said nothing. He picked up his grinder and started removing the weld.
+
+I thought I had handled it well. I had not. The men in the next two bays had, without appearing to have heard, heard. The man whose work I had corrected had, without appearing to have minded, minded. And the small invisible budget that any supervisor has for telling his people that their work is not good enough — a budget that is, in practice, the only currency he has on the floor — had been spent a little more wastefully than it needed to be.
+
+I learned, after a few of these, that public correction is almost never necessary. The work is fixable in private. The point can be made without other people watching. The shame, which is real even when nobody intended any, can be kept off the bench. A quiet word at the urn at the next break, *can I show you something on that one*, achieves exactly the same correction with a fraction of the damage. The cost of taking the man aside is two minutes. The cost of not taking him aside is a slow erosion of the willingness of the floor to take correction from you at all, because they have learned that correction from you carries an audience, and audiences are something a man would rather not have for a piece of work he is already not proud of.
+
+**The third mistake was that I did not say thank you often enough.**
+
+This one took me longest to see, because nothing about the workshop culture I had come up in particularly encouraged the saying of thank you, and I had grown up thinking that *not telling you that you were doing it wrong* was, by itself, a form of praise. It is. But it is a thin form, and it does not, on its own, sustain a team over time.
+
+I noticed, around the eighth or ninth month, that the men were quieter than they had been in the early weeks. Not in a sulky way. In a flatter way. The energy on the floor had dropped a degree or two, and the small jokes that used to ripple between the bays had thinned out. I sat with the foreman one afternoon and asked him, in the indirect way you asked older men in that trade about things you were embarrassed not to know yourself, whether he had seen anything.
+
+He said, after a long pause, that I was not letting them know when they had done well.
+
+He said it gently. He said it in the way an older tradesman says a hard thing without making it hard. He said that the men in those bays were doing, on most weeks, very respectable work, and that the only feedback they were getting from me was the absence of correction, which was not the same thing as a *well done*. He said that a man can run for a long time on the absence of correction, but he runs better, and longer, on the occasional plain acknowledgement that the work has been seen and is good.
+
+I went back the next morning and I said, to the man in the second bay, that the bracket job he had finished on the Friday had come out very nicely and that the inspector had said so. He looked at me for a second as if I had spoken a foreign language. Then he nodded, said *thanks, boss*, in the small dry voice he used for everything, and went back to his work. But the air around his bench shifted, in a way I could feel without being able to describe, for the rest of the day. It cost me about four seconds. It changed something on the floor for the next month.
+
+I have, since, made it a personal rule to do this at least once a day, in some small honest form, in any team I have ever run. Not as a technique. As a debt repaid to the foreman who told me, twenty-something years ago, that the men were going quiet because I was not seeing them properly. He was right. I had not been. And the correction of that, more than anything else I did in the first year, was what finally turned me from a tradesman with a clipboard into something that resembled, faintly, a supervisor.
+
+## What the step up actually teaches you
+
+Looking back on that first year, from the distance I now have, the lessons under it sort themselves into a small honest list. I am going to set it out the way I set out the apprentice's list in an earlier chapter, because the supervisor's list is, in its own way, just the apprentice's list rewritten for a different kind of bench.
+
+- **Say the awkward thing plainly, early.** The men know the situation has changed. Pretending it has not is more disrespectful than naming it. Catch each of them, privately, and tell them what you intend the new arrangement to look like. Do it in the first fortnight. Do not write a speech. Use your own words.
+- **Carry a clipboard, in some form.** Whether it is a piece of hardboard, a notebook, a pocket diary, or, much later, a small list on a phone, carry the discipline of writing things down. The job is no longer to do the work. The job is to notice the work. You will not notice if you do not write.
+- **Put your hands behind your back.** When a job is in trouble and you can feel your fingers itching to step in, ask whether the man in front of you will learn anything by the end of the day if you do. If yes, leave the tool on the bench. If no, help, but help in the smallest possible way, and talk while you help.
+- **Correct in private. Praise in public.** Reverse this rule and you will, slowly, lose the floor. The shame of public correction is a tax on the team that you do not need to charge, and the small public *that came out well* is one of the cheapest pieces of currency a supervisor ever spends.
+- **Say thank you out loud.** The absence of correction is not praise. The men can run on it for a while, but not for long, and they will go quiet on you in a way you will not, at first, know how to read. Name the good work when you see it. Briefly. Truthfully. Out loud.
+- **Accept the quieter walk to the gate.** The small distance that opens up between you and the men is not a punishment. It is the price of the clipboard. Pay it without complaining. Do not try to close it by pretending it is not there. The men are not pulling away from you. They are making room for the job you now have to do.
+- **Keep one foot in the trade.** Do not become the kind of supervisor who has forgotten how the work feels in the hands. Pick up a tool, occasionally, when it does not undermine somebody else's development, just to remind your fingers what the bench knows. The day you can no longer hear what the steel is saying through somebody else's account of it is the day you have stopped being useful in this job.
+
+That is most of it. There are other things, but they are smaller, and they tend to be variations on these.
+
+## The small honest reckoning
+
+The line from tradesman to supervisor is, in the end, the first proper test of whether a person is going to be able to be useful in any role that requires him to be responsible for other people's work. The trade can teach you almost everything you need on the bench. It cannot, by itself, teach you what to do when the bench is no longer the place where your usefulness lives.
+
+That has to be learned by doing it, in front of men who already know you, in a workshop that has not changed, with a small piece of hardboard under your arm and the diesel hanging in the yard on a Tuesday morning. There is no shortcut. There is no course. There are older men who will, if you let them, tell you small things on Friday afternoons that will save you a month of mistakes, but they will only tell you those things if you have first admitted, plainly, that you do not yet know what you are doing.
+
+I came out of that first year tireder than I had expected to be, and not entirely sure I had done it well. The foreman, when I asked him at the end of it whether I was alright, said *you are getting there*, which from him was, again, a great deal. The men in the three bays were still in their three bays. The work was still going out the door. Nobody had walked off the job. The floor had not turned on me. I had not become the kind of supervisor I had been afraid I would become in the first wobbling fortnight.
+
+I had also, without noticing the moment it happened, stopped thinking of myself as a tradesman who had been given a clipboard, and started thinking of myself, quietly, as a supervisor who happened to still know how to hold a grinder. That is a small shift in self-description. It is, in fact, the shift. Everything that came afterwards — the longer hours, the harder years, the eventual office with a door on it — was built on that small private adjustment of who I thought I was.
+
+The years that followed were not easy. I did not, at the time, know that. I thought, leaving that first year as a supervisor, that I had done the hard part, and that the road ahead, while it would be longer, was going to be a road of the same kind. It was not. The trade was about to put a different kind of pressure on me, of a sort the workshop floor itself had not prepared me for, and the next stretch of the story is about what happened when the wider weather of the industry turned and the small habits I had built up in the bays had to hold a whole section of men through it. That is where the story goes next.

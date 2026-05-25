@@ -92,6 +92,7 @@ import { BooksApi, BookChapterDetail, BookDetail } from '../../core/api/books.ap
                   [style.height.px]="pageHeight()"
                   [style.columnWidth.px]="pageWidth()"
                   [style.columnGap.px]="columnGap"
+                  [style.fontFamily]="bodyFontStack()"
                   [style.transform]="'translateX(' + (-pageIndex() * (pageWidth() + columnGap)) + 'px)'"
                   [innerHTML]="renderedHtml()">
                 </div>
@@ -176,6 +177,10 @@ import { BooksApi, BookChapterDetail, BookDetail } from '../../core/api/books.ap
     }
 
     /* ---- typography: print-styled, justified, hyphenated ---- */
+    /* font-family is set as an inline style on the .reader element so the
+       book's chosen BodyFont (BookProject.BodyFont) overrides the default
+       serif stack. The fallback stack below is what gets used when no font
+       is selected — matches the export renderers' Georgia fallback. */
     .reader {
       font-family: 'Crimson Pro', 'Source Serif Pro', Georgia, 'Times New Roman', serif;
       font-size: 1.0625rem;
@@ -187,18 +192,22 @@ import { BooksApi, BookChapterDetail, BookDetail } from '../../core/api/books.ap
       -ms-hyphens: auto;
       padding: 0 0.25rem;
     }
+    /* Block paragraphs (no indent, small vertical space between) — matches the
+       export renderers' new layout. Paragraphs immediately after headings or
+       quotes don't get the top margin because the heading/quote already supplies
+       it; this keeps the rhythm tight at section boundaries. */
     .reader :where(p) {
-      margin: 0;
-      text-indent: 1.5em;
+      margin: 0 0 0.6em 0;
+      text-indent: 0;
       orphans: 2;
       widows: 2;
     }
-    .reader :where(p:first-of-type),
+    .reader :where(p:last-child) { margin-bottom: 0; }
     .reader :where(h1 + p),
     .reader :where(h2 + p),
     .reader :where(h3 + p),
     .reader :where(blockquote + p) {
-      text-indent: 0;
+      margin-top: 0;
     }
     .reader :where(h1) {
       font-family: 'Space Grotesk', Inter, sans-serif;
@@ -265,7 +274,7 @@ export class BooksReadComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() id!: string;
   private api = inject(BooksApi);
 
-  // Constants. columnGap is the visual gutter between adjacent pages — it
+  // Constants. columnGap is the visual gutter between adjacent pages - it
   // matches the CSS column-gap and is included in the per-page step distance.
   readonly columnGap = 64;
   private readonly minPageWidthPx = 320;
@@ -305,6 +314,16 @@ export class BooksReadComponent implements OnInit, AfterViewInit, OnDestroy {
     const md = this.current()?.contentMarkdown ?? '';
     if (!md) return '';
     return marked.parse(md, { breaks: false, async: false }) as string;
+  });
+
+  // Build the font-family stack used by the reader. Honors BookProject.BodyFont
+  // (the same value PDF/KDP/Ingram exports use, so screen and print stay in sync).
+  // Falls back to a serif stack matching the export renderers' Georgia default
+  // when no font is selected on the book.
+  bodyFontStack = computed(() => {
+    const chosen = this.book()?.bodyFont?.trim();
+    const fallback = `'Crimson Pro', 'Source Serif Pro', Georgia, 'Times New Roman', serif`;
+    return chosen ? `'${chosen.replace(/'/g, '')}', ${fallback}` : fallback;
   });
 
   // Chapter-level navigation availability used to decide whether a page step
@@ -418,7 +437,7 @@ export class BooksReadComponent implements OnInit, AfterViewInit, OnDestroy {
       this.pageIndex.update((v) => v + 1);
       return;
     }
-    // Last page of chapter — advance into the next chapter at page 0.
+    // Last page of chapter - advance into the next chapter at page 0.
     const c = this.current();
     if (!c) return;
     const target = this.chapters().find((x) => x.chapterNumber === c.chapterNumber + 1);
@@ -434,7 +453,7 @@ export class BooksReadComponent implements OnInit, AfterViewInit, OnDestroy {
       this.pageIndex.update((v) => v - 1);
       return;
     }
-    // First page — go back to the previous chapter's LAST page. We jump to
+    // First page - go back to the previous chapter's LAST page. We jump to
     // the last page after the new chapter renders by stashing a target.
     const c = this.current();
     if (!c) return;

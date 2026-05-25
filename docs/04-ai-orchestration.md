@@ -1,4 +1,4 @@
-# 04 — AI orchestration
+# 04 - AI orchestration
 
 This document specifies how the worker (Claude Code Desktop, see [03](03-worker-and-job-lifecycle.md)) decomposes a book-generation request into a multi-stage agentic pipeline, what each agent does, and how prompts and variables are managed.
 
@@ -50,7 +50,7 @@ A `BookRequest` becomes a directed sequence of `AIJobQueue` entries. The pipelin
    └──────┬──────┘
           ▼
    ┌─────────────┐
-   │  Exports    │   Worker INSERTs BookExports(Status=Queued) — Hangfire picks up
+   │  Exports    │   Worker INSERTs BookExports(Status=Queued) - Hangfire picks up
    └─────────────┘
 ```
 
@@ -83,7 +83,7 @@ Each agent corresponds to a Claude Code subagent (invoked via the Agent tool) wi
 
 **Input:** a list of research topics from the Planner, plus the user's uploaded source material (PDFs, notes).
 
-**Output:** a research dossier per topic — facts, statistics, quotes, references, citations in the project's `CitationStyle`.
+**Output:** a research dossier per topic - facts, statistics, quotes, references, citations in the project's `CitationStyle`.
 
 **Writes:** rows in `BookAssets` with `AssetType = Generated`, MimeType `application/json`, containing structured research notes the Writer can pull from.
 
@@ -107,7 +107,7 @@ Each agent corresponds to a Claude Code subagent (invoked via the Agent tool) wi
 
 **Input:** one drafted `BookChapter`, the variables, and the chapters immediately before and after (for context).
 
-**Output:** an edited version of the chapter — grammar, flow, clarity, consistency.
+**Output:** an edited version of the chapter - grammar, flow, clarity, consistency.
 
 **Writes:** updates `ContentMarkdown` (overwrites the draft), sets `Status = Final`. Optionally writes an `EditNotes` blob to `BookAssets` for later author review.
 
@@ -115,11 +115,11 @@ Each agent corresponds to a Claude Code subagent (invoked via the Agent tool) wi
 
 **Input:** ALL final `BookChapters` for the project, plus `BookCharacters`.
 
-**Output:** a continuity report — character name/trait inconsistencies, timeline conflicts, tone drift, plot holes.
+**Output:** a continuity report - character name/trait inconsistencies, timeline conflicts, tone drift, plot holes.
 
 **Writes:**
 
-- If issues are found: emits new `EditChapter` jobs targeting the offending chapters with the continuity notes in the input JSON. Recursive — capped at 2 continuity passes.
+- If issues are found: emits new `EditChapter` jobs targeting the offending chapters with the continuity notes in the input JSON. Recursive - capped at 2 continuity passes.
 - A continuity report blob in `BookAssets`.
 
 ### 2.6 Publisher (metadata)
@@ -180,7 +180,7 @@ inputs:
   - research (optional, JSON dossier)
 ---
 
-# Writer — Draft Chapter
+# Writer - Draft Chapter
 
 You are the Writer agent for MADAuthor. You write one chapter of a book.
 
@@ -217,7 +217,7 @@ Summary from the plan:
 ## Output format
 
 Return the chapter as Markdown. Use H1 for the chapter title, H2 for section
-breaks. No commentary or framing — just the chapter content.
+breaks. No commentary or framing - just the chapter content.
 
 ## Constraints
 
@@ -240,7 +240,7 @@ The `BookRequests.Variables` JSON ([02 §4](02-data-model.md)) is the single sou
 | Researcher | nonfiction.researchDepth, nonfiction.citationCount |
 | Writer | writing (all), POV from request |
 | Editor | writing.simplicityLevel, writing.vocabularySophistication |
-| Continuity | (none — operates on text alone) |
+| Continuity | (none - operates on text alone) |
 | Publisher | project.genre, publishing.kdpOptimization |
 | Cover | publishing.coverStyle, project.genre |
 | Marketer | project.targetAudience, project.genre |
@@ -302,7 +302,7 @@ Every stage's input/output JSON is stored in `AIJobQueue.OutputJson` for audit a
 
 ## 9. Orchestrator durability
 
-The `PipelineOrchestrator` (in `apps/api/MadAuthor.Api/Realtime/PipelineOrchestrator.cs`) is a `BackgroundService` hosted inside the API process. It is the **only thing** that enqueues stage-N+1 jobs when stage-N completes — the worker only does the work; it does not chain.
+The `PipelineOrchestrator` (in `apps/api/MadAuthor.Api/Realtime/PipelineOrchestrator.cs`) is a `BackgroundService` hosted inside the API process. It is the **only thing** that enqueues stage-N+1 jobs when stage-N completes - the worker only does the work; it does not chain.
 
 Because it's a hosted service, it only runs when the API runs. A stalled API = a stalled pipeline. To survive restarts and intermittent failure, the orchestrator runs at two cadences:
 
@@ -315,7 +315,7 @@ Because it's a hosted service, it only runs when the API runs. A stalled API = a
 
 The Tick is fast but fragile: if the API was down when a job completed, that completion is past the cursor when the API comes back and the Tick will never see it. Earlier the cursor initialized to `UtcNow - 10min`, which silently dropped any completion older than 10 minutes at startup.
 
-The reconciler is the durability layer. It scans by **state**, not by timestamp cursor, so it doesn't care when the completion happened — only whether the follow-up that should exist actually exists.
+The reconciler is the durability layer. It scans by **state**, not by timestamp cursor, so it doesn't care when the completion happened - only whether the follow-up that should exist actually exists.
 
 ### Idempotency contract
 
@@ -343,11 +343,11 @@ When a book stalls despite the orchestrator running, walk through these steps:
 2. **Find the offending chapters.** `SELECT Id, ChapterNumber, Status FROM BookChapters WHERE BookProjectId=… AND Status < 4`. Status 2 = Drafted (needs Edit), 4 = Final.
 3. **Enqueue the missing rows manually.** Insert `Status=Pending` rows into `AIJobQueue` with the right `JobType` and `InputJson` shape (see existing rows in the same project for the canonical shape). The worker's next scheduled tick will claim them.
 4. **For project-level stages** (`ContinuityCheck`, `GenerateMetadata`, `GenerateMarketing`), `InputJson` can be `NULL`.
-5. **If `OnMarketingComplete` didn't fire** (project still not `ReadyForReview` despite Marketing complete), restart the API or wait for the next reconciler tick — it will retroactively flip the project columns and send the owner email.
+5. **If `OnMarketingComplete` didn't fire** (project still not `ReadyForReview` despite Marketing complete), restart the API or wait for the next reconciler tick - it will retroactively flip the project columns and send the owner email.
 
 ## 10. Open questions
 
 - **Human-in-the-loop checkpoints.** Confirmed 2026-05-20: `RequireOutlineApproval` is a `BookProjects` column, defaults to `true`. After the Planner job completes, the worker stops and waits; the next job (Researcher/Writer) is only enqueued when the user approves the outline via the API. Users can flip the setting off per project for fully-autonomous runs.
-- **Resume semantics.** If a job is mid-pipeline and the user edits the project, does the next stage see the edited version? Recommend yes — agents always re-read from the DB at job start. But also recommend that ongoing jobs are paused (`Status = Cancelled`) when the project is meaningfully edited mid-flight, and the user is shown a "Restart pipeline?" prompt.
-- **Multi-language.** The schema has `Language` on `BookProjects` but the prompt templates are English. For Phase 1, only English. For multi-language we either translate prompts (risky — language-specific writing conventions matter) or maintain per-language prompt sets.
+- **Resume semantics.** If a job is mid-pipeline and the user edits the project, does the next stage see the edited version? Recommend yes - agents always re-read from the DB at job start. But also recommend that ongoing jobs are paused (`Status = Cancelled`) when the project is meaningfully edited mid-flight, and the user is shown a "Restart pipeline?" prompt.
+- **Multi-language.** The schema has `Language` on `BookProjects` but the prompt templates are English. For Phase 1, only English. For multi-language we either translate prompts (risky - language-specific writing conventions matter) or maintain per-language prompt sets.
 - **Sensitive content guardrails.** What categories are blocked outright (illegal content, CSAM, etc.) vs gated (graphic violence in fiction, theology that misrepresents specific traditions)? Needs a content-policy doc before launch.

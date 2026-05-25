@@ -13,7 +13,7 @@
     Schedule polling interval: 00:00:15
 2026-05-22 04:11:20.205 +02:00 [INF] Application started. Press Ctrl+C to shut down.
 2026-05-22 04:11:20.205 +02:00 [INF] Hosting environment: Production
-2026-05-22 04:11:20.205 +02:00 [INF] Content root path: F:\Domains\coronanny.co.za\madauthorapi.madproducts.co.za
+2026-05-22 04:11:20.205 +02:00 [INF] Content root path: F:\Domains\coronanny.co.za\madauthorapi.madprospects.com
 2026-05-22 04:11:20.262 +02:00 [INF] HTTP GET //wp-includes/wlwmanifest.xml responded 404 in 56.9944 ms
 2026-05-22 04:11:20.435 +02:00 [INF] HTTP GET //xmlrpc.php responded 404 in 4.3745 ms
 2026-05-22 04:11:20.503 +02:00 [INF] Server winsvrweb16:17104:cded5cf4 successfully announced in 297,8023 ms
@@ -36,7 +36,7 @@
 2026-05-22 04:11:22.817 +02:00 [INF] HTTP GET //site/wp-includes/wlwmanifest.xml responded 404 in 0.1868 ms
 2026-05-22 04:11:22.975 +02:00 [INF] HTTP GET //cms/wp-includes/wlwmanifest.xml responded 404 in 0.3591 ms
 2026-05-22 04:11:23.134 +02:00 [INF] HTTP GET //sito/wp-includes/wlwmanifest.xml responded 404 in 0.2257 ms
-2026-05-22 04:11:30.419 +02:00 [INF] Sent email to anton@madproducts.co.za: "Your book is ready: The Apprentice's Compass".
+2026-05-22 04:11:30.419 +02:00 [INF] Sent email to anton@madprospects.com: "Your book is ready: The Apprentice's Compass".
 2026-05-22 04:11:30.420 +02:00 [INF] Project "9a1c1078-c007-41dd-a646-5a4c717b1d2a" pipeline complete.
 2026-05-22 04:11:30.521 +02:00 [ERR] Failed executing DbCommand (26ms) [Parameters=[@__cutoff_0='?' (DbType = DateTime2), @__liveProjectIds_1='?' (Size = 4000)], CommandType='"Text"', CommandTimeout='30']
 SELECT [a].[Id], [a].[BookProjectId], [a].[BookRequestId], [a].[ClaimedAt], [a].[ClaimedBy], [a].[CompletedDate], [a].[CreatedDate], [a].[ErrorMessage], [a].[InputJson], [a].[JobType], [a].[LockExpiresAt], [a].[MaxRetries], [a].[OutputJson], [a].[Priority], [a].[Progress], [a].[RetryCount], [a].[Stage], [a].[StartedDate], [a].[Status], [a].[UpdatedDate]
@@ -132,12 +132,12 @@ Error Number:156,State:1,Class:15
     Schedule polling interval: 00:00:15
 2026-05-22 06:13:01.375 +02:00 [INF] Application started. Press Ctrl+C to shut down.
 2026-05-22 06:13:01.376 +02:00 [INF] Hosting environment: Production
-2026-05-22 06:13:01.376 +02:00 [INF] Content root path: F:\Domains\coronanny.co.za\madauthorapi.madproducts.co.za
+2026-05-22 06:13:01.376 +02:00 [INF] Content root path: F:\Domains\coronanny.co.za\madauthorapi.madprospects.com
 2026-05-22 06:13:01.424 +02:00 [INF] HTTP GET / responded 404 in 47.2944 ms
 2026-05-22 06:13:01.466 +02:00 [INF] Server winsvrweb16:30896:d4cd35c1 successfully announced in 88,8813 ms
 2026-05-22 06:13:01.469 +02:00 [INF] Server winsvrweb16:30896:d4cd35c1 is starting the registered dispatchers: ServerWatchdog, ServerJobCancellationWatcher, ExpirationManager, CountersAggregator, SqlServerHeartbeatProcess, Worker, DelayedJobScheduler, RecurringJobScheduler...
 2026-05-22 06:13:01.477 +02:00 [INF] Server winsvrweb16:30896:d4cd35c1 all the dispatchers started
-2026-05-22 06:13:10.983 +02:00 [INF] Sent email to anton@madproducts.co.za: "Your book is ready: The Apprentice's Compass".
+2026-05-22 06:13:10.983 +02:00 [INF] Sent email to anton@madprospects.com: "Your book is ready: The Apprentice's Compass".
 2026-05-22 06:13:10.984 +02:00 [INF] Project "9a1c1078-c007-41dd-a646-5a4c717b1d2a" pipeline complete.
 2026-05-22 06:13:11.048 +02:00 [ERR] Failed executing DbCommand (7ms) [Parameters=[@__cutoff_0='?' (DbType = DateTime2), @__liveProjectIds_1='?' (Size = 4000)], CommandType='"Text"', CommandTimeout='30']
 SELECT [a].[Id], [a].[BookProjectId], [a].[BookRequestId], [a].[ClaimedAt], [a].[ClaimedBy], [a].[CompletedDate], [a].[CreatedDate], [a].[ErrorMessage], [a].[InputJson], [a].[JobType], [a].[LockExpiresAt], [a].[MaxRetries], [a].[OutputJson], [a].[Priority], [a].[Progress], [a].[RetryCount], [a].[Stage], [a].[StartedDate], [a].[Status], [a].[UpdatedDate]
@@ -233,12 +233,12 @@ Error Number:156,State:1,Class:15
     Schedule polling interval: 00:00:15
 2026-05-22 07:25:31.447 +02:00 [INF] Application started. Press Ctrl+C to shut down.
 2026-05-22 07:25:31.447 +02:00 [INF] Hosting environment: Production
-2026-05-22 07:25:31.447 +02:00 [INF] Content root path: F:\Domains\coronanny.co.za\madauthorapi.madproducts.co.za
+2026-05-22 07:25:31.447 +02:00 [INF] Content root path: F:\Domains\coronanny.co.za\madauthorapi.madprospects.com
 2026-05-22 07:25:31.488 +02:00 [INF] HTTP GET / responded 404 in 41.8141 ms
 2026-05-22 07:25:31.531 +02:00 [INF] Server winsvrweb16:25044:9a9a01ec successfully announced in 81,2052 ms
 2026-05-22 07:25:31.534 +02:00 [INF] Server winsvrweb16:25044:9a9a01ec is starting the registered dispatchers: ServerWatchdog, ServerJobCancellationWatcher, ExpirationManager, CountersAggregator, SqlServerHeartbeatProcess, Worker, DelayedJobScheduler, RecurringJobScheduler...
 2026-05-22 07:25:31.542 +02:00 [INF] Server winsvrweb16:25044:9a9a01ec all the dispatchers started
-2026-05-22 07:25:41.245 +02:00 [INF] Sent email to anton@madproducts.co.za: "Your book is ready: The Apprentice's Compass".
+2026-05-22 07:25:41.245 +02:00 [INF] Sent email to anton@madprospects.com: "Your book is ready: The Apprentice's Compass".
 2026-05-22 07:25:41.246 +02:00 [INF] Project "9a1c1078-c007-41dd-a646-5a4c717b1d2a" pipeline complete.
 2026-05-22 07:25:41.304 +02:00 [ERR] Failed executing DbCommand (3ms) [Parameters=[@__cutoff_0='?' (DbType = DateTime2), @__liveProjectIds_1='?' (Size = 4000)], CommandType='"Text"', CommandTimeout='30']
 SELECT [a].[Id], [a].[BookProjectId], [a].[BookRequestId], [a].[ClaimedAt], [a].[ClaimedBy], [a].[CompletedDate], [a].[CreatedDate], [a].[ErrorMessage], [a].[InputJson], [a].[JobType], [a].[LockExpiresAt], [a].[MaxRetries], [a].[OutputJson], [a].[Priority], [a].[Progress], [a].[RetryCount], [a].[Stage], [a].[StartedDate], [a].[Status], [a].[UpdatedDate]
@@ -334,7 +334,7 @@ Error Number:156,State:1,Class:15
     Schedule polling interval: 00:00:15
 2026-05-22 07:32:00.995 +02:00 [INF] Application started. Press Ctrl+C to shut down.
 2026-05-22 07:32:00.996 +02:00 [INF] Hosting environment: Production
-2026-05-22 07:32:00.996 +02:00 [INF] Content root path: F:\Domains\coronanny.co.za\madauthorapi.madproducts.co.za
+2026-05-22 07:32:00.996 +02:00 [INF] Content root path: F:\Domains\coronanny.co.za\madauthorapi.madprospects.com
 2026-05-22 07:32:01.001 +02:00 [INF] HTTP OPTIONS /api/auth/refresh responded 204 in 4.1545 ms
 2026-05-22 07:32:01.006 +02:00 [INF] HTTP OPTIONS /api/auth/refresh responded 204 in 4.1426 ms
 2026-05-22 07:32:01.095 +02:00 [INF] Server winsvrweb16:11232:aa2a94d2 successfully announced in 96,0913 ms
@@ -342,7 +342,7 @@ Error Number:156,State:1,Class:15
 2026-05-22 07:32:01.119 +02:00 [INF] Server winsvrweb16:11232:aa2a94d2 all the dispatchers started
 2026-05-22 07:32:01.347 +02:00 [INF] HTTP POST /api/auth/refresh responded 401 in 85.9847 ms
 2026-05-22 07:32:01.348 +02:00 [INF] HTTP POST /api/auth/refresh responded 401 in 87.6758 ms
-2026-05-22 07:32:10.687 +02:00 [INF] Sent email to anton@madproducts.co.za: "Your book is ready: The Apprentice's Compass".
+2026-05-22 07:32:10.687 +02:00 [INF] Sent email to anton@madprospects.com: "Your book is ready: The Apprentice's Compass".
 2026-05-22 07:32:10.687 +02:00 [INF] Project "9a1c1078-c007-41dd-a646-5a4c717b1d2a" pipeline complete.
 2026-05-22 07:32:10.743 +02:00 [ERR] Failed executing DbCommand (3ms) [Parameters=[@__cutoff_0='?' (DbType = DateTime2), @__liveProjectIds_1='?' (Size = 4000)], CommandType='"Text"', CommandTimeout='30']
 SELECT [a].[Id], [a].[BookProjectId], [a].[BookRequestId], [a].[ClaimedAt], [a].[ClaimedBy], [a].[CompletedDate], [a].[CreatedDate], [a].[ErrorMessage], [a].[InputJson], [a].[JobType], [a].[LockExpiresAt], [a].[MaxRetries], [a].[OutputJson], [a].[Priority], [a].[Progress], [a].[RetryCount], [a].[Stage], [a].[StartedDate], [a].[Status], [a].[UpdatedDate]
@@ -440,7 +440,7 @@ Error Number:156,State:1,Class:15
     Schedule polling interval: 00:00:15
 2026-05-22 07:37:08.908 +02:00 [INF] Application started. Press Ctrl+C to shut down.
 2026-05-22 07:37:08.908 +02:00 [INF] Hosting environment: Production
-2026-05-22 07:37:08.908 +02:00 [INF] Content root path: F:\Domains\coronanny.co.za\madauthorapi.madproducts.co.za
+2026-05-22 07:37:08.908 +02:00 [INF] Content root path: F:\Domains\coronanny.co.za\madauthorapi.madprospects.com
 2026-05-22 07:37:08.913 +02:00 [INF] HTTP OPTIONS /api/auth/login responded 204 in 3.5051 ms
 2026-05-22 07:37:08.993 +02:00 [INF] Server winsvrweb16:25336:49701be2 successfully announced in 82,4798 ms
 2026-05-22 07:37:08.995 +02:00 [INF] Server winsvrweb16:25336:49701be2 is starting the registered dispatchers: ServerWatchdog, ServerJobCancellationWatcher, ExpirationManager, CountersAggregator, SqlServerHeartbeatProcess, Worker, DelayedJobScheduler, RecurringJobScheduler...
@@ -461,7 +461,7 @@ Error Number:156,State:1,Class:15
 2026-05-22 07:37:17.679 +02:00 [INF] HTTP GET /api/books/9a1c1078-c007-41dd-a646-5a4c717b1d2a/publisher-metadata responded 404 in 56.1220 ms
 2026-05-22 07:37:17.721 +02:00 [INF] HTTP GET /api/books/9a1c1078-c007-41dd-a646-5a4c717b1d2a/covers responded 200 in 7.5100 ms
 2026-05-22 07:37:17.730 +02:00 [INF] HTTP GET /api/books/9a1c1078-c007-41dd-a646-5a4c717b1d2a/assets/3c45b2d3-e311-4497-bf7f-96d38a797131/download responded 401 in 3.3606 ms
-2026-05-22 07:37:18.350 +02:00 [INF] Sent email to anton@madproducts.co.za: "Your book is ready: The Apprentice's Compass".
+2026-05-22 07:37:18.350 +02:00 [INF] Sent email to anton@madprospects.com: "Your book is ready: The Apprentice's Compass".
 2026-05-22 07:37:18.351 +02:00 [INF] Project "9a1c1078-c007-41dd-a646-5a4c717b1d2a" pipeline complete.
 2026-05-22 07:37:18.399 +02:00 [ERR] Failed executing DbCommand (3ms) [Parameters=[@__cutoff_0='?' (DbType = DateTime2), @__liveProjectIds_1='?' (Size = 4000)], CommandType='"Text"', CommandTimeout='30']
 SELECT [a].[Id], [a].[BookProjectId], [a].[BookRequestId], [a].[ClaimedAt], [a].[ClaimedBy], [a].[CompletedDate], [a].[CreatedDate], [a].[ErrorMessage], [a].[InputJson], [a].[JobType], [a].[LockExpiresAt], [a].[MaxRetries], [a].[OutputJson], [a].[Priority], [a].[Progress], [a].[RetryCount], [a].[Stage], [a].[StartedDate], [a].[Status], [a].[UpdatedDate]

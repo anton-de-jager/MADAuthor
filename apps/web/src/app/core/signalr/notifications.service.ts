@@ -14,7 +14,7 @@ export interface JobProgressEvent {
   jobId: string;
   bookProjectId: string;
   jobType: string;
-  // status is now humanized server-side via HumanVoice — "In progress", "Done", "Paused" etc.
+  // status is now humanized server-side via HumanVoice - "In progress", "Done", "Paused" etc.
   status: string;
   stage: string | null;
   progress: number;
@@ -51,7 +51,7 @@ export class NotificationsService implements OnDestroy {
     if (this.connection?.state === HubConnectionState.Connected) return;
     if (this.startPromise) return this.startPromise;
 
-    // Lock to WebSockets only — if the SignalR negotiate call falls back to long-polling
+    // Lock to WebSockets only - if the SignalR negotiate call falls back to long-polling
     // (which is what was producing the "lots of empty WebSocket-shaped HTTP calls" pattern
     // in the network tab), we want to FAIL LOUD rather than silently degrade. If you ever
     // see this connection fail in prod, the fix is enabling the IIS WebSocket Protocol
@@ -63,7 +63,7 @@ export class NotificationsService implements OnDestroy {
         transport: HttpTransportType.WebSockets,
         skipNegotiation: true,
       })
-      // Persistent reconnect — the default policy gives up after 4 attempts (≈30s),
+      // Persistent reconnect - the default policy gives up after 4 attempts (≈30s),
       // which means an API restart or any blip > 30s leaves the page silently
       // disconnected until the user refreshes. Retry forever with backoff so the
       // connection self-heals.

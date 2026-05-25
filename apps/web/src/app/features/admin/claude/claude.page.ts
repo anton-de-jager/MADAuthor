@@ -160,8 +160,8 @@ const FILTER_TO_STATUS: Record<Exclude<StatusFilter, '' | 'not_completed'>, Stat
       <div class="flex items-start justify-between mb-6">
         <div>
           <p class="text-ink-400 text-sm">Operations</p>
-          <h1 class="font-display text-3xl font-semibold tracking-tight">Claude Tasks</h1>
-          <p class="text-ink-400 text-sm mt-1">Autonomous /claude task queue. Edit, import, deploy.</p>
+          <h1 class="font-display text-3xl font-semibold tracking-tight">MAD Cloud</h1>
+          <p class="text-ink-400 text-sm mt-1">Autonomous task queue. Edit, import, deploy.</p>
         </div>
         <div class="flex items-center gap-2">
           <button type="button" (click)="openTemplates()" title="Templates"

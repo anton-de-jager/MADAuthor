@@ -32,7 +32,7 @@ import { AuthService } from '../../core/auth/auth.service';
            class="glass rounded-xl p-6 hover:border-brand-500/40 hover:bg-ink-800/40 transition">
           <div class="text-xs uppercase tracking-wider text-fuchsia-300 mb-2">Ready</div>
           <div class="text-lg font-display font-semibold mb-1">Exports &amp; publishing</div>
-          <div class="text-sm text-ink-400">PDF, EPUB, DOCX, KDP Print &amp; more — open any book to export.</div>
+          <div class="text-sm text-ink-400">PDF, EPUB, DOCX, KDP Print &amp; more - open any book to export.</div>
         </a>
       </div>
     </div>

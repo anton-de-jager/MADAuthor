@@ -1,6 +1,6 @@
 import { Injectable, inject, signal, computed } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, of, tap, catchError } from 'rxjs';
+import { Observable, of, tap, catchError, shareReplay, finalize } from 'rxjs';
 
 export interface UserSummary {
   id: string;
@@ -20,7 +20,7 @@ interface AuthResponse {
 }
 
 /**
- * Register no longer auto-signs the user in — the API requires the user to confirm their email
+ * Register no longer auto-signs the user in - the API requires the user to confirm their email
  * first, then sign in. The response just confirms an email is on the way.
  */
 export interface RegisterResponse {
@@ -36,13 +36,27 @@ export interface ConfirmEmailResponse {
 export class AuthService {
   private http = inject(HttpClient);
 
-  // Access token lives in memory only (not localStorage) — refresh via httpOnly cookie.
+  // Access token lives in memory only (not localStorage) - refresh via httpOnly cookie.
   private _accessToken = signal<string | null>(null);
   private _user = signal<UserSummary | null>(null);
 
   readonly accessToken = this._accessToken.asReadonly();
   readonly user = this._user.asReadonly();
   readonly isAuthenticated = computed(() => this._accessToken() !== null);
+
+  /**
+   * Single in-flight refresh observable. On page reload the SPA fires N parallel
+   * requests; each one that hits 401 triggers an interceptor refresh, plus
+   * AppComponent.ngOnInit also calls tryRestore(). Without deduping, the server
+   * sees N copies of the same refresh-token cookie, rotates on the first, and
+   * REVOKES the cookie on every subsequent one (treats them as replay).
+   *
+   * shareReplay({ bufferSize: 1, refCount: true }) ensures all parallel callers
+   * subscribe to the SAME network call, then the next call after completion
+   * fires a fresh refresh. `finalize` clears the slot so a later 401 (e.g. after
+   * the access token actually expires 15 min later) gets a new round-trip.
+   */
+  private inflightRefresh: Observable<AuthResponse> | null = null;
 
   register(payload: {
     email: string;
@@ -51,7 +65,7 @@ export class AuthService {
     lastName: string;
     companyName?: string;
   }): Observable<RegisterResponse> {
-    // After Register the API sends a confirmation email and does NOT issue a JWT —
+    // After Register the API sends a confirmation email and does NOT issue a JWT -
     // the user has to confirm before they can sign in.
     return this.http.post<RegisterResponse>('/api/auth/register', payload, {
       withCredentials: true,
@@ -91,9 +105,23 @@ export class AuthService {
   }
 
   refresh(): Observable<AuthResponse> {
-    return this.http
+    // Dedupe: if a refresh is already in flight, return that observable so all
+    // callers share one network call. Otherwise start a new one.
+    if (this.inflightRefresh) return this.inflightRefresh;
+
+    this.inflightRefresh = this.http
       .post<AuthResponse>('/api/auth/refresh', {}, { withCredentials: true })
-      .pipe(tap((res) => this.applyAuth(res)));
+      .pipe(
+        tap((res) => this.applyAuth(res)),
+        // Clear the slot when the call finishes (success or error) so the NEXT
+        // refresh attempt - which can happen after the new access token expires
+        // 15 min later - actually goes to the network instead of re-emitting the
+        // stale completed observable.
+        finalize(() => { this.inflightRefresh = null; }),
+        // Multicast so parallel subscribers don't each trigger a new HTTP call.
+        shareReplay({ bufferSize: 1, refCount: true }),
+      );
+    return this.inflightRefresh;
   }
 
   /** Called on app boot: silent session restore via refresh cookie. */

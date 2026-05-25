@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
 // ---------------------------------------------------------------------------
-// madauthor-worker — CLI invoked by the Claude Code Desktop worker session.
+// madauthor-worker - CLI invoked by the Claude Code Desktop worker session.
 // Subcommands are single-purpose, JSON in / JSON out, so the agent doesn't
 // need to know any SQL. See docs/03-worker-and-job-lifecycle.md.
 // ---------------------------------------------------------------------------
@@ -146,7 +146,7 @@ OUTPUT
 
 /// <summary>
 /// Release a claimed job back to Pending WITHOUT writing any user-visible error message.
-/// Use this for diagnostic / system claims that should be invisible to the user — never use
+/// Use this for diagnostic / system claims that should be invisible to the user - never use
 /// <c>fail</c> with a developer string, because <c>JobProgressBroadcaster</c> pipes
 /// <c>ErrorMessage</c> straight to the SPA over SignalR. Does NOT bump RetryCount.
 /// </summary>
@@ -178,9 +178,9 @@ static async Task<int> ReleaseClaim(DbContextOptions<MadAuthorDbContext> opts, s
 
 /// <summary>
 /// Atomically claim up to N jobs with wave-based concurrency:
-///   - A book with NO chapter at Drafted-or-beyond (cold start) gets at most 1 job per tick —
+///   - A book with NO chapter at Drafted-or-beyond (cold start) gets at most 1 job per tick -
 ///     so chapter 1 finishes alone, locking voice/cadence before any parallel drafting.
-///   - A book with >= 1 Drafted chapter (warm / in flow) gets up to 3 jobs per tick — subsequent
+///   - A book with >= 1 Drafted chapter (warm / in flow) gets up to 3 jobs per tick - subsequent
 ///     waves can run chapters in parallel because they each have prior prose to read for voice.
 ///   - Across all books, total claimed is capped at N. Interleaves rn=1 across books first for
 ///     fairness, then rn=2 across books, etc.
@@ -449,7 +449,7 @@ static async Task<int> WriteAsset(
         CreatedDate = DateTime.UtcNow,
     });
 
-    // Persist the payload alongside the asset row by writing to disk too — Phase-1 storage.
+    // Persist the payload alongside the asset row by writing to disk too - Phase-1 storage.
     var storageRoot = Environment.GetEnvironmentVariable("STORAGE_LOCAL_ROOT")
         ?? Path.Combine(AppContext.BaseDirectory, "storage");
     var fullPath = Path.Combine(storageRoot, "generated", job.BookProjectId.ToString(), $"{assetId}-{filename}");
@@ -474,7 +474,7 @@ static async Task<int> WriteContinuity(
 {
     var rc = await WriteAsset(opts, jobIdRaw, content, "continuity-report.json");
 
-    // Parse the report so we can return the list of chapters that need revision —
+    // Parse the report so we can return the list of chapters that need revision -
     // the API-side orchestrator uses this to enqueue follow-up EditChapter jobs.
     try
     {
@@ -760,7 +760,7 @@ static int PrintUsageAndOk() { PrintUsage(); return 0; }
 
 static void PrintUsage()
 {
-    Console.WriteLine(@"madauthor-worker — Claude Code Desktop worker CLI
+    Console.WriteLine(@"madauthor-worker - Claude Code Desktop worker CLI
 
 USAGE
   madauthor-worker <command> [args]

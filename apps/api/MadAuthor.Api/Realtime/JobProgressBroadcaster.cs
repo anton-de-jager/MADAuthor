@@ -13,7 +13,7 @@ namespace MadAuthor.Api.Realtime;
 /// pushes), but a future improvement is to have the worker CLI POST an "I updated job X"
 /// endpoint after every write so this poll can be retired entirely. See docs/03 §7.
 ///
-/// Poll cadence intentionally generous (10s) — worker writes don't arrive faster than
+/// Poll cadence intentionally generous (10s) - worker writes don't arrive faster than
 /// that, and a tighter interval just burns DB IO without benefit.
 /// </summary>
 public class JobProgressBroadcaster(
@@ -25,7 +25,7 @@ public class JobProgressBroadcaster(
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        // Avoid starting until the app is fully up — gives EF migrations and SignalR
+        // Avoid starting until the app is fully up - gives EF migrations and SignalR
         // a moment to initialize before our first poll.
         try { await Task.Delay(TimeSpan.FromSeconds(3), stoppingToken); }
         catch (OperationCanceledException) { return; }
@@ -88,7 +88,7 @@ public class JobProgressBroadcaster(
 
             // Build a milestone toast for jobs that just landed in Completed state.
             // Look up book title and (for chapter-scoped jobs) chapter info so the
-            // toast can name what was finished — "Sipho freshly drafted chapter 4: Men Who Took a Chance".
+            // toast can name what was finished - "Sipho freshly drafted chapter 4: Men Who Took a Chance".
             string? toast = null;
             if (statusEnum == AIJobStatus.Completed)
             {
@@ -152,7 +152,7 @@ public class JobProgressBroadcaster(
                 return id;
             }
         }
-        catch { /* swallow — best effort */ }
+        catch { /* swallow - best effort */ }
         return null;
     }
 }

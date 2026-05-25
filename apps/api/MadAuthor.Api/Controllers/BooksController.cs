@@ -91,7 +91,7 @@ public class BooksController(
             p.TargetAudience, p.WritingTone, p.Language, p.Status, p.WorkflowStage,
             p.CompletionPercentage, p.TargetWordCount, p.TargetReadingLevel,
             p.RequireOutlineApproval, p.OutlineApprovedAt, p.CreatedDate,
-            p.AuthorId, authorName,
+            p.AuthorId, authorName, p.BodyFont,
             p.Chapters.OrderBy(c => c.ChapterNumber)
                 .Select(c => new BookChapterSummary(c.Id, c.ChapterNumber, c.Title, c.Summary, c.WordCount, c.Status))
                 .ToList());
@@ -140,6 +140,21 @@ public class BooksController(
                 return BadRequest(new { error = "Author not found in your organisation." });
             project.AuthorId = authorId;
         }
+        if (req.BodyFont is not null)
+        {
+            // Whitelist: only fonts known to be installed on the rendering server.
+            // Empty string = clear (renderer falls back to Georgia).
+            var allowed = new[] {
+                "Georgia", "Times New Roman", "Cambria", "Constantia",
+                "Palatino Linotype", "Book Antiqua", "Garamond", "Bookman Old Style",
+            };
+            if (string.IsNullOrWhiteSpace(req.BodyFont))
+                project.BodyFont = null;
+            else if (!allowed.Contains(req.BodyFont, StringComparer.OrdinalIgnoreCase))
+                return BadRequest(new { error = "Unknown body font. Allowed: " + string.Join(", ", allowed) });
+            else
+                project.BodyFont = req.BodyFont.Trim();
+        }
 
         project.UpdatedDate = DateTime.UtcNow;
         await db.SaveChangesAsync(ct);
@@ -155,7 +170,7 @@ public class BooksController(
             project.TargetAudience, project.WritingTone, project.Language, project.Status, project.WorkflowStage,
             project.CompletionPercentage, project.TargetWordCount, project.TargetReadingLevel,
             project.RequireOutlineApproval, project.OutlineApprovedAt, project.CreatedDate,
-            project.AuthorId, authorName,
+            project.AuthorId, authorName, project.BodyFont,
             project.Chapters.OrderBy(c => c.ChapterNumber)
                 .Select(c => new BookChapterSummary(c.Id, c.ChapterNumber, c.Title, c.Summary, c.WordCount, c.Status))
                 .ToList());
@@ -171,6 +186,80 @@ public class BooksController(
             .Select(a => new AuthorSummary(a.Id, a.PenName))
             .ToListAsync();
         return authors;
+    }
+
+    [HttpPost("authors")]
+    public async Task<ActionResult<AuthorSummary>> CreateAuthor(
+        [FromBody] CreateAuthorRequest req, CancellationToken ct)
+    {
+        var (userId, companyId) = Identify();
+        if (string.IsNullOrWhiteSpace(req.PenName))
+            return BadRequest(new { error = "Pen name is required." });
+        if (req.PenName.Length > 200)
+            return BadRequest(new { error = "Pen name must be 200 characters or fewer." });
+
+        var penName = req.PenName.Trim();
+        var dup = await db.Authors.AnyAsync(
+            a => a.CompanyId == companyId && a.PenName == penName, ct);
+        if (dup) return Conflict(new { error = "An author with that pen name already exists." });
+
+        var author = new Author
+        {
+            Id = Guid.NewGuid(),
+            UserId = userId,
+            CompanyId = companyId,
+            PenName = penName,
+            Biography = string.IsNullOrWhiteSpace(req.Biography) ? null : req.Biography.Trim(),
+            DefaultLanguage = "en",
+            CreatedDate = DateTime.UtcNow,
+        };
+        db.Authors.Add(author);
+        await db.SaveChangesAsync(ct);
+        return new AuthorSummary(author.Id, author.PenName);
+    }
+
+    [HttpPatch("authors/{authorId:guid}")]
+    public async Task<ActionResult<AuthorSummary>> UpdateAuthor(
+        Guid authorId, [FromBody] UpdateAuthorRequest req, CancellationToken ct)
+    {
+        var (_, companyId) = Identify();
+        var author = await db.Authors.FirstOrDefaultAsync(
+            a => a.Id == authorId && a.CompanyId == companyId, ct);
+        if (author is null) return NotFound();
+
+        if (req.PenName is not null)
+        {
+            if (string.IsNullOrWhiteSpace(req.PenName) || req.PenName.Length > 200)
+                return BadRequest(new { error = "Pen name must be 1-200 characters." });
+            var penName = req.PenName.Trim();
+            var dup = await db.Authors.AnyAsync(
+                a => a.Id != authorId && a.CompanyId == companyId && a.PenName == penName, ct);
+            if (dup) return Conflict(new { error = "An author with that pen name already exists." });
+            author.PenName = penName;
+        }
+        if (req.Biography is not null)
+            author.Biography = string.IsNullOrEmpty(req.Biography) ? null : req.Biography.Trim();
+
+        author.UpdatedDate = DateTime.UtcNow;
+        await db.SaveChangesAsync(ct);
+        return new AuthorSummary(author.Id, author.PenName);
+    }
+
+    [HttpDelete("authors/{authorId:guid}")]
+    public async Task<IActionResult> DeleteAuthor(Guid authorId, CancellationToken ct)
+    {
+        var (_, companyId) = Identify();
+        var author = await db.Authors.FirstOrDefaultAsync(
+            a => a.Id == authorId && a.CompanyId == companyId, ct);
+        if (author is null) return NotFound();
+
+        var usedByCount = await db.BookProjects.CountAsync(p => p.AuthorId == authorId, ct);
+        if (usedByCount > 0)
+            return Conflict(new { error = $"Cannot delete: this author is assigned to {usedByCount} book(s). Reassign them first." });
+
+        db.Authors.Remove(author);
+        await db.SaveChangesAsync(ct);
+        return NoContent();
     }
 
     [HttpPost("{id:guid}/requests")]
@@ -295,7 +384,7 @@ public class BooksController(
         project.WorkflowStage = Domain.Enums.BookProjectWorkflowStage.Drafting;
         project.UpdatedDate = DateTime.UtcNow;
 
-        // Directly enqueue DraftChapter jobs — the orchestrator only chains on
+        // Directly enqueue DraftChapter jobs - the orchestrator only chains on
         // job completion, and there's no new completion to trigger here.
         foreach (var ch in plannedChapters)
         {
@@ -340,7 +429,7 @@ public class BooksController(
             .Where(c => c.BookProjectId == id)
             .ToListAsync(ct);
 
-        // Reject if any chapter has moved beyond Planned — drafting has started
+        // Reject if any chapter has moved beyond Planned - drafting has started
         // and editing the outline at this point is unsafe.
         if (existing.Any(c => c.Status > BookChapterStatus.Planned))
         {
@@ -383,7 +472,7 @@ public class BooksController(
 
             // Renormalize ChapterNumber to 1..N based on the ORDER of the
             // incoming list. Trust the client's ordering, not the supplied
-            // ChapterNumber values — the UI may have moved rows around without
+            // ChapterNumber values - the UI may have moved rows around without
             // recomputing numbers.
             for (var i = 0; i < incoming.Count; i++)
             {
@@ -457,7 +546,7 @@ public class BooksController(
             Id = Guid.NewGuid(),
             BookProjectId = chapter.BookProjectId,
             JobType = Domain.Enums.AIJobType.DraftChapter,
-            Priority = 3, // bump priority — user explicitly asked
+            Priority = 3, // bump priority - user explicitly asked
             Status = Domain.Enums.AIJobStatus.Pending,
             InputJson = System.Text.Json.JsonSerializer.Serialize(
                 new { chapterId = chapter.Id, chapterNumber = chapter.ChapterNumber, regenerate = true }),

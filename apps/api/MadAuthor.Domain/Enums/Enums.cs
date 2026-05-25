@@ -107,7 +107,7 @@ public enum BookExportType : byte
     PrintPdfIngram = 4,
     Html = 5,
     Markdown = 6,
-    // Mobi deliberately excluded — KDP no longer accepts it for new submissions.
+    // Mobi deliberately excluded - KDP no longer accepts it for new submissions.
 }
 
 public enum BookExportStatus : byte

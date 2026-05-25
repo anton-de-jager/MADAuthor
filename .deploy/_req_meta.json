@@ -1,0 +1,22 @@
+{
+  "id": "84812e1e-a558-4afa-a78b-7b4277358623",
+  "requestType": "Idea",
+  "ideaPrompt": "test",
+  "notes": null,
+  "aiInstructions": "test",
+  "desiredTone": null,
+  "desiredLength": null,
+  "povStyle": "First",
+  "writingStyle": null,
+  "themesCsv": "test",
+  "keywordsCsv": null,
+  "variables": {
+    "schemaVersion": 1,
+    "writing": {
+      "chapterLength": "medium",
+      "tone": "test"
+    }
+  },
+  "features": {},
+  "_existingContentLen": 81425
+}

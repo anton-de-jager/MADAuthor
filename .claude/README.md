@@ -1,4 +1,4 @@
-# `/claude` Operator Task System — Runtime Setup
+# `/claude` Operator Task System - Runtime Setup
 
 End-to-end install and verification steps for the autonomous task system added by
 `docs/08-claude-task-system.md`. After completing this checklist the system runs
@@ -147,11 +147,11 @@ Unregister-ScheduledTask -TaskName "MADAuthorClaude*" -Confirm:$false
 | Path | Purpose |
 |---|---|
 | `.claude/worker/worker.log` | Worker heartbeat + claude.exe stdout/stderr |
-| `.claude/worker/state.json` | `{streak, lastFiredAt}` — drives adaptive backoff |
+| `.claude/worker/state.json` | `{streak, lastFiredAt}` - drives adaptive backoff |
 | `.claude/scanner/scanner.log` | Scanner heartbeat + claude.exe stdout/stderr |
 | `.claude/scanner/state.json` | `{lastRanAt}` |
 
-All four are gitignored — they're runtime state.
+All four are gitignored - they're runtime state.
 
 ## Token rotation
 

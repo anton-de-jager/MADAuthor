@@ -44,7 +44,7 @@ interface HeartbeatRow {
         <h2 class="font-display text-xl mb-3">Worker heartbeats</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
           @if (heartbeats().length === 0) {
-            <div class="glass rounded-xl p-5 text-ink-400 col-span-full">No heartbeats yet — the worker hasn't run.</div>
+            <div class="glass rounded-xl p-5 text-ink-400 col-span-full">No heartbeats yet - the worker hasn't run.</div>
           }
           @for (h of heartbeats(); track h.workerId) {
             <div class="glass rounded-xl p-4">
@@ -124,7 +124,7 @@ interface HeartbeatRow {
                       <span class="text-[10px] text-ink-500 ml-2">retry {{ j.retryCount }}/{{ j.maxRetries }}</span>
                     }
                   </td>
-                  <td class="px-4 py-3 text-ink-300">{{ j.stage || '—' }}</td>
+                  <td class="px-4 py-3 text-ink-300">{{ j.stage || '-' }}</td>
                   <td class="px-4 py-3 text-right">{{ j.progress }}%</td>
                   <td class="px-4 py-3 text-ink-400 text-xs">{{ j.createdDate | date: 'mediumTime' }}</td>
                   <td class="px-4 py-3 text-right">

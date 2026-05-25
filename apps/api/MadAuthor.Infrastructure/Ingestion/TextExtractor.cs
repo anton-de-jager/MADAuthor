@@ -12,9 +12,9 @@ public class TextExtractor(
     IAudioTranscriber audio,
     IOcrService ocr) : ITextExtractor
 {
-    // PDFs that hand back fewer than this many characters are almost certainly scanned —
+    // PDFs that hand back fewer than this many characters are almost certainly scanned -
     // PdfPig can't pull text out of a rasterized page. We log the case so it's visible, but we
-    // don't attempt page rasterization here (out of scope for this phase — see Phase 6).
+    // don't attempt page rasterization here (out of scope for this phase - see Phase 6).
     private const int ScannedPdfTextThreshold = 50;
 
     public async Task<string?> ExtractAsync(
@@ -23,7 +23,7 @@ public class TextExtractor(
         var mime = (mimeType ?? string.Empty).ToLowerInvariant();
         try
         {
-            // Audio MIME types — delegate to the transcriber. The DI layer wires up either the
+            // Audio MIME types - delegate to the transcriber. The DI layer wires up either the
             // real Whisper client (when OPENAI_API_KEY is set) or a NoOp that returns null.
             if (mime.StartsWith("audio/", StringComparison.Ordinal))
             {
@@ -40,7 +40,7 @@ public class TextExtractor(
                 return result.Text;
             }
 
-            // Image MIME types — delegate to the OCR service. Same gating pattern as audio.
+            // Image MIME types - delegate to the OCR service. Same gating pattern as audio.
             if (mime.StartsWith("image/", StringComparison.Ordinal))
             {
                 if (!ocr.IsEnabled)
@@ -92,14 +92,14 @@ public class TextExtractor(
         }
         var extracted = sb.ToString().Trim();
 
-        // Likely a scanned PDF — PdfPig couldn't find an embedded text layer. We don't currently
+        // Likely a scanned PDF - PdfPig couldn't find an embedded text layer. We don't currently
         // rasterize PDF pages and re-OCR them (see Phase 6); flag the case in logs so an operator
         // can convert the file manually or re-upload page images. The OCR service is still passed
         // in so we can light up rasterization later without re-touching the controller.
         if (extracted.Length < ScannedPdfTextThreshold)
         {
             log.LogInformation(
-                "PDF {File} yielded only {Chars} chars of embedded text — likely a scanned/image PDF. " +
+                "PDF {File} yielded only {Chars} chars of embedded text - likely a scanned/image PDF. " +
                 "OCR fallback for PDFs is not enabled in this build; upload page images directly or " +
                 "wait for the Phase 6 rasterizer.",
                 fileName, extracted.Length);

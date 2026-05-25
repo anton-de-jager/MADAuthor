@@ -30,7 +30,7 @@ public class SmtpEmailSender(SmtpEmailOptions options, ILogger<SmtpEmailSender> 
             || string.IsNullOrWhiteSpace(options.Username)
             || string.IsNullOrWhiteSpace(options.Password))
         {
-            log.LogInformation("SMTP not configured — skipping email to {To} subject \"{Subject}\".", toAddress, subject);
+            log.LogInformation("SMTP not configured - skipping email to {To} subject \"{Subject}\".", toAddress, subject);
             return false;
         }
 

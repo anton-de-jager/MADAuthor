@@ -4,7 +4,7 @@ namespace MadAuthor.Application.Security;
 
 /// <summary>
 /// Antivirus / malware scanning abstraction for uploaded files. Phase 4 implementation:
-/// pluggable backends — currently <see cref="ScanStatus"/> defaults to <c>Skipped</c> when no
+/// pluggable backends - currently <see cref="ScanStatus"/> defaults to <c>Skipped</c> when no
 /// daemon is configured (the no-op scanner) and is computed via the ClamAV INSTREAM protocol
 /// when <c>CLAMAV_HOST</c> + <c>CLAMAV_PORT</c> env vars (or the matching
 /// <c>FileScanner:ClamAv:Host/Port</c> config keys) are present.

@@ -16,7 +16,7 @@ namespace MadAuthor.Api.Controllers;
 /// <summary>
 /// Translate finalized chapter content into another language. The result of each translation is
 /// stored as a <see cref="BookAssetType.Generated"/> BookAsset attached to the original
-/// BookProject — we deliberately do NOT clone the BookProject. The UI surfaces these assets as
+/// BookProject - we deliberately do NOT clone the BookProject. The UI surfaces these assets as
 /// downloadable Markdown files in the Publishing tab.
 /// </summary>
 [ApiController]
@@ -220,8 +220,8 @@ public class TranslationController(
             SourceLanguageDetected: translation.SourceLanguageDetected);
     }
 
-    /// <summary>True when the target language obviously matches the source. We're lenient — "en"
-    /// vs "English" both match an "en" source — so a typo doesn't accidentally translate
+    /// <summary>True when the target language obviously matches the source. We're lenient - "en"
+    /// vs "English" both match an "en" source - so a typo doesn't accidentally translate
     /// English-to-English and burn a paid API call.</summary>
     private static bool LooksLikeSameLanguage(string source, string target)
     {

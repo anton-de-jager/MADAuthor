@@ -36,6 +36,28 @@ public class ExportRendererService(
         var db = scope.ServiceProvider.GetRequiredService<MadAuthorDbContext>();
         var storage = scope.ServiceProvider.GetRequiredService<IFileStorage>();
 
+        // Heal stuck-in-Running rows. An IIS recycle mid-render leaves a row
+        // in `Status=Running` forever; the next process can't re-claim it
+        // because our claim filter is `Status=Queued`. If a row has been Running
+        // longer than the longest plausible render (5 minutes), assume the worker
+        // that owned it is dead and put the row back in the queue.
+        var stuckThreshold = DateTime.UtcNow.AddMinutes(-5);
+        var stuck = await db.BookExports
+            .Where(e => e.Status == BookExportStatus.Running
+                     && e.UpdatedDate != null && e.UpdatedDate < stuckThreshold)
+            .ToListAsync(ct);
+        if (stuck.Count > 0)
+        {
+            foreach (var e in stuck)
+            {
+                log.LogWarning("Requeuing stuck export {ExportId} (was Running since {When})",
+                    e.Id, e.UpdatedDate);
+                e.Status = BookExportStatus.Queued;
+                e.UpdatedDate = DateTime.UtcNow;
+            }
+            await db.SaveChangesAsync(ct);
+        }
+
         var queued = await db.BookExports
             .Where(e => e.Status == BookExportStatus.Queued)
             .OrderBy(e => e.CreatedDate)
@@ -70,12 +92,18 @@ public class ExportRendererService(
                     throw new InvalidOperationException("No chapter content available to export.");
 
                 // Load the most recently Selected cover, if any, and embed.
+                // Prefer the DESIGNED asset (typography overlaid by the cover composer)
+                // over the raw background photo. The flag tells the renderer not to
+                // double-up its own title/subtitle/author text block on top.
                 ExportCoverImage? cover = null;
                 var selectedCover = await db.BookCovers.IgnoreQueryFilters()
                     .Where(c => c.BookProjectId == project.Id && c.Status == BookCoverStatus.Selected)
                     .OrderByDescending(c => c.CreatedDate)
                     .FirstOrDefaultAsync(ct);
-                if (selectedCover?.AssetId is { } coverAssetId)
+
+                var preferredAssetId = selectedCover?.DesignedAssetId ?? selectedCover?.AssetId;
+                var isDesigned = selectedCover?.DesignedAssetId is not null;
+                if (preferredAssetId is { } coverAssetId)
                 {
                     var coverAsset = await db.BookAssets.FirstOrDefaultAsync(a => a.Id == coverAssetId, ct);
                     if (coverAsset is not null)
@@ -84,15 +112,25 @@ public class ExportRendererService(
                         if (File.Exists(coverPath))
                         {
                             var bytes = await File.ReadAllBytesAsync(coverPath, ct);
-                            var (attrText, attrUrl) = ParseAttribution(coverAsset.AttributionJson);
-                            cover = new ExportCoverImage(bytes, coverAsset.MimeType, attrText, attrUrl);
+                            // Attribution lives on the ORIGINAL background asset (Unsplash/AI metadata),
+                            // not the composed image - so always pull it from selectedCover.AssetId
+                            // even when rendering the designed bytes.
+                            string? attrText = null, attrUrl = null;
+                            if (selectedCover?.AssetId is { } rawId)
+                            {
+                                var rawAsset = await db.BookAssets.FirstOrDefaultAsync(a => a.Id == rawId, ct);
+                                if (rawAsset is not null)
+                                    (attrText, attrUrl) = ParseAttribution(rawAsset.AttributionJson);
+                            }
+                            cover = new ExportCoverImage(bytes, coverAsset.MimeType, attrText, attrUrl, isDesigned);
                         }
                     }
                 }
 
                 var context = new ExportContext(
                     project.Id, project.Title, project.Subtitle,
-                    author?.PenName, project.CopyrightText, chapters, cover);
+                    author?.PenName, project.CopyrightText, chapters, cover,
+                    BodyFont: project.BodyFont);
 
                 IExportRenderer renderer = export.ExportType switch
                 {

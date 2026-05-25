@@ -82,7 +82,7 @@ public class BookAssetsController(
         var key = $"{cid}/{projectId}/{assetId}-{safeName}";
 
         // Scan the upload before persisting it. If clamd flags an infection, refuse the upload.
-        // If the scanner is disabled or errors, fall through to Skipped — virus scanning is a
+        // If the scanner is disabled or errors, fall through to Skipped - virus scanning is a
         // hardening layer, not a hard dependency for legitimate uploads.
         ScanStatus scanStatus;
         string? scanThreat = null;
@@ -130,7 +130,7 @@ public class BookAssetsController(
 
         // Extract text best-effort, store it on the asset itself. The Submit endpoint stitches
         // all of the project's asset ExtractedText into BookRequest.ExistingContent when a
-        // BookRequest is created — so uploads done before Submit are no longer dropped on the floor.
+        // BookRequest is created - so uploads done before Submit are no longer dropped on the floor.
         asset.ExtractedText = await TryExtractText(asset, ct);
 
         db.BookAssets.Add(asset);

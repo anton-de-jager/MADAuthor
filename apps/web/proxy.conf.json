@@ -1,12 +1,12 @@
 {
   "/api": {
-    "target": "http://localhost:5150",
+    "target": "http://localhost:4212",
     "secure": false,
     "changeOrigin": true,
     "logLevel": "info"
   },
   "/hubs": {
-    "target": "http://localhost:5150",
+    "target": "http://localhost:4212",
     "secure": false,
     "ws": true,
     "changeOrigin": true,

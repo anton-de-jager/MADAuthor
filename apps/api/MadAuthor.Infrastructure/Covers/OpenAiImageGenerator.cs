@@ -57,7 +57,7 @@ public sealed class OpenAiImageGenerator : IImageGenerator
             Quality: "standard",
             ResponseFormat: "b64_json");
 
-        // Per-call client — we set Authorization headers + an extended timeout that we don't
+        // Per-call client - we set Authorization headers + an extended timeout that we don't
         // want to leak into the shared singleton HttpClient.
         using var http = _httpFactory.CreateClient();
         http.Timeout = TimeSpan.FromMinutes(2);
@@ -120,7 +120,7 @@ public sealed class OpenAiImageGenerator : IImageGenerator
     /// <summary>
     /// Fold the optional style hint and "no typography" instruction into a single prompt string.
     /// The negative-prompt knob is not supported by DALL-E 3, so we append it as a natural-language
-    /// instruction instead — best-effort.
+    /// instruction instead - best-effort.
     /// </summary>
     private static string BuildPrompt(GenerateImageRequest req)
     {

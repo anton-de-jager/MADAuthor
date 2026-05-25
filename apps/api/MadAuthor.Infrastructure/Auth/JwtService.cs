@@ -51,7 +51,7 @@ public class JwtService(JwtServiceOptions options) : IJwtService
 
     public string GenerateRefreshTokenRaw()
     {
-        // 256-bit random token, base64url-encoded — opaque to clients.
+        // 256-bit random token, base64url-encoded - opaque to clients.
         Span<byte> bytes = stackalloc byte[32];
         RandomNumberGenerator.Fill(bytes);
         return Base64UrlEncoder.Encode(bytes.ToArray());

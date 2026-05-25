@@ -42,7 +42,7 @@
           <!-- Cross-subdomain refresh cookie. Sets the cookie's Domain on the parent
                so the SPA at madauthor.* can receive a cookie issued by madauthorapi.*.
                Not in the local .env because Domain attribute breaks localhost dev. -->
-          <environmentVariable name="COOKIE_DOMAIN" value=".madproducts.co.za" />
+          <environmentVariable name="COOKIE_DOMAIN" value=".madprospects.com" />
           <!--
             Real secrets (JWT_SIGNING_KEY, DB connection, UNSPLASH_ACCESS_KEY, SMTP_*)
             come from the uploaded .env (the deploy script strips FTP_* before upload).

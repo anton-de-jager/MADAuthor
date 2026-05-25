@@ -1,4 +1,4 @@
-# 01 — Architecture
+# 01 - Architecture
 
 This document describes the system-level design of MADAuthor: components, how they talk to each other, the tech stack with rationale, the monorepo layout, and the security and storage models.
 
@@ -6,9 +6,9 @@ This document describes the system-level design of MADAuthor: components, how th
 
 MADAuthor is a single multi-tenant web application. End users are authors, coaches, churches, course creators, and publishers. They use a web browser. Behind the scenes, three runtime components do the work:
 
-1. **Angular SPA** — what the user sees. Talks only to the .NET API. Receives realtime updates via SignalR.
-2. **.NET 8 Web API** — owns all reads/writes to the database, all file storage operations, all auth, all SignalR broadcasts, and all *deterministic* background jobs (export rendering, email/SMS notifications, cleanup) via Hangfire.
-3. **Claude Code Desktop worker** — runs on Anton's desktop. Wakes on a schedule, polls the `AIJobQueue` table for pending work, executes the multi-stage agentic generation pipeline, writes results back to the database. Never talks to the API directly. See [03-worker-and-job-lifecycle.md](03-worker-and-job-lifecycle.md).
+1. **Angular SPA** - what the user sees. Talks only to the .NET API. Receives realtime updates via SignalR.
+2. **.NET 8 Web API** - owns all reads/writes to the database, all file storage operations, all auth, all SignalR broadcasts, and all *deterministic* background jobs (export rendering, email/SMS notifications, cleanup) via Hangfire.
+3. **Claude Code Desktop worker** - runs on Anton's desktop. Wakes on a schedule, polls the `AIJobQueue` table for pending work, executes the multi-stage agentic generation pipeline, writes results back to the database. Never talks to the API directly. See [03-worker-and-job-lifecycle.md](03-worker-and-job-lifecycle.md).
 
 ```
                          ┌─────────────────────────┐
@@ -53,7 +53,7 @@ The decoupling matters: the API doesn't know whether AI work is happening. It on
 | Claude Code Desktop | Anton's machine | Agentic generation: planning, writing, editing, continuity, formatting prep |
 | Object storage | Azure Blob / S3 | All file blobs: uploads, generated covers, finalized exports |
 
-## 3. Hangfire vs Claude Code worker — what each does
+## 3. Hangfire vs Claude Code worker - what each does
 
 This split is load-bearing. Confusing them produces a system that's hard to reason about.
 
@@ -78,9 +78,9 @@ Concretely: when Claude finishes the generation phases, it enqueues a determinis
 
 | Choice | Rationale | Alternatives considered |
 | --- | --- | --- |
-| Angular 19 standalone | Anton's pick. Standalone components avoid NgModule boilerplate. Strong typing, mature ecosystem. | React/Next — but stack is Angular-locked. |
-| .NET 8 Web API | Long-term-support runtime, EF Core, Hangfire and SignalR are first-class. | .NET 9 — newer, but LTS preferred for a 1-person project. |
-| SQL Server | Anton has an existing instance. Dedicated `madapi` database. Strong tooling, mature EF support, atomic job claiming via `UPDATE ... OUTPUT`. | Postgres — would also work, but no reason to switch. |
+| Angular 19 standalone | Anton's pick. Standalone components avoid NgModule boilerplate. Strong typing, mature ecosystem. | React/Next - but stack is Angular-locked. |
+| .NET 8 Web API | Long-term-support runtime, EF Core, Hangfire and SignalR are first-class. | .NET 9 - newer, but LTS preferred for a 1-person project. |
+| SQL Server | Anton has an existing instance. Dedicated `madauthor` database, with `madauthorhangfire` for Hangfire. Strong tooling, mature EF support, atomic job claiming via `UPDATE ... OUTPUT`. | Postgres - would also work, but no reason to switch. |
 | Hangfire | First-class .NET in-process job server with a built-in dashboard. Persists to SQL Server. | Quartz.NET (overkill), MassTransit (needs broker). |
 | SignalR | First-party realtime over WebSockets, integrates with auth, scales out via Redis backplane when needed. | Server-Sent Events (one-way only), raw WS (no scaling story). |
 | QuestPDF | Pure-C# layout engine, no Chromium dependency, MIT license for non-commercial / paid for commercial. | Puppeteer (HTML-to-PDF, heavy), iText (AGPL). |
@@ -147,11 +147,11 @@ The split between `MadAuthor.Application` (handlers, validators) and `MadAuthor.
 
 **File access.** Frontend never sees blob storage URLs directly. The API mints time-limited signed URLs (5 min for downloads, 30 min for in-progress uploads). All download URL generations are audited.
 
-**File uploads.** Two-step: client requests a signed PUT URL → uploads directly to blob storage → notifies API with a key. API validates content type and size, kicks off an async virus scan job (Hangfire), and only flips the asset to `Available` after the scan passes. Note: virus-scanning service is an open question — could be Microsoft Defender for Storage (Azure-native), ClamAV in a container, or a third-party API.
+**File uploads.** Two-step: client requests a signed PUT URL → uploads directly to blob storage → notifies API with a key. API validates content type and size, kicks off an async virus scan job (Hangfire), and only flips the asset to `Available` after the scan passes. Note: virus-scanning service is an open question - could be Microsoft Defender for Storage (Azure-native), ClamAV in a container, or a third-party API.
 
 **Rate limiting.** ASP.NET `AddRateLimiter` middleware. Per-IP for unauth endpoints (login, register). Per-user for auth endpoints (especially file uploads and AI job submission).
 
-**Audit logging.** Every state-changing action goes through an audit interceptor that writes an `AuditLogs` row with the user id, entity, action, and a JSON diff. Read endpoints are NOT audited by default — too noisy. Admin-monitoring endpoints (which cross tenant boundaries) ARE audited.
+**Audit logging.** Every state-changing action goes through an audit interceptor that writes an `AuditLogs` row with the user id, entity, action, and a JSON diff. Read endpoints are NOT audited by default - too noisy. Admin-monitoring endpoints (which cross tenant boundaries) ARE audited.
 
 **Secrets.** Local dev: .NET user-secrets + `.env.local`. Production: Azure Key Vault or AWS Secrets Manager (depends on hosting).
 
@@ -159,14 +159,14 @@ The split between `MadAuthor.Application` (handlers, validators) and `MadAuthor.
 
 **SignalR hub** exposes one hub: `/hubs/notifications`. After connect, the client joins two groups:
 
-- `user:{userId}` — receives notifications meant for this user.
-- `project:{projectId}` — joined on demand when the user opens a book detail page; receives `JobProgress` and `ExportReady` events for that project.
+- `user:{userId}` - receives notifications meant for this user.
+- `project:{projectId}` - joined on demand when the user opens a book detail page; receives `JobProgress` and `ExportReady` events for that project.
 
-**Server-side**, an `INotificationPublisher` is the only allowed way to broadcast. It writes a `Notifications` row, then pushes to SignalR groups. The DB row is the source of truth — if the user is offline, they see the notification next time they connect.
+**Server-side**, an `INotificationPublisher` is the only allowed way to broadcast. It writes a `Notifications` row, then pushes to SignalR groups. The DB row is the source of truth - if the user is offline, they see the notification next time they connect.
 
 **Channels** beyond in-app: email via DreamHost SMTP using MailKit (`smtp.dreamhost.com:465`, creds in `.env`); SMS (Twilio, when needed); WhatsApp Business API (optional, later). The publisher fans out by user preference.
 
-**Worker → frontend.** The worker doesn't talk to SignalR. It writes progress to `AIJobQueue.Stage` and `AIJobQueue.Progress`. A Hangfire recurring job (every 2s) reads recent progress updates and publishes them to SignalR. This keeps the worker simple — its only contract is the database.
+**Worker → frontend.** The worker doesn't talk to SignalR. It writes progress to `AIJobQueue.Stage` and `AIJobQueue.Progress`. A Hangfire recurring job (every 2s) reads recent progress updates and publishes them to SignalR. This keeps the worker simple - its only contract is the database.
 
 ## 8. Storage strategy
 
@@ -174,14 +174,14 @@ The split between `MadAuthor.Application` (handlers, validators) and `MadAuthor.
 
 **Folders (mirror what would be containers/buckets in cloud storage):**
 
-- `uploads/` — raw user inputs (PDFs, DOCXs, audio). Lifecycle: keep until project is deleted.
-- `covers/` — generated covers + final selected cover.
-- `exports/` — finalized PDF/EPUB/DOCX. Lifecycle: keep for 90 days after generation, then purge if not downloaded. (MOBI dropped — KDP no longer accepts it for new submissions.)
-- `tmp/` — intermediate worker outputs. Lifecycle: delete after 24h via a Hangfire recurring job.
+- `uploads/` - raw user inputs (PDFs, DOCXs, audio). Lifecycle: keep until project is deleted.
+- `covers/` - generated covers + final selected cover.
+- `exports/` - finalized PDF/EPUB/DOCX. Lifecycle: keep for 90 days after generation, then purge if not downloaded. (MOBI dropped - KDP no longer accepts it for new submissions.)
+- `tmp/` - intermediate worker outputs. Lifecycle: delete after 24h via a Hangfire recurring job.
 
 **Path convention:** `{root}/{folder}/{companyId}/{projectId}/{assetId}-{filename}`. Predictable and tenant-isolated even at the storage layer.
 
-**Provider abstraction.** Code uses `IObjectStore` with three implementations: `LocalFileSystemObjectStore` (Phase 1), `AzureBlobObjectStore`, `S3ObjectStore`. Chosen by config. The local store hands the API a relative path; the API serves the file through an authenticated controller endpoint (`GET /api/files/{key}`) rather than via a signed URL — there is no equivalent of a signed URL on the local filesystem. When moving to Azure/S3, this collapses back to true signed URLs.
+**Provider abstraction.** Code uses `IObjectStore` with three implementations: `LocalFileSystemObjectStore` (Phase 1), `AzureBlobObjectStore`, `S3ObjectStore`. Chosen by config. The local store hands the API a relative path; the API serves the file through an authenticated controller endpoint (`GET /api/files/{key}`) rather than via a signed URL - there is no equivalent of a signed URL on the local filesystem. When moving to Azure/S3, this collapses back to true signed URLs.
 
 **Security caveat for the local-storage phase:** download bandwidth goes through the API process, and the storage root must not be web-accessible directly. Don't put it under `wwwroot/`.
 
@@ -196,16 +196,16 @@ The split between `MadAuthor.Application` (handlers, validators) and `MadAuthor.
 
 Resolved 2026-05-20 (kept here for traceability):
 
-- ~~SQL Server connection string + DB name~~ — dedicated `madapi` on remote SQL Server, creds in `.env`.
-- ~~File storage provider~~ — local filesystem behind `IObjectStore`, swappable later.
-- ~~Auth identity store~~ — ASP.NET Identity + JWT.
-- ~~Email provider~~ — DreamHost SMTP via MailKit.
-- ~~MOBI~~ — dropped from export list.
+- ~~SQL Server connection string + DB name~~ - dedicated `madauthor` plus `madauthorhangfire` on remote SQL Server, creds in `.env`.
+- ~~File storage provider~~ - local filesystem behind `IObjectStore`, swappable later.
+- ~~Auth identity store~~ - ASP.NET Identity + JWT.
+- ~~Email provider~~ - DreamHost SMTP via MailKit.
+- ~~MOBI~~ - dropped from export list.
 
 Still open, deferred to the phase that needs them:
 
-1. **Virus scan service** — defer until Phase 3 when file uploads land. For Phase 3 dev, flag uploads as `Scan=Skipped` and revisit at end of phase.
-2. **Cover generation provider** — DALL·E, Stable Diffusion, Midjourney via Discord, or user-uploads-only. Decide at start of Phase 5. Phase 1–4 require user-uploaded covers.
-3. **Voice-to-text + OCR providers** — decide at start of Phase 6 (Azure AI Speech / Whisper for voice; Azure Document Intelligence / Tesseract for OCR).
-4. **Hosting target for prod** — Azure App Service, container on a VM, or stay local-only. Not blocking until shipping to other users.
-5. **Trial / billing model** — out of scope unless commercial launch becomes a priority.
+1. **Virus scan service** - defer until Phase 3 when file uploads land. For Phase 3 dev, flag uploads as `Scan=Skipped` and revisit at end of phase.
+2. **Cover generation provider** - DALL·E, Stable Diffusion, Midjourney via Discord, or user-uploads-only. Decide at start of Phase 5. Phase 1–4 require user-uploaded covers.
+3. **Voice-to-text + OCR providers** - decide at start of Phase 6 (Azure AI Speech / Whisper for voice; Azure Document Intelligence / Tesseract for OCR).
+4. **Hosting target for prod** - Azure App Service, container on a VM, or stay local-only. Not blocking until shipping to other users.
+5. **Trial / billing model** - out of scope unless commercial launch becomes a priority.

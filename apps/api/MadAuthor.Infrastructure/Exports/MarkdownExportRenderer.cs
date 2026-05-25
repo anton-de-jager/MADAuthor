@@ -6,7 +6,7 @@ namespace MadAuthor.Infrastructure.Exports;
 /// <summary>
 /// Concatenates every chapter's source markdown into a single .md file, prefixed with
 /// YAML frontmatter (title/subtitle/author/timestamp). Each chapter is separated by an
-/// h-rule. Chapter ContentMarkdown is passed through verbatim — no transformation.
+/// h-rule. Chapter ContentMarkdown is passed through verbatim - no transformation.
 /// </summary>
 public class MarkdownExportRenderer : IExportRenderer
 {
@@ -50,7 +50,7 @@ public class MarkdownExportRenderer : IExportRenderer
         {
             sb.Append("_").Append(ctx.Cover.AttributionText).Append("_");
             if (!string.IsNullOrWhiteSpace(ctx.Cover.AttributionUrl))
-                sb.Append(" — <").Append(ctx.Cover.AttributionUrl).Append(">");
+                sb.Append(" - <").Append(ctx.Cover.AttributionUrl).Append(">");
             sb.AppendLine();
             sb.AppendLine();
         }

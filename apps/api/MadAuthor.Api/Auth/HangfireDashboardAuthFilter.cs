@@ -6,7 +6,7 @@ namespace MadAuthor.Api.Auth;
 /// <summary>
 /// Hangfire's built-in dashboard has no auth. We require the connected user to carry the
 /// Admin role on their JWT. (Dev convenience: if `MADAUTHOR_HANGFIRE_OPEN=true` env var is
-/// set, allow any authenticated user — handy when bootstrapping a new local DB.)
+/// set, allow any authenticated user - handy when bootstrapping a new local DB.)
 /// </summary>
 public class HangfireDashboardAuthFilter : IDashboardAuthorizationFilter
 {

@@ -12,8 +12,13 @@ export class AppComponent implements OnInit {
   private auth = inject(AuthService);
 
   ngOnInit() {
-    // Try to silently restore the session from the refresh cookie. If it fails,
-    // the route guards send the user to /login.
+    const publicPaths = new Set(['/', '/home', '/login', '/register', '/confirm-email']);
+    if (publicPaths.has(window.location.pathname)) {
+      return;
+    }
+
+    // Try to silently restore the session from the refresh cookie for protected
+    // app routes. Public pages avoid an expected anonymous 401 in the console.
     this.auth.tryRestore().subscribe();
   }
 }

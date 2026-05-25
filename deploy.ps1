@@ -124,7 +124,7 @@ if ($LASTEXITCODE -ne 0) {
 Write-Host "    + app_offline.htm removed - site is live with new DLLs."
 
 # 4. Warm the worker process. Best-effort; tolerate cert / DNS failures.
-$publicHost = 'madauthorapi.madproducts.co.za'
+$publicHost = 'madauthorapi.madprospects.com'
 $healthUrl = "https://$publicHost/api/health/ready"
 try {
     $resp = Invoke-WebRequest -Uri $healthUrl -UseBasicParsing -TimeoutSec 15 -ErrorAction Stop

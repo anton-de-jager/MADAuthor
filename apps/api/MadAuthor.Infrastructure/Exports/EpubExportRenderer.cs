@@ -6,7 +6,7 @@ using Markdig;
 namespace MadAuthor.Infrastructure.Exports;
 
 /// <summary>
-/// Builds an EPUB 3.0 file from scratch — chapter XHTML + OPF manifest + NCX (EPUB 2 compat)
+/// Builds an EPUB 3.0 file from scratch - chapter XHTML + OPF manifest + NCX (EPUB 2 compat)
 /// + nav.xhtml (EPUB 3) zipped with the mimetype entry stored uncompressed first. Cover image
 /// (when present) is included as a manifest item with the cover-image property + the EPUB 2
 /// <meta name="cover"/> compatibility shim.
@@ -31,7 +31,7 @@ public class EpubExportRenderer : IExportRenderer
             using (var s = mimeEntry.Open()) using (var w = new StreamWriter(s, new UTF8Encoding(false)))
                 w.Write("application/epub+zip");
 
-            // 2. container.xml — points readers at the OPF.
+            // 2. container.xml - points readers at the OPF.
             WriteEntry(zip, "META-INF/container.xml",
                 """
                 <?xml version="1.0" encoding="UTF-8"?>
@@ -95,6 +95,20 @@ public class EpubExportRenderer : IExportRenderer
 
     private static string BuildTitlePage(ExportContext ctx, string coverExt)
     {
+        // Designed cover (typography baked in): show the image alone, full-width, no
+        // margins. Skip the heading + subtitle + author lines, the composer's already
+        // placed them on the image. Reader apps respect the absolute-positioned wrapper
+        // for a true full-bleed feel.
+        if (ctx.Cover is { IsDesigned: true })
+        {
+            return Xhtml($"""
+                <div style="margin:0; padding:0; text-align:center;">
+                    <img src="cover.{coverExt}" alt="Cover" style="width:100%; height:auto; display:block;"/>
+                </div>
+                """, ctx.Title ?? "Title");
+        }
+
+        // Raw photo (or no cover): legacy small-photo + text-title layout.
         var coverImg = ctx.Cover is null
             ? ""
             : $"<div style=\"text-align:center; margin-bottom:1.5em;\"><img src=\"cover.{coverExt}\" alt=\"Cover\" style=\"max-width:100%; height:auto;\"/></div>";
@@ -132,7 +146,7 @@ public class EpubExportRenderer : IExportRenderer
         return Xhtml($"""
             <p class="chapter-meta">Chapter {ch.Number}</p>
             {html}
-            """, $"Chapter {ch.Number} — {ch.Title}");
+            """, $"Chapter {ch.Number} - {ch.Title}");
     }
 
     private static string BuildNavDoc(ExportContext ctx)
@@ -207,7 +221,7 @@ public class EpubExportRenderer : IExportRenderer
             spineItems.AppendLine($"    <itemref idref=\"{id}\"/>");
         }
 
-        // EPUB 2 cover compatibility meta — supported by older readers.
+        // EPUB 2 cover compatibility meta - supported by older readers.
         var coverMeta = ctx.Cover is null ? "" : "    <meta name=\"cover\" content=\"cover-image\"/>";
 
         return $"""

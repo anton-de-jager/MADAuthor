@@ -22,6 +22,6 @@ public sealed record TranslateRequest(
     string SourceMarkdown,
     string TargetLanguage,         // ISO 639-1 ("es", "fr", "de") or full name ("Spanish")
     string? SourceLanguage = null, // null = auto-detect
-    string? StyleHint = null);     // e.g. "warm, conversational" — passed into the prompt
+    string? StyleHint = null);     // e.g. "warm, conversational" - passed into the prompt
 
 public sealed record TranslationResult(string TranslatedMarkdown, string SourceLanguageDetected, string Provider);

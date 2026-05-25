@@ -1,0 +1,21 @@
+const fs = require('fs');
+const raw = fs.readFileSync('C:/Code/madauthor/.deploy/job-context.json', 'utf8');
+// Strip BOM if present
+const text = raw.charCodeAt(0) === 0xFEFF ? raw.slice(1) : raw;
+const j = JSON.parse(text);
+const r = j.request || {};
+const ec = r.existingContent || '';
+fs.writeFileSync('C:/Code/madauthor/.deploy/_ec_meta.txt', 'Total length: ' + ec.length + '\n');
+fs.writeFileSync('C:/Code/madauthor/.deploy/_ec_chunk1.txt', ec.slice(0, 8000));
+fs.writeFileSync('C:/Code/madauthor/.deploy/_ec_chunk2.txt', ec.slice(8000, 16000));
+fs.writeFileSync('C:/Code/madauthor/.deploy/_ec_chunk3.txt', ec.slice(16000, 24000));
+fs.writeFileSync('C:/Code/madauthor/.deploy/_ec_chunk4.txt', ec.slice(24000, 32000));
+fs.writeFileSync('C:/Code/madauthor/.deploy/_ec_chunk5.txt', ec.slice(32000, 40000));
+fs.writeFileSync('C:/Code/madauthor/.deploy/_ec_chunk6.txt', ec.slice(40000, 48000));
+fs.writeFileSync('C:/Code/madauthor/.deploy/_ec_chunk7.txt', ec.slice(48000));
+fs.writeFileSync('C:/Code/madauthor/.deploy/_proj.json', JSON.stringify(j.project, null, 2));
+const reqMeta = { ...r };
+delete reqMeta.existingContent;
+reqMeta._existingContentLen = ec.length;
+fs.writeFileSync('C:/Code/madauthor/.deploy/_req_meta.json', JSON.stringify(reqMeta, null, 2));
+console.log('OK len=' + ec.length);

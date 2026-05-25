@@ -38,7 +38,7 @@ import { BooksApi } from '../../core/api/books.api';
           Find blanks
         </button>
         @if (blanksScanned() && blanks().length === 0) {
-          <span class="text-xs text-emerald-300">No [BLANK] placeholders left — looking good!</span>
+          <span class="text-xs text-emerald-300">No [BLANK] placeholders left - looking good!</span>
         }
         @if (blanks().length > 0) {
           <span class="text-xs text-ink-400 self-center">

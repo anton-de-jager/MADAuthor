@@ -125,6 +125,37 @@ public class ExportsController(
         return File(System.IO.File.OpenRead(path), contentType, fileName);
     }
 
+    [HttpDelete("exports/{exportId:guid}")]
+    public async Task<IActionResult> Delete(Guid exportId, CancellationToken ct)
+    {
+        var (uid, cid) = Identify();
+        var record = await db.BookExports
+            .Join(db.BookProjects,
+                e => e.BookProjectId, p => p.Id,
+                (e, p) => new { export = e, project = p })
+            .Where(x => x.export.Id == exportId
+                        && x.project.OwnerUserId == uid && x.project.CompanyId == cid)
+            .FirstOrDefaultAsync(ct);
+        if (record is null) return NotFound();
+
+        // Remove the file from disk first (best-effort), then the DB row. If the file
+        // delete throws, we still want to drop the row so a stuck export can be wiped
+        // and re-queued cleanly.
+        if (!string.IsNullOrWhiteSpace(record.export.BlobKey))
+        {
+            try
+            {
+                var path = storage.ResolvePath("exports", record.export.BlobKey);
+                if (System.IO.File.Exists(path)) System.IO.File.Delete(path);
+            }
+            catch { /* swallow; row delete still proceeds */ }
+        }
+
+        db.BookExports.Remove(record.export);
+        await db.SaveChangesAsync(ct);
+        return NoContent();
+    }
+
     private (Guid userId, Guid companyId) Identify()
     {
         if (currentUser.UserId is not { } uid || currentUser.CompanyId is not { } cid)

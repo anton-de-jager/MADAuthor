@@ -2,7 +2,23 @@ import { Routes } from '@angular/router';
 import { authGuard, anonGuard, adminGuard } from './core/auth/auth.guard';
 
 export const routes: Routes = [
-  // Unauthenticated routes — flat so the router doesn't have to resolve nested '' paths.
+  // Public marketing landing — full-bleed, no shell, no auth guard. Auth-aware
+  // CTAs route signed-in visitors to /dashboard or /books/new; anon visitors to
+  // /register and /login. pathMatch:'full' keeps this from swallowing /dashboard
+  // etc. below.
+  {
+    path: '',
+    pathMatch: 'full',
+    loadComponent: () =>
+      import('./features/landing/landing.component').then((m) => m.LandingComponent),
+  },
+  {
+    path: 'home',
+    loadComponent: () =>
+      import('./features/landing/landing.component').then((m) => m.LandingComponent),
+  },
+
+  // Unauthenticated auth screens - flat so the router doesn't have to resolve nested '' paths.
   {
     path: 'login',
     canActivate: [anonGuard],
@@ -20,13 +36,12 @@ export const routes: Routes = [
       import('./features/auth/confirm-email.component').then((m) => m.ConfirmEmailComponent),
   },
 
-  // Authenticated app — single root with the shell component and lazy children.
+  // Authenticated app - single root with the shell component and lazy children.
   {
     path: '',
     canActivate: [authGuard],
     loadComponent: () => import('./layout/shell.component').then((m) => m.ShellComponent),
     children: [
-      { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
       {
         path: 'dashboard',
         loadComponent: () =>

@@ -5,7 +5,7 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        // Brand palette — tuned for the dark, futuristic feel called for in the spec.
+        // Brand palette - tuned for the dark, futuristic feel called for in the spec.
         brand: {
           50:  '#f5f3ff',
           100: '#ede9fe',

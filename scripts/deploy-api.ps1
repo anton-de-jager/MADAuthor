@@ -8,7 +8,7 @@
     API_FTP_USER   - FTP username
     API_FTP_PASS   - FTP password
     API_FTP_PATH   - path on the FTP server pointing at the domain folder
-                     (e.g. /madaiapi.madproducts.co.za)
+                     (e.g. /madaiapi.madprospects.com)
     API_FTP_USE_TLS  - optional, "true" to use FTPS (explicit TLS) on port 21
 
   Workflow:
@@ -187,5 +187,5 @@ Write-Host "Removing remote app_offline.htm - API coming back online..." -Foregr
 Remove-FtpFile 'app_offline.htm'
 
 Write-Host "`nDone." -ForegroundColor Green
-Write-Host "Smoke test:  https://madaiapi.madproducts.co.za/swagger" -ForegroundColor Cyan
-Write-Host "Health:      https://madaiapi.madproducts.co.za/health" -ForegroundColor Cyan
+Write-Host "Smoke test:  https://madaiapi.madprospects.com/swagger" -ForegroundColor Cyan
+Write-Host "Health:      https://madaiapi.madprospects.com/health" -ForegroundColor Cyan

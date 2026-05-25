@@ -1,4 +1,4 @@
-# 02 — Data model
+# 02 - Data model
 
 This document refines the table list in the original spec into a relational schema that EF Core can own. Issues in the spec (duplicate columns, missing FKs, missing indexes, no tenancy column on most rows, a `BookRequests` table with ~50 boolean flags) are called out and resolved here.
 
@@ -62,7 +62,7 @@ A tenant. A `User` can belong to one or more companies via `CompanyMembers`.
 | --- | --- | --- |
 | Id | uniqueidentifier PK |  |
 | Name | nvarchar(200) NOT NULL |  |
-| Slug | nvarchar(80) NOT NULL | UNIQUE — used in URLs |
+| Slug | nvarchar(80) NOT NULL | UNIQUE - used in URLs |
 | LogoUrl | nvarchar(1024) NULL |  |
 | BrandingJson | nvarchar(max) NULL | Colors, fonts, theme overrides |
 | OwnerUserId | uniqueidentifier NOT NULL | FK Users |
@@ -135,7 +135,7 @@ The main aggregate root for a book.
 | PublishingGoal | nvarchar(200) NULL |  |
 | Deadline | datetime2 NULL |  |
 | RequireOutlineApproval | bit NOT NULL DEFAULT 1 | If true, pipeline pauses after Planner until user approves outline. See [04 §9](04-ai-orchestration.md). |
-| OutlineApprovedAt | datetime2 NULL | Set when the user clicks "Approve outline" — gates downstream jobs. |
+| OutlineApprovedAt | datetime2 NULL | Set when the user clicks "Approve outline" - gates downstream jobs. |
 | IsDeleted | bit NOT NULL DEFAULT 0 |  |
 | CreatedDate | datetime2 NOT NULL |  |
 | UpdatedDate | datetime2 NULL |  |
@@ -238,7 +238,7 @@ A finalized rendered artifact (PDF, EPUB, DOCX) ready to download.
 | --- | --- | --- |
 | Id | uniqueidentifier PK |  |
 | BookProjectId | uniqueidentifier NOT NULL | FK BookProjects, cascade delete |
-| ExportType | tinyint NOT NULL | Pdf, Epub, Docx, PrintPdfKdp, PrintPdfIngram, Html, Markdown — MOBI deliberately excluded (deprecated by KDP) |
+| ExportType | tinyint NOT NULL | Pdf, Epub, Docx, PrintPdfKdp, PrintPdfIngram, Html, Markdown - MOBI deliberately excluded (deprecated by KDP) |
 | BlobKey | nvarchar(1024) NULL | Null while Status is Queued/Running |
 | FileSize | bigint NULL |  |
 | ChecksumSha256 | char(64) NULL |  |
@@ -258,7 +258,7 @@ Indexes: `IX_BookExports_BookProjectId_ExportType_Status`.
 | BookProjectId | uniqueidentifier NOT NULL | FK BookProjects, cascade delete |
 | Prompt | nvarchar(max) NOT NULL |  |
 | Style | nvarchar(200) NULL |  |
-| AssetId | uniqueidentifier NULL | FK BookAssets — the generated image |
+| AssetId | uniqueidentifier NULL | FK BookAssets - the generated image |
 | Status | tinyint NOT NULL | Pending, Generating, Ready, Failed, Selected |
 | CreatedDate | datetime2 NOT NULL |  |
 
@@ -318,7 +318,7 @@ The contract between API and Claude Code Desktop worker. Critical.
 | MaxRetries | tinyint NOT NULL DEFAULT 3 |  |
 | CreatedDate | datetime2 NOT NULL |  |
 
-Indexes: `IX_AIJobQueue_Status_Priority_CreatedDate` (this is the polling query path — keep it tight).
+Indexes: `IX_AIJobQueue_Status_Priority_CreatedDate` (this is the polling query path - keep it tight).
 
 ### WorkerHeartbeats
 
@@ -468,13 +468,13 @@ Users 1───* Notifications
 - EF Core migrations live under `apps/api/MadAuthor.Infrastructure/Migrations/`. The `db/migrations/` folder at the root is just a symlink/mirror for visibility.
 - Initial migration creates the full schema above.
 - Seed script populates: `PublishingPlatforms` (KDP, IngramSpark, Lulu, B&N Press), one dev `Company` ("MADAuthor Dev"), one dev `User` (Anton), one dev `Author`.
-- Subsequent migrations are additive — never destructive — and tested with a "migrate from prior version" script in CI.
+- Subsequent migrations are additive - never destructive - and tested with a "migrate from prior version" script in CI.
 
 ## 8. Out of scope for the data model
 
 The spec implies but does not commit to:
 
-- **Billing/subscriptions** — Stripe customer/subscription/invoice tables. Deferred unless Phase 1 needs paid tiers.
-- **Collaboration** — sharing a project with a non-owner. Mentioned in "Collaboration updates" under realtime; needs `BookProjectMembers (UserId, BookProjectId, Role)` when implemented.
-- **Prompt-template store** — the spec mentions "Prompt Templates" as a UI page. If users can edit templates in-app, add `PromptTemplates (Id, CompanyId, Name, Body, Variables, Version)`. For Phase 1, prompt templates live in the repo as Markdown files under `packages/prompts/`.
-- **API keys for tenants** — if users can call MADAuthor via API, add `ApiKeys (Id, UserId, CompanyId, KeyHash, Scopes, ExpiresAt)`.
+- **Billing/subscriptions** - Stripe customer/subscription/invoice tables. Deferred unless Phase 1 needs paid tiers.
+- **Collaboration** - sharing a project with a non-owner. Mentioned in "Collaboration updates" under realtime; needs `BookProjectMembers (UserId, BookProjectId, Role)` when implemented.
+- **Prompt-template store** - the spec mentions "Prompt Templates" as a UI page. If users can edit templates in-app, add `PromptTemplates (Id, CompanyId, Name, Body, Variables, Version)`. For Phase 1, prompt templates live in the repo as Markdown files under `packages/prompts/`.
+- **API keys for tenants** - if users can call MADAuthor via API, add `ApiKeys (Id, UserId, CompanyId, KeyHash, Scopes, ExpiresAt)`.

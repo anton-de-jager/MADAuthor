@@ -390,6 +390,9 @@ namespace MadAuthor.Infrastructure.Persistence.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<Guid?>("DesignedAssetId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Prompt")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -468,6 +471,9 @@ namespace MadAuthor.Infrastructure.Persistence.Migrations
 
                     b.Property<Guid?>("AuthorId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("BodyFont")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("CompanyId")
                         .HasColumnType("uniqueidentifier");

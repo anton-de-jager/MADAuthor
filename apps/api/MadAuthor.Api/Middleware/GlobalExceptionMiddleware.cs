@@ -33,7 +33,7 @@ public class GlobalExceptionMiddleware(RequestDelegate next, ILogger<GlobalExcep
                 error = ex.GetType().Name,
                 detail = ex.Message,
                 inner = ex.InnerException?.Message,
-                // stack is intentionally surfaced for now — Anton is the only user. Strip
+                // stack is intentionally surfaced for now - Anton is the only user. Strip
                 // before going multi-tenant or production-facing.
                 stack = ex.StackTrace,
             });

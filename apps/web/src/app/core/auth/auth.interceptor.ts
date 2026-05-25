@@ -11,7 +11,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const token = auth.accessToken();
 
   // Rewrite relative /api/* and /hubs/* paths to the absolute API URL in production.
-  // Dev keeps relative paths and lets the ng-serve proxy forward to localhost:5150.
+  // Dev keeps relative paths and lets the ng-serve proxy forward to localhost:4212.
   const isRelativeApi =
     (req.url.startsWith('/api/') || req.url.startsWith('/hubs/')) &&
     !!environment.apiBase;
@@ -34,7 +34,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   // keywords ('delete', 'put') anywhere in the URL, AND the WAF flags the
   // `X-HTTP-Method-Override` header itself (known method-override attack vector).
   // Workaround: tunnel as POST with the verb encoded in a single-letter URL
-  // suffix — `/_d` = DELETE, `/_p` = PUT, `/_h` = PATCH. No custom headers, no
+  // suffix - `/_d` = DELETE, `/_p` = PUT, `/_h` = PATCH. No custom headers, no
   // keyword-matching segments, no guid as the tail. The API middleware reads
   // the suffix, strips it, and swaps the method back before routing.
   if (isApi && (outgoing.method === 'DELETE' || outgoing.method === 'PUT' || outgoing.method === 'PATCH')) {

@@ -43,6 +43,7 @@ public record BookDetail(
     DateTime CreatedDate,
     Guid? AuthorId,
     string? AuthorPenName,
+    string? BodyFont,
     IReadOnlyList<BookChapterSummary> Chapters);
 
 public record BookChapterSummary(
@@ -76,11 +77,20 @@ public record UpdateBookRequest(
     string? Language,
     int? TargetWordCount,
     string? TargetReadingLevel,
-    Guid? AuthorId);
+    Guid? AuthorId,
+    string? BodyFont);
 
 public record AuthorSummary(
     Guid Id,
     string PenName);
+
+public record CreateAuthorRequest(
+    string PenName,
+    string? Biography);
+
+public record UpdateAuthorRequest(
+    string? PenName,
+    string? Biography);
 
 public record SubmitBookRequest(
     BookRequestType RequestType,

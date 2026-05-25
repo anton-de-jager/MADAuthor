@@ -67,6 +67,7 @@ export interface BookDetail {
   createdDate: string;
   authorId?: string | null;
   authorPenName?: string | null;
+  bodyFont?: string | null;
   chapters: BookChapterSummary[];
 }
 
@@ -81,6 +82,7 @@ export interface UpdateBookRequest {
   targetWordCount?: number | null;
   targetReadingLevel?: string | null;
   authorId?: string | null;
+  bodyFont?: string | null;
 }
 
 export interface AuthorSummary {
@@ -160,11 +162,27 @@ export interface BookCoverRow {
   prompt: string;
   style?: string | null;
   assetId?: string | null;
+  designedAssetId?: string | null;
   status: 'Pending' | 'Generating' | 'Ready' | 'Failed' | 'Selected';
   createdDate: string;
   assetUrl?: string | null;
+  designedAssetUrl?: string | null;
   attribution?: string | null; // JSON string
 }
+
+export type CoverTemplate =
+  | 'BoldGradient'
+  | 'ClassicCentered'
+  | 'ModernMinimal'
+  | 'PenguinStripe'
+  | 'MagazineBlock'
+  | 'AuthorSpotlight'
+  | 'NightOwl'
+  | 'GoldenAge';
+
+export type CoverSide = 'Front' | 'Back';
+
+export type CoverPaperType = 'cream' | 'white';
 
 export interface BookExportRow {
   id: string;
@@ -199,6 +217,18 @@ export class BooksApi {
 
   listAuthors(): Observable<AuthorSummary[]> {
     return this.http.get<AuthorSummary[]>('/api/books/authors');
+  }
+
+  createAuthor(req: { penName: string; biography?: string | null }): Observable<AuthorSummary> {
+    return this.http.post<AuthorSummary>('/api/books/authors', req);
+  }
+
+  updateAuthor(authorId: string, req: { penName?: string; biography?: string | null }): Observable<AuthorSummary> {
+    return this.http.patch<AuthorSummary>(`/api/books/authors/${authorId}`, req);
+  }
+
+  deleteAuthor(authorId: string): Observable<void> {
+    return this.http.delete<void>(`/api/books/authors/${authorId}`);
   }
 
   getChapter(id: string, chapterId: string): Observable<BookChapterDetail> {
@@ -271,9 +301,13 @@ export class BooksApi {
     return `/api/exports/${exportId}/download`;
   }
 
+  deleteExport(exportId: string): Observable<void> {
+    return this.http.delete<void>(`/api/exports/${exportId}`);
+  }
+
   /**
    * Fetch a protected file as a Blob. Use this anywhere you'd otherwise put
-   * the URL into `<a href>` — anchor tags can't carry the JWT, and on
+   * the URL into `<a href>` - anchor tags can't carry the JWT, and on
    * production the SPA host and API host are different origins so a relative
    * `/api/...` href hits the SPA's 404 instead of the API. Going through
    * HttpClient routes the request through the auth interceptor (auth header +
@@ -324,7 +358,60 @@ export class BooksApi {
     return this.http.delete<void>(`/api/books/${id}/covers/${coverId}`);
   }
 
-  // The shape is intentionally loose — the editor UI is responsible for the
+  /**
+   * Compose a designed panel (front or back) and persist it as a new asset. For Front,
+   * the new image becomes the cover's `designedAssetUrl` and the cover is promoted to
+   * Selected if it was Ready.
+   */
+  designCover(
+    projectId: string,
+    coverId: string,
+    template: CoverTemplate,
+    side: CoverSide,
+  ): Observable<{ coverId: string; designedAssetId: string; assetUrl: string }> {
+    return this.http.post<{ coverId: string; designedAssetId: string; assetUrl: string }>(
+      `/api/books/${projectId}/covers/${coverId}/design`,
+      { template, side },
+    );
+  }
+
+  /**
+   * Render the print-ready cover wrap (front + spine + back) PDF. Returns the full
+   * HttpResponse<Blob> so the caller can read the filename from Content-Disposition
+   * and trigger a browser download.
+   */
+  wrapCover(
+    projectId: string,
+    coverId: string,
+    template: CoverTemplate,
+    paperType: CoverPaperType,
+    pageCount?: number,
+  ): Observable<HttpResponse<Blob>> {
+    return this.http.post(
+      `/api/books/${projectId}/covers/${coverId}/wrap`,
+      { template, paperType, pageCount: pageCount ?? null },
+      { responseType: 'blob', observe: 'response' },
+    );
+  }
+
+  /**
+   * Live design preview - returns the composed PNG for the given template/side without
+   * saving anything. Use blob URLs in the UI and revoke them when the template changes.
+   */
+  designPreview(
+    projectId: string,
+    coverId: string,
+    template: CoverTemplate,
+    side: CoverSide,
+  ): Observable<Blob> {
+    return this.http.get(
+      `/api/books/${projectId}/covers/${coverId}/design-preview` +
+        `?template=${encodeURIComponent(template)}&side=${encodeURIComponent(side)}`,
+      { responseType: 'blob' },
+    );
+  }
+
+  // The shape is intentionally loose - the editor UI is responsible for the
   // field-level schema. The server stores whatever JSON the front-end sends back.
   getPublisherMetadata(id: string): Observable<any> {
     return this.http.get<any>(`/api/books/${id}/publisher-metadata`);
