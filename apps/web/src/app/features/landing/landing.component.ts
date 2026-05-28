@@ -1,4 +1,5 @@
 import { Component, computed, inject, signal } from '@angular/core';
+import { PayfastSubscribeComponent } from '../../shared/payfast/payfast-subscribe.component';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../core/auth/auth.service';
 
@@ -20,7 +21,7 @@ const MAD_UNIVERSE_APPS = [
 @Component({
   selector: 'app-landing',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink, PayfastSubscribeComponent],
   template: `
     <div class="aurora min-h-screen text-ink-100 overflow-x-hidden">
       <!-- ===== Top bar ===== -->
@@ -356,6 +357,8 @@ const MAD_UNIVERSE_APPS = [
         </div>
       </section>
 
+      <div class="max-w-7xl mx-auto px-6 lg:px-10"><app-payfast-subscribe productName="MADAuthor" headline="Publish with Payfast" lead="Choose the writing plan, confirm your email, and subscribe in a secure onsite Payfast window." [compact]="true"></app-payfast-subscribe></div>
+
       <!-- ===== Final CTA ===== -->
       <section class="relative z-10 max-w-5xl mx-auto px-6 lg:px-10 py-20 lg:py-28">
         <div class="glass rounded-3xl p-10 lg:p-16 text-center relative overflow-hidden">
@@ -426,7 +429,7 @@ const MAD_UNIVERSE_APPS = [
       align-items: center;
       gap: 8px;
       margin: 0;
-      color: #7dd3fc;
+      color: #FF4081;
       font-size: 11px;
       font-weight: 700;
       letter-spacing: 0.18em;
@@ -434,7 +437,7 @@ const MAD_UNIVERSE_APPS = [
       text-transform: uppercase;
       white-space: nowrap;
     }
-    .mad-universe-kicker span { color: #38bdf8; }
+    .mad-universe-kicker span { color: #D500F9; }
     .mad-universe-marquee {
       flex: 1 1 auto;
       min-width: 0;
@@ -551,7 +554,7 @@ export class LandingComponent {
         { label: 'Print-ready PDFs (KDP + Ingram)',                  value: false },
         { label: 'AI cover generation',                              value: false },
         { label: 'Translation to any language',                      value: false },
-        { label: 'Audio transcription (Whisper)',                    value: false },
+        { label: 'MADCloud audio transcription',                     value: false },
         { label: 'OCR for image / scanned PDF uploads',              value: false },
         { label: 'Priority worker queue',                            value: false },
         { label: 'Email support',                                    value: true },
@@ -570,9 +573,9 @@ export class LandingComponent {
         { label: 'Screen formats (PDF · EPUB · DOCX)',               value: true },
         { label: 'HTML + Markdown exports',                          value: true },
         { label: 'Print-ready PDFs (KDP + Ingram, 6×9, mirrored)',   value: true },
-        { label: 'AI cover generation (DALL·E / Stable Diffusion)',  value: true },
+        { label: 'MADCloud cover generation',                        value: true },
         { label: 'Translation to any language',                      value: true },
-        { label: 'Audio transcription (Whisper, audio → manuscript)',value: true },
+        { label: 'MADCloud audio transcription',                     value: true },
         { label: 'OCR for image / scanned PDF uploads',              value: true },
         { label: 'Priority worker queue',                            value: true },
         { label: 'Email support',                                    value: true },
@@ -591,9 +594,9 @@ export class LandingComponent {
         { label: 'Screen formats (PDF · EPUB · DOCX)',               value: true },
         { label: 'HTML + Markdown exports',                          value: true },
         { label: 'Print-ready PDFs (KDP + Ingram, 6×9, mirrored)',   value: true },
-        { label: 'AI cover generation (DALL·E / Stable Diffusion)',  value: true },
+        { label: 'MADCloud cover generation',                        value: true },
         { label: 'Translation to any language',                      value: true },
-        { label: 'Audio transcription (Whisper, audio → manuscript)',value: true },
+        { label: 'MADCloud audio transcription',                     value: true },
         { label: 'OCR for image / scanned PDF uploads',              value: true },
         { label: 'Priority worker queue',                            value: 'Fastest ✦' },
         { label: 'Custom agent prompts',                             value: true },

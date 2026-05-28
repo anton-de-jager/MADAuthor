@@ -26,12 +26,20 @@ export const anonGuard: CanActivateFn = () => {
     router.navigate(['/dashboard']);
     return false;
   }
-  return true;
+  // Try silent refresh — if the user has a valid refresh cookie,
+  // redirect them to /dashboard instead of showing login/register.
+  return auth.refresh().pipe(
+    map(() => {
+      router.navigate(['/dashboard']);
+      return false;
+    }),
+    catchError(() => of(true)),
+  );
 };
 
 /**
  * Restricts a route to users with the "Admin" or "Owner" role. Used by the operator
- * /admin/claude page. Falls back to silent refresh once (same pattern as authGuard)
+ * /admin/ai page. Falls back to silent refresh once (same pattern as authGuard)
  * because we may be racing the page boot.
  */
 export const adminGuard: CanActivateFn = () => {

@@ -90,7 +90,13 @@ export class AuthService {
 
   login(email: string, password: string): Observable<AuthResponse> {
     return this.http
-      .post<AuthResponse>('/api/auth/signin', { email, password }, { withCredentials: true })
+      .post<AuthResponse>('/api/auth/session', null, {
+        headers: {
+          'X-MAD-Email': email,
+          'X-MAD-Password': password,
+        },
+        withCredentials: true,
+      })
       .pipe(tap((res) => this.applyAuth(res)));
   }
 

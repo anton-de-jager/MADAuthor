@@ -119,6 +119,10 @@ export class LoginComponent {
           this.unconfirmedEmail.set(body.email ?? email);
           return;
         }
+        if (err?.status === 503 && body?.error === 'DatabaseUnavailable') {
+          this.error.set('Service temporarily unavailable. The API cannot reach the MADAuthor database right now.');
+          return;
+        }
         this.error.set(body?.error ?? 'Sign-in failed.');
       },
     });

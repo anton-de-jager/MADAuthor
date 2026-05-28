@@ -32,6 +32,8 @@ export interface ClaudeTaskRealtimeEvent {
   task: unknown | null;
 }
 
+export type AiTaskRealtimeEvent = ClaudeTaskRealtimeEvent;
+
 @Injectable({ providedIn: 'root' })
 export class NotificationsService implements OnDestroy {
   private auth = inject(AuthService);
@@ -39,12 +41,15 @@ export class NotificationsService implements OnDestroy {
   private startPromise?: Promise<void>;
   private readonly _jobProgress$ = new Subject<JobProgressEvent>();
   private readonly _claudeTaskEvents$ = new Subject<ClaudeTaskRealtimeEvent>();
+  private readonly _aiTaskEvents$ = new Subject<AiTaskRealtimeEvent>();
   private joinedGroups = new Set<string>();
   /** Tracked separately from project groups -- it's a single global group with no id. */
   private joinedClaudeTasks = false;
+  private joinedAiTasks = false;
 
   readonly jobProgress$: Observable<JobProgressEvent> = this._jobProgress$.asObservable();
   readonly claudeTaskEvents$: Observable<ClaudeTaskRealtimeEvent> = this._claudeTaskEvents$.asObservable();
+  readonly aiTaskEvents$: Observable<AiTaskRealtimeEvent> = this._aiTaskEvents$.asObservable();
 
   /** Idempotent connect. Resolves once the hub is in Connected state. */
   async ensureConnected(): Promise<void> {
@@ -79,6 +84,7 @@ export class NotificationsService implements OnDestroy {
 
     this.connection.on('JobProgress', (msg: JobProgressEvent) => this._jobProgress$.next(msg));
     this.connection.on('ClaudeTaskEvent', (msg: ClaudeTaskRealtimeEvent) => this._claudeTaskEvents$.next(msg));
+    this.connection.on('AiTaskEvent', (msg: AiTaskRealtimeEvent) => this._aiTaskEvents$.next(msg));
 
     this.connection.onreconnected(async () => {
       // Re-join previously subscribed project groups after a reconnect.
@@ -88,6 +94,9 @@ export class NotificationsService implements OnDestroy {
       // Re-join the claude-tasks global group if we were previously subscribed.
       if (this.joinedClaudeTasks) {
         try { await this.connection!.invoke('JoinClaudeTasksGroup'); } catch { /* ignore */ }
+      }
+      if (this.joinedAiTasks) {
+        try { await this.connection!.invoke('JoinAiTasksGroup'); } catch { /* ignore */ }
       }
     });
 
@@ -112,7 +121,7 @@ export class NotificationsService implements OnDestroy {
     this.joinedGroups.delete(projectId);
   }
 
-  /** Subscribe to the operator /claude task event stream. Admin/Owner role required
+  /** Subscribe to the operator /ai task event stream. Admin/Owner role required
    *  server-side; the hub throws if the connection lacks the role. */
   async joinClaudeTasks(): Promise<void> {
     await this.ensureConnected();
@@ -125,6 +134,19 @@ export class NotificationsService implements OnDestroy {
     if (!this.joinedClaudeTasks) return;
     try { await this.connection?.invoke('LeaveClaudeTasksGroup'); } catch { /* ignore */ }
     this.joinedClaudeTasks = false;
+  }
+
+  async joinAiTasks(): Promise<void> {
+    await this.ensureConnected();
+    if (this.joinedAiTasks) return;
+    await this.connection!.invoke('JoinAiTasksGroup');
+    this.joinedAiTasks = true;
+  }
+
+  async leaveAiTasks(): Promise<void> {
+    if (!this.joinedAiTasks) return;
+    try { await this.connection?.invoke('LeaveAiTasksGroup'); } catch { /* ignore */ }
+    this.joinedAiTasks = false;
   }
 
   ngOnDestroy() {

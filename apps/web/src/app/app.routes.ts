@@ -2,6 +2,8 @@ import { Routes } from '@angular/router';
 import { authGuard, anonGuard, adminGuard } from './core/auth/auth.guard';
 
 export const routes: Routes = [
+  { path: 'ai', canActivate: [adminGuard], loadComponent: () => import('./features/madcloud-ai/madcloud-ai.page').then((m) => m.MadcloudAiPage) },
+
   // Public marketing landing — full-bleed, no shell, no auth guard. Auth-aware
   // CTAs route signed-in visitors to /dashboard or /books/new; anon visitors to
   // /register and /login. pathMatch:'full' keeps this from swallowing /dashboard
@@ -42,6 +44,7 @@ export const routes: Routes = [
     canActivate: [authGuard],
     loadComponent: () => import('./layout/shell.component').then((m) => m.ShellComponent),
     children: [
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       {
         path: 'dashboard',
         loadComponent: () =>
@@ -70,7 +73,66 @@ export const routes: Routes = [
             loadComponent: () =>
               import('./features/books/books-read.component').then((m) => m.BooksReadComponent),
           },
+          {
+            path: ':id/publishing',
+            data: { area: 'publishing' },
+            loadComponent: () =>
+              import('./features/books/book-workflow-page.component').then((m) => m.BookWorkflowPageComponent),
+          },
+          {
+            path: ':id/assets',
+            data: { area: 'assets' },
+            loadComponent: () =>
+              import('./features/books/book-workflow-page.component').then((m) => m.BookWorkflowPageComponent),
+          },
+          {
+            path: ':id/covers',
+            data: { area: 'covers' },
+            loadComponent: () =>
+              import('./features/books/book-workflow-page.component').then((m) => m.BookWorkflowPageComponent),
+          },
+          {
+            path: ':id/metadata',
+            data: { area: 'metadata' },
+            loadComponent: () =>
+              import('./features/books/book-workflow-page.component').then((m) => m.BookWorkflowPageComponent),
+          },
+          {
+            path: ':id/exports',
+            data: { area: 'exports' },
+            loadComponent: () =>
+              import('./features/books/book-workflow-page.component').then((m) => m.BookWorkflowPageComponent),
+          },
+          {
+            path: ':id/translate',
+            data: { area: 'translate' },
+            loadComponent: () =>
+              import('./features/books/book-workflow-page.component').then((m) => m.BookWorkflowPageComponent),
+          },
         ],
+      },
+      {
+        path: 'billing',
+        loadComponent: () =>
+          import('./features/billing/billing-page.component').then((m) => m.BillingPageComponent),
+      },
+      {
+        path: 'billing/success',
+        data: { status: 'success' },
+        loadComponent: () =>
+          import('./features/billing/billing-result.component').then((m) => m.BillingResultComponent),
+      },
+      {
+        path: 'billing/cancelled',
+        data: { status: 'cancelled' },
+        loadComponent: () =>
+          import('./features/billing/billing-result.component').then((m) => m.BillingResultComponent),
+      },
+      {
+        path: 'admin',
+        canActivate: [adminGuard],
+        loadComponent: () =>
+          import('./features/admin/admin-home.component').then((m) => m.AdminHomeComponent),
       },
       {
         path: 'admin/queue',
@@ -79,14 +141,14 @@ export const routes: Routes = [
           import('./features/admin/admin-queue.component').then((m) => m.AdminQueueComponent),
       },
       {
-        path: 'admin/claude',
+        path: 'admin/ai',
         canActivate: [adminGuard],
         loadComponent: () =>
-          import('./features/admin/claude/claude.page').then((m) => m.ClaudePageComponent),
+          import('./features/madcloud-ai/madcloud-ai.page').then((m) => m.MadcloudAiPage),
       },
     ],
   },
 
-  // Catch-all goes to the dashboard (authGuard bounces unauthenticated visitors to /login).
-  { path: '**', redirectTo: '' },
+  // Catch-all: authenticated users land on dashboard, unauthenticated on the landing page.
+  { path: '**', redirectTo: 'dashboard' },
 ];

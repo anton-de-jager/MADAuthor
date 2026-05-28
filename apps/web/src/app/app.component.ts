@@ -12,13 +12,10 @@ export class AppComponent implements OnInit {
   private auth = inject(AuthService);
 
   ngOnInit() {
-    const publicPaths = new Set(['/', '/home', '/login', '/register', '/confirm-email']);
-    if (publicPaths.has(window.location.pathname)) {
-      return;
-    }
-
-    // Try to silently restore the session from the refresh cookie for protected
-    // app routes. Public pages avoid an expected anonymous 401 in the console.
+    // Silently restore the session from the refresh cookie on every page load.
+    // This ensures auth-aware CTAs on public pages (landing, login) show the
+    // correct state for returning users. Anonymous users produce an expected
+    // 401 on the refresh call — tryRestore() swallows it.
     this.auth.tryRestore().subscribe();
   }
 }

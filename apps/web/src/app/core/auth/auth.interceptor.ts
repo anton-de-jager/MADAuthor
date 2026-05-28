@@ -4,7 +4,7 @@ import { catchError, switchMap, throwError } from 'rxjs';
 import { AuthService } from './auth.service';
 import { environment } from '../../../environments/environment';
 
-const PUBLIC_ENDPOINTS = ['/api/auth/signin', '/api/auth/register', '/api/auth/refresh'];
+const PUBLIC_ENDPOINTS = ['/api/auth/session', '/api/auth/register', '/api/auth/refresh'];
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const auth = inject(AuthService);
