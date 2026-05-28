@@ -1,0 +1,48 @@
+{
+  "product": "MADAuthor",
+  "slug": "madauthor",
+  "sourceCode": "C:\\Code\\madprospects\\madauthor",
+  "repository": "https://github.com/mad-leads/madauthor",
+  "madcloud": {
+    "role": "MADCloud is the only AI service provider for this application.",
+    "apiUrlProd": "https://madcloudapi.madprospects.com",
+    "apiUrlDev": "http://localhost:3010",
+    "aiOperatorRoute": "/ai",
+    "callbackPath": "/api/madcloud/ai-results",
+    "callbackUrlProd": "https://madauthorapi.madprospects.com/api/madcloud/ai-results",
+    "callbackUrlDev": "http://localhost:3012/api/madcloud/ai-results",
+    "taskEndpoints": {
+      "createAiRequest": "POST /api/ai/requests",
+      "createCodeFix": "POST /api/ai/code-fixes",
+      "pollRequest": "GET /api/ai/requests/{requestId}",
+      "operatorTasks": "GET/POST/PATCH/DELETE /api/ai-tasks",
+      "operatorSettings": "GET/PATCH /api/ai-settings",
+      "promptTemplates": "GET/POST/DELETE /api/ai-prompt-templates"
+    },
+    "auth": {
+      "scheme": "HMAC-SHA256",
+      "headers": [
+        "X-MADCloud-App",
+        "X-MADCloud-Timestamp",
+        "X-MADCloud-Nonce",
+        "X-MADCloud-Signature",
+        "Idempotency-Key"
+      ],
+      "signaturePayload": "METHOD\\nPATH\\nTIMESTAMP\\nNONCE\\nSHA256(body)",
+      "secretStorage": "Server-side environment/appsettings only. Never expose app secrets to Angular."
+    },
+    "superAdmin": {
+      "operatorPage": "/ai",
+      "requiredUser": "admin@madprospects.com",
+      "note": "The browser page hides itself unless a super-admin token/role/email is present; MADCloud API also rejects operator endpoints without super-admin evidence."
+    }
+  },
+  "application": {
+    "frontendUrlProd": "https://madauthor.madprospects.com",
+    "apiUrlProd": "https://madauthorapi.madprospects.com",
+    "frontendUrlDev": "http://localhost:4212",
+    "apiUrlDev": "http://localhost:3012",
+    "pm2ProcessName": "mau-api",
+    "databaseName": "madauthor"
+  }
+}
