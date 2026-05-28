@@ -13,6 +13,7 @@ namespace MadAuthor.Api.Controllers;
 [ApiController]
 [Authorize(Roles = "Admin,Owner")]
 [Route("api/claude-prompt-templates")]
+[Route("api/ai-prompt-templates")]
 public class ClaudePromptTemplatesController(MadAuthorDbContext db) : ControllerBase
 {
     [HttpGet]

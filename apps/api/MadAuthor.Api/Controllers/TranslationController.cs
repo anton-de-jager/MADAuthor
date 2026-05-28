@@ -52,7 +52,7 @@ public class TranslationController(
         if (LooksLikeSameLanguage(project.Language, language))
             return BadRequest(new { error = "Target language matches the source language; nothing to translate." });
         if (!translator.IsEnabled)
-            return StatusCode(503, new { error = "No translation provider configured. Set OPENAI_API_KEY or DEEPL_API_KEY on the API and restart." });
+            return StatusCode(503, new { error = "Translation is routed through MADCloud. Create a MADCloud translation task and import the returned chapters." });
 
         var chapter = await db.BookChapters
             .FirstOrDefaultAsync(c => c.Id == chapterId && c.BookProjectId == projectId, ct);
@@ -98,7 +98,7 @@ public class TranslationController(
         if (LooksLikeSameLanguage(project.Language, language))
             return BadRequest(new { error = "Target language matches the source language; nothing to translate." });
         if (!translator.IsEnabled)
-            return StatusCode(503, new { error = "No translation provider configured. Set OPENAI_API_KEY or DEEPL_API_KEY on the API and restart." });
+            return StatusCode(503, new { error = "Translation is routed through MADCloud. Create a MADCloud translation task and import the returned chapters." });
 
         var chapters = await db.BookChapters
             .Where(c => c.BookProjectId == projectId && c.Status == BookChapterStatus.Final)

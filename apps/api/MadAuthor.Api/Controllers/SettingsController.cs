@@ -14,11 +14,51 @@ namespace MadAuthor.Api.Controllers;
 [ApiController]
 [Authorize(Roles = "Admin,Owner")]
 [Route("api/settings")]
+[Route("api/ai-settings")]
 public class SettingsController(MadAuthorDbContext db) : ControllerBase
 {
     [HttpGet]
     public async Task<ActionResult<IReadOnlyList<AppSettingDto>>> List(CancellationToken ct = default)
     {
+        var rows = await db.AppSettings.OrderBy(s => s.Key).ToListAsync(ct);
+        return rows.Select(s => new AppSettingDto(s.Key, s.ValueJson)).ToList();
+    }
+
+    [HttpPatch]
+    public async Task<ActionResult<IReadOnlyList<AppSettingDto>>> UpsertMany(
+        [FromBody] Dictionary<string, object?> req,
+        CancellationToken ct = default)
+    {
+        if (req.Count == 0)
+            return BadRequest(new { error = "At least one setting is required." });
+
+        foreach (var (key, value) in req)
+        {
+            if (string.IsNullOrWhiteSpace(key) || key.Length > 100)
+                return BadRequest(new { error = "Setting keys must be 1-100 characters." });
+
+            var valueJson = value is string s
+                ? s
+                : System.Text.Json.JsonSerializer.Serialize(value);
+
+            var existing = await db.AppSettings.FindAsync(new object[] { key }, ct);
+            if (existing is null)
+            {
+                db.AppSettings.Add(new AppSetting
+                {
+                    Key = key,
+                    ValueJson = valueJson,
+                    UpdatedDate = DateTime.UtcNow,
+                });
+            }
+            else
+            {
+                existing.ValueJson = valueJson;
+                existing.UpdatedDate = DateTime.UtcNow;
+            }
+        }
+
+        await db.SaveChangesAsync(ct);
         var rows = await db.AppSettings.OrderBy(s => s.Key).ToListAsync(ct);
         return rows.Select(s => new AppSettingDto(s.Key, s.ValueJson)).ToList();
     }

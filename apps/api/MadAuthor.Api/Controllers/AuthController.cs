@@ -11,6 +11,7 @@ using MadAuthor.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -118,6 +119,24 @@ public class AuthController(
     [HttpPost("signin")]
     public async Task<ActionResult<AuthResponse>> Login([FromBody] LoginRequest req)
     {
+        return await LoginCore(req);
+    }
+
+    [HttpPost("session")]
+    public async Task<ActionResult<AuthResponse>> LoginSession(
+        [FromBody(EmptyBodyBehavior = EmptyBodyBehavior.Allow)] LoginRequest? body)
+    {
+        var req = body ?? new LoginRequest(
+            Request.Headers["X-MAD-Email"].ToString(),
+            Request.Headers["X-MAD-Password"].ToString());
+        return await LoginCore(req);
+    }
+
+    private async Task<ActionResult<AuthResponse>> LoginCore(LoginRequest req)
+    {
+        if (string.IsNullOrWhiteSpace(req.Email) || string.IsNullOrWhiteSpace(req.Password))
+            return BadRequest(new { error = "Email and password are required." });
+
         var user = await users.FindByEmailAsync(req.Email);
         if (user is null || !user.IsActive)
             return Unauthorized(new { error = "Invalid credentials." });

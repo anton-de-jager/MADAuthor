@@ -34,6 +34,7 @@ namespace MadAuthor.Api.Controllers;
 [ApiController]
 [Authorize(Roles = "Admin,Owner")]
 [Route("api/claude-tasks")]
+[Route("api/ai-tasks")]
 public class ClaudeTasksController(
     MadAuthorDbContext db,
     IFileStorage storage,
@@ -470,6 +471,8 @@ public class ClaudeTasksController(
         {
             await hub.Clients.Group(NotificationHub.ClaudeTasksGroup)
                 .SendAsync("ClaudeTaskEvent", new ClaudeTaskEvent(type, taskId, task), ct);
+            await hub.Clients.Group(NotificationHub.AiTasksGroup)
+                .SendAsync("AiTaskEvent", new ClaudeTaskEvent(type, taskId, task), ct);
         }
         catch
         {

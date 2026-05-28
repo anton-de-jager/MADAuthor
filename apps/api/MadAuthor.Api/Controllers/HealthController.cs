@@ -1,20 +1,15 @@
 using MadAuthor.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace MadAuthor.Api.Controllers;
 
 [ApiController]
 [Route("api/health")]
-public class HealthController(MadAuthorDbContext db) : ControllerBase
+public class HealthController : ControllerBase
 {
     [HttpGet("live")]
     public IActionResult Live() => Ok(new { status = "alive", utc = DateTime.UtcNow });
 
     [HttpGet("ready")]
-    public async Task<IActionResult> Ready()
-    {
-        var dbOk = await db.Database.CanConnectAsync();
-        return Ok(new { status = dbOk ? "ready" : "degraded", db = dbOk, utc = DateTime.UtcNow });
-    }
+    public IActionResult Ready() => Ok(new { status = "ready", db = "not_checked", utc = DateTime.UtcNow });
 }

@@ -242,7 +242,7 @@ public class CoversController(
         {
             return StatusCode(503, new
             {
-                error = "No image-gen provider configured. Set OPENAI_API_KEY or STABILITY_API_KEY.",
+                error = "AI cover generation is routed through MADCloud. Create a MADCloud cover task and apply the returned asset.",
             });
         }
 

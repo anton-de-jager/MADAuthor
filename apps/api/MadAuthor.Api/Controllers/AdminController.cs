@@ -10,6 +10,33 @@ namespace MadAuthor.Api.Controllers;
 [Route("api/admin")]
 public class AdminController(MadAuthorDbContext db) : ControllerBase
 {
+    [HttpGet("health-summary")]
+    public async Task<ActionResult<object>> HealthSummary(CancellationToken ct)
+    {
+        var dbAvailable = await db.Database.CanConnectAsync(ct);
+        var pendingJobs = dbAvailable
+            ? await db.AIJobQueue.CountAsync(j => j.Status == Domain.Enums.AIJobStatus.Pending, ct)
+            : 0;
+        var failedJobs = dbAvailable
+            ? await db.AIJobQueue.CountAsync(j => j.Status == Domain.Enums.AIJobStatus.Failed, ct)
+            : 0;
+        var workers = dbAvailable
+            ? await db.WorkerHeartbeats.CountAsync(ct)
+            : 0;
+
+        return Ok(new
+        {
+            status = dbAvailable ? "ready" : "degraded",
+            utc = DateTime.UtcNow,
+            api = "online",
+            database = dbAvailable ? "available" : "unavailable",
+            hangfire = "see /hangfire",
+            pendingJobs,
+            failedJobs,
+            workers,
+        });
+    }
+
     [HttpGet("jobs")]
     public async Task<ActionResult<IReadOnlyList<object>>> Jobs(
         [FromQuery] string? status = null, [FromQuery] int limit = 50)
