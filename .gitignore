@@ -5,6 +5,13 @@
 
 # dotenv files
 .env
+.env.deploy
+.env.deploy.*
+.deploy/.env.deploy
+# ...but keep the sanitized templates
+!.env.deploy.example
+!.env.deploy.*.example
+!.env.madcloud.example
 
 # User-specific files
 *.rsuser
