@@ -56,6 +56,10 @@ if ($FeOnly -or $SkipRecycle -or $WhatIfPreference) {
     exit 0
 }
 
+Write-Host ""
+Write-Host "==> Wrapper recycle/warmup skipped; inner deploy already handled app_offline cleanup and API liveness verification." -ForegroundColor DarkGray
+exit 0
+
 # Re-load .env to get the FTP creds the recycle step needs.
 $envFile = Join-Path $PSScriptRoot '.env'
 if (-not (Test-Path $envFile)) { throw "Couldn't find $envFile." }

@@ -1,4 +1,5 @@
 using System.Text.Json;
+using Microsoft.Data.SqlClient;
 
 namespace MadAuthor.Api.Middleware;
 
@@ -8,7 +9,10 @@ namespace MadAuthor.Api.Middleware;
 /// (UseCors runs before this in the pipeline, but if we set status codes after UseCors has
 /// already added/skipped headers, errors can be invisible to the browser).
 /// </summary>
-public class GlobalExceptionMiddleware(RequestDelegate next, ILogger<GlobalExceptionMiddleware> log)
+public class GlobalExceptionMiddleware(
+    RequestDelegate next,
+    ILogger<GlobalExceptionMiddleware> log,
+    IHostEnvironment env)
 {
     public async Task InvokeAsync(HttpContext context)
     {
@@ -25,6 +29,15 @@ public class GlobalExceptionMiddleware(RequestDelegate next, ILogger<GlobalExcep
                 detail = ex.Message,
             });
         }
+        catch (SqlException ex)
+        {
+            log.LogError(ex, "SQL unavailable at {Path}", context.Request.Path);
+            await WriteJson(context, StatusCodes.Status503ServiceUnavailable, new
+            {
+                error = "DatabaseUnavailable",
+                detail = "The API could not connect to the MADAuthor database. Check the deployed SQL connection string/user credentials.",
+            });
+        }
         catch (Exception ex)
         {
             log.LogError(ex, "Unhandled exception at {Path}", context.Request.Path);
@@ -33,9 +46,7 @@ public class GlobalExceptionMiddleware(RequestDelegate next, ILogger<GlobalExcep
                 error = ex.GetType().Name,
                 detail = ex.Message,
                 inner = ex.InnerException?.Message,
-                // stack is intentionally surfaced for now - Anton is the only user. Strip
-                // before going multi-tenant or production-facing.
-                stack = ex.StackTrace,
+                stack = env.IsProduction() ? null : ex.StackTrace,
             });
         }
     }

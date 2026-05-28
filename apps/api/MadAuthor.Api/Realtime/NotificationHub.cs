@@ -20,6 +20,7 @@ public class NotificationHub(MadAuthorDbContext db) : Hub
     /// Kept as a constant so controllers and hub agree on the spelling.
     /// </summary>
     public const string ClaudeTasksGroup = "claude-tasks";
+    public const string AiTasksGroup = "ai-tasks";
 
     public async Task JoinProjectGroup(Guid projectId)
     {
@@ -45,6 +46,16 @@ public class NotificationHub(MadAuthorDbContext db) : Hub
 
     public Task LeaveClaudeTasksGroup() =>
         Groups.RemoveFromGroupAsync(Context.ConnectionId, ClaudeTasksGroup);
+
+    public async Task JoinAiTasksGroup()
+    {
+        if (!IsAdminOrOwner())
+            throw new HubException("Not authorized to subscribe to MADCloud AI tasks.");
+        await Groups.AddToGroupAsync(Context.ConnectionId, AiTasksGroup);
+    }
+
+    public Task LeaveAiTasksGroup() =>
+        Groups.RemoveFromGroupAsync(Context.ConnectionId, AiTasksGroup);
 
     private bool IsAdminOrOwner() =>
         Context.User?.IsInRole("Admin") == true || Context.User?.IsInRole("Owner") == true;

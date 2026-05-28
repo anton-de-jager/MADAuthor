@@ -2,7 +2,7 @@
 # Generate from this file with `flyctl launch --no-deploy --copy-config` if needed.
 
 app = "madauthor"
-primary_region = "jnb"     # Johannesburg — close to the SQL Server at 41.185.13.202
+primary_region = "jnb"     # Johannesburg, near the production SQL Server host.
 
 [build]
   dockerfile = "Dockerfile"

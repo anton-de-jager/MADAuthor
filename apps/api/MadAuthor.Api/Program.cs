@@ -21,6 +21,9 @@ using Serilog;
 
 // Load .env from the repo root by walking up the directory tree. No-op if not found.
 Env.TraversePath().Load();
+// On IIS/Plesk the process working directory is not always the published app
+// folder, so explicitly load the staged runtime .env beside the API DLL.
+LoadDotEnvIntoProcess(Path.Combine(AppContext.BaseDirectory, ".env"), overwriteExisting: true);
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -44,15 +47,17 @@ builder.Host.UseSerilog();
 // (appsettings.json / appsettings.Local.json). Fall back to composing from
 // DB_* env vars so prod hosting can ship without a Local file. The result
 // is normalized to ensure TLS flags suit a self-signed/IP-based SQL Server.
-var rawConnStr =
-    NonBlank(builder.Configuration.GetConnectionString("DefaultConnection"))
-    ?? ComposeConnectionStringFromEnv();
+var connStr = ResolveBestConnectionString(
+    "App",
+    builder.Configuration,
+    [ "DefaultConnection", "Default" ],
+    ComposeConnectionStringFromEnvCandidates);
 
-var rawHangfireConnStr =
-    NonBlank(builder.Configuration.GetConnectionString("Hangfire"))
-    ?? ComposeHangfireConnectionStringFromEnv();
-var hangfireConnStr = NormalizeConnectionString(rawHangfireConnStr);
-var connStr = NormalizeConnectionString(rawConnStr);
+var hangfireConnStr = ResolveBestConnectionString(
+    "Hangfire",
+    builder.Configuration,
+    [ "Hangfire" ],
+    ComposeHangfireConnectionStringFromEnvCandidates);
 if (builder.Environment.IsDevelopment())
 {
     EnsureSqlDatabaseExists(connStr);
@@ -70,7 +75,7 @@ var storageRoot = Environment.GetEnvironmentVariable("STORAGE_LOCAL_ROOT")
 Directory.CreateDirectory(storageRoot);
 builder.Services.AddMadAuthorStorage(storageRoot);
 
-// --- Audio transcription + image OCR (light up when OPENAI_API_KEY is set) ----
+// --- Audio transcription + image OCR (MADCloud-only AI boundary; local no-op) ----
 MadAuthor.Infrastructure.Ingestion.MediaProcessingDependencyInjection.AddMadAuthorMediaProcessing(builder.Services);
 
 // --- Unsplash (royalty-free photo source for book covers) ----------------
@@ -82,7 +87,7 @@ builder.Services.AddSingleton(new MadAuthor.Infrastructure.Covers.UnsplashOption
 builder.Services.AddHttpClient<MadAuthor.Application.Covers.IUnsplashClient,
     MadAuthor.Infrastructure.Covers.UnsplashClient>();
 
-// --- AI image generation (OpenAI DALL-E preferred, Stability fallback, NoOp otherwise) --
+// --- AI image generation (MADCloud-only AI boundary; local no-op) --
 MadAuthor.Infrastructure.Covers.ImageGenDependencyInjection.AddMadAuthorImageGen(builder.Services);
 
 // --- Cover composer (QuestPDF-based typography overlay + print-wrap PDF) ----
@@ -90,7 +95,7 @@ MadAuthor.Infrastructure.Covers.ImageGenDependencyInjection.AddMadAuthorImageGen
 builder.Services.AddSingleton<MadAuthor.Application.Covers.ICoverComposer,
     MadAuthor.Infrastructure.Covers.QuestPdfCoverComposer>();
 
-// --- Translation (OpenAI primary, DeepL alternate, NoOp fallback) ---------
+// --- Translation (MADCloud-only AI boundary; local no-op) ---------
 MadAuthor.Infrastructure.Translation.TranslationDependencyInjection.AddMadAuthorTranslation(builder.Services);
 
 // --- Virus scanning (ClamAV when configured; no-op otherwise) -------------
@@ -324,7 +329,7 @@ catch (Exception ex)
 
 // JobProgressBroadcaster is registered as a HostedService - see Realtime/.
 
-if (app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment() || app.Environment.IsEnvironment("Local"))
 {
     app.UseSwagger();
     app.UseSwaggerUI();
@@ -461,17 +466,6 @@ if (Directory.Exists(wwwroot) && File.Exists(Path.Combine(wwwroot, "index.html")
 
 app.Run();
 
-static string Required(string key)
-{
-    var value = Environment.GetEnvironmentVariable(key);
-    if (string.IsNullOrWhiteSpace(value))
-    {
-        throw new InvalidOperationException(
-            $"Required environment variable '{key}' is not set. Check your .env file.");
-    }
-    return value;
-}
-
 static string NormalizeSecret(string? value) =>
     (value ?? string.Empty).Trim().Trim('"');
 
@@ -500,13 +494,129 @@ static void EnsureSqlDatabaseExists(string connectionString)
     cmd.ExecuteNonQuery();
 }
 
-static string ComposeConnectionStringFromEnv() =>
-    $"Server={Required("DB_HOST")};Database={Required("DB_DATABASE")};" +
-    $"User Id={Required("DB_USERNAME")};Password={Required("DB_PASSWORD")};";
+static IEnumerable<string> ComposeConnectionStringFromEnvCandidates()
+{
+    var host = EnvFirst("DB_HOST");
+    var database = EnvFirst("DB_DATABASE", "DB_NAME");
+    var username = EnvFirst("DB_USERNAME", "DB_USER");
+    var password = EnvFirst("DB_PASSWORD", "DB_PASS");
+    if (host is not null && database is not null && username is not null && password is not null)
+    {
+        yield return $"Server={host};Database={database};User Id={username};Password={password};";
+    }
+}
 
-static string ComposeHangfireConnectionStringFromEnv() =>
-    $"Server={Required("DB_HOST")};Database={Required("DB_HANGFIRE_DATABASE")};" +
-    $"User Id={Required("DB_USERNAME")};Password={Required("DB_PASSWORD")};";
+static IEnumerable<string> ComposeHangfireConnectionStringFromEnvCandidates()
+{
+    var host = EnvFirst("DB_HOST");
+    var database = EnvFirst("DB_HANGFIRE_DATABASE", "DB_HANGFIRE_NAME");
+    var username = EnvFirst("DB_USERNAME", "DB_USER");
+    var password = EnvFirst("DB_PASSWORD", "DB_PASS");
+    if (host is not null && database is not null && username is not null && password is not null)
+    {
+        yield return $"Server={host};Database={database};User Id={username};Password={password};";
+    }
+}
+
+static string? EnvFirst(params string[] keys) =>
+    keys.Select(Environment.GetEnvironmentVariable).FirstOrDefault(v => !string.IsNullOrWhiteSpace(v));
+
+static void LoadDotEnvIntoProcess(string path, bool overwriteExisting)
+{
+    if (!File.Exists(path)) return;
+
+    foreach (var rawLine in File.ReadAllLines(path))
+    {
+        var line = rawLine.Trim();
+        if (line.Length == 0 || line.StartsWith('#') || !line.Contains('=')) continue;
+        if (line.StartsWith("export ", StringComparison.OrdinalIgnoreCase))
+        {
+            line = line["export ".Length..].TrimStart();
+        }
+
+        var separator = line.IndexOf('=');
+        if (separator <= 0) continue;
+
+        var key = line[..separator].Trim();
+        var value = line[(separator + 1)..].Trim();
+        if (value.Length >= 2 &&
+            ((value.StartsWith('"') && value.EndsWith('"')) ||
+             (value.StartsWith('\'') && value.EndsWith('\''))))
+        {
+            value = value[1..^1];
+        }
+
+        if (overwriteExisting || string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable(key)))
+        {
+            Environment.SetEnvironmentVariable(key, value);
+        }
+    }
+}
+
+static string ResolveBestConnectionString(
+    string label,
+    IConfiguration configuration,
+    IReadOnlyList<string> connectionStringKeys,
+    Func<IEnumerable<string>> envCandidateFactory)
+{
+    var candidates = new List<(string Source, string Value)>();
+    foreach (var key in connectionStringKeys)
+    {
+        var value = NonBlank(configuration.GetConnectionString(key));
+        if (value is not null) candidates.Add(($"ConnectionStrings:{key}", value));
+    }
+    candidates.AddRange(envCandidateFactory().Select((value, index) => ($"DB_* env candidate {index + 1}", value)));
+
+    var normalized = candidates
+        .Where(c => !string.IsNullOrWhiteSpace(c.Value))
+        .Select(c => (c.Source, Value: NormalizeConnectionString(c.Value)))
+        .GroupBy(c => c.Value, StringComparer.OrdinalIgnoreCase)
+        .Select(g => g.First())
+        .ToList();
+
+    // A previous Plesk value used the hosting account name (`madprospects`) as
+    // the SQL login. If a valid .env/appsettings candidate exists, never let that
+    // stale host-level value win just because startup SQL probes time out.
+    var nonLegacy = normalized
+        .Where(c => !IsLegacyWrongMadProspectsSqlUser(c.Value))
+        .ToList();
+    if (nonLegacy.Count > 0)
+    {
+        normalized = nonLegacy;
+    }
+
+    if (normalized.Count == 0)
+    {
+        throw new InvalidOperationException(
+            $"{label} SQL connection string is not configured. Set ConnectionStrings__DefaultConnection or DB_* values.");
+    }
+
+    foreach (var candidate in normalized)
+    {
+        if (CanOpenSqlConnection(candidate.Value, $"{label} ({candidate.Source})"))
+        {
+            Log.Information("{Label} SQL connection selected from {Source}.", label, candidate.Source);
+            return candidate.Value;
+        }
+    }
+
+    Log.Warning("{Label} SQL connection candidates are not reachable. Using {Source} so the app can start and return health/auth errors cleanly.",
+        label, normalized[0].Source);
+    return normalized[0].Value;
+}
+
+static bool IsLegacyWrongMadProspectsSqlUser(string connectionString)
+{
+    try
+    {
+        var b = new SqlConnectionStringBuilder(connectionString);
+        return string.Equals(b.UserID, "madprospects", StringComparison.OrdinalIgnoreCase);
+    }
+    catch
+    {
+        return false;
+    }
+}
 
 static string NormalizeConnectionString(string input)
 {

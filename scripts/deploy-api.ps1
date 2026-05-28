@@ -187,5 +187,4 @@ Write-Host "Removing remote app_offline.htm - API coming back online..." -Foregr
 Remove-FtpFile 'app_offline.htm'
 
 Write-Host "`nDone." -ForegroundColor Green
-Write-Host "Smoke test:  https://madaiapi.madprospects.com/swagger" -ForegroundColor Cyan
-Write-Host "Health:      https://madaiapi.madprospects.com/health" -ForegroundColor Cyan
+Write-Host "Smoke test:  https://madaiapi.madprospects.com/health" -ForegroundColor Cyan
