@@ -4,9 +4,8 @@ using Microsoft.Extensions.Logging;
 namespace MadAuthor.Infrastructure.Translation;
 
 /// <summary>
-/// Fallback translator used when no provider API key is configured. Always returns null from
-/// <see cref="TranslateAsync"/> so the API can surface a 503 to the UI. Logs a warning the first
-/// time it's invoked so operators see the missing-config signal without flooding the log.
+/// Local placeholder because MADAuthor does not call translation AI providers directly.
+/// Translation work must be queued through MADCloud and delivered back as translated chapters.
 /// </summary>
 public sealed class NoOpTranslator : ITranslator
 {
@@ -19,15 +18,15 @@ public sealed class NoOpTranslator : ITranslator
     }
 
     public bool IsEnabled => false;
-    public string ProviderName => "none";
+    public string ProviderName => "MADCloud";
 
     public Task<TranslationResult?> TranslateAsync(TranslateRequest request, CancellationToken ct = default)
     {
         if (Interlocked.Exchange(ref _warned, 1) == 0)
         {
             _log.LogWarning(
-                "Translation requested but no translation provider is configured. " +
-                "Set OPENAI_API_KEY or DEEPL_API_KEY in the environment and restart the API.");
+                "Translation requested locally. MADAuthor uses MADCloud as the only AI integration; " +
+                "queue translation through MADCloud and persist the returned text.");
         }
         return Task.FromResult<TranslationResult?>(null);
     }

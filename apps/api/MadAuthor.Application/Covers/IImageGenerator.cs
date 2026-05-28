@@ -1,22 +1,21 @@
 namespace MadAuthor.Application.Covers;
 
 /// <summary>
-/// Provider-agnostic image generation contract used by the cover-AI endpoint. Implementations
-/// (OpenAI DALL-E, Stability, NoOp) are wired in <c>ImageGenDependencyInjection</c> based on
-/// which API key is set in the environment. The selected provider is auto-detected once at
-/// startup; toggling providers requires an env-var change + restart.
+/// Provider-agnostic image generation contract used by the cover-AI endpoint. MADAuthor
+/// routes AI image generation through MADCloud only; local implementations never call AI
+/// vendors directly.
 /// </summary>
 public interface IImageGenerator
 {
-    /// <summary>True when a real provider is wired (i.e. an API key is configured).</summary>
+    /// <summary>True when a local provider is wired. MADCloud-only mode returns false locally.</summary>
     bool IsEnabled { get; }
 
-    /// <summary>Display name of the active provider (e.g. "openai-dall-e-3", "stability-sd3"), or "none".</summary>
+    /// <summary>Display name of the active provider boundary.</summary>
     string ProviderName { get; }
 
     /// <summary>
     /// Generate one cover image. Returns PNG bytes + the prompt that was actually used (after any
-    /// provider-side rewriting, e.g. DALL-E's automatic prompt revision) + attribution metadata
+    /// provider-side rewriting) + attribution metadata
     /// for storage. Returns null when the provider is disabled or the call failed in a way the
     /// caller should surface (the implementation logs the underlying error).
     /// </summary>

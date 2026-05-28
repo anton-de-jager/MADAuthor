@@ -1,17 +1,16 @@
 namespace MadAuthor.Application.Translation;
 
 /// <summary>
-/// Provider-agnostic Markdown translation contract. Implementations (OpenAI gpt-4o-mini,
-/// DeepL, NoOp) are wired in <c>TranslationDependencyInjection</c> based on which API key
-/// is set in the environment. The selected provider is auto-detected once at startup;
-/// toggling providers requires an env-var change + restart.
+/// Provider-agnostic Markdown translation contract. MADAuthor does not call AI vendors
+/// directly; translation work is routed through MADCloud and this interface remains the
+/// local boundary used by controllers.
 /// </summary>
 public interface ITranslator
 {
-    /// <summary>True when a real provider is wired (i.e. an API key is configured).</summary>
+    /// <summary>True when a local provider is wired. MADCloud-only mode returns false locally.</summary>
     bool IsEnabled { get; }
 
-    /// <summary>Display name of the active provider (e.g. "openai-gpt-4o-mini", "deepl"), or "none".</summary>
+    /// <summary>Display name of the active provider boundary.</summary>
     string ProviderName { get; }
 
     /// <summary>Translate Markdown content from one language to another. Preserves headings, lists, emphasis, code blocks, and quotes.</summary>

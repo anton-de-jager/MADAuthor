@@ -24,7 +24,7 @@ public class TextExtractor(
         try
         {
             // Audio MIME types - delegate to the transcriber. The DI layer wires up either the
-            // real Whisper client (when OPENAI_API_KEY is set) or a NoOp that returns null.
+            // MADCloud-only transcription boundary or a NoOp that returns null.
             if (mime.StartsWith("audio/", StringComparison.Ordinal))
             {
                 if (!audio.IsEnabled)
