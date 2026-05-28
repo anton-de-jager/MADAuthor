@@ -20,14 +20,16 @@ import { NotificationsService, JobProgressEvent } from '../../core/signalr/notif
 import { CoverPickerComponent } from './cover-picker.component';
 import { MetadataEditorComponent } from './metadata-editor.component';
 import { OutlineEditorComponent } from './outline-editor.component';
+import { ProductionCenterComponent } from './production-center.component';
+import { BookActionNavComponent } from './book-action-nav.component';
 
 @Component({
   selector: 'app-books-detail',
   standalone: true,
-  imports: [RouterLink, DatePipe, DecimalPipe, FormsModule, CoverPickerComponent, MetadataEditorComponent, OutlineEditorComponent],
+  imports: [RouterLink, DatePipe, DecimalPipe, FormsModule, CoverPickerComponent, MetadataEditorComponent, OutlineEditorComponent, ProductionCenterComponent, BookActionNavComponent],
   template: `
     <div class="p-8 max-w-5xl mx-auto">
-      <a routerLink="/books" class="text-sm text-ink-400 hover:text-ink-100">&larr; All books</a>
+      <a routerLink="/books" class="text-sm text-ink-400 hover:text-ink-100" aria-label="Back to all books">&larr; All books</a>
 
       @if (loading()) {
         <div class="glass rounded-xl p-12 text-center text-ink-400 mt-6">Loading…</div>
@@ -52,6 +54,10 @@ import { OutlineEditorComponent } from './outline-editor.component';
               Open reader →
             </a>
           }
+        </div>
+
+        <div class="mb-6">
+          <app-book-action-nav [book]="b"></app-book-action-nav>
         </div>
 
         <!-- Outline approval banner -->
@@ -245,6 +251,10 @@ import { OutlineEditorComponent } from './outline-editor.component';
               {{ lastError() }}
             </div>
           }
+        </div>
+
+        <div class="mb-8">
+          <app-production-center [book]="b"></app-production-center>
         </div>
 
         @if (b.chapters.length === 0) {
@@ -1027,7 +1037,7 @@ export class BooksDetailComponent implements OnInit, OnDestroy {
         const status = err?.status;
         const msg = err?.error?.error ?? err?.message ?? 'Translation failed.';
         if (status === 503) {
-          this.translateError.set('No translation provider is configured. Set OPENAI_API_KEY or DEEPL_API_KEY on the API and restart.');
+          this.translateError.set('Translation is routed through MADCloud. Create a MADCloud translation task and import the returned chapters.');
         } else {
           this.translateError.set(msg);
         }

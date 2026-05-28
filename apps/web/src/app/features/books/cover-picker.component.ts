@@ -397,7 +397,7 @@ interface TemplateMeta {
         <div class="border border-ink-700/60 rounded-lg p-3 mb-3 bg-ink-900/30">
           <div class="flex items-center justify-between mb-2">
             <div class="text-xs uppercase tracking-wider text-ink-400">Generate with AI</div>
-            <span class="text-[10px] text-ink-500">OpenAI / Stability</span>
+            <span class="text-[10px] text-ink-500">MADCloud</span>
           </div>
           <div class="flex flex-col md:flex-row gap-2">
             <input
@@ -438,10 +438,8 @@ interface TemplateMeta {
             }
             @if (aiNotConfigured()) {
               <div class="text-xs text-ink-400 mt-1">
-                No AI provider configured. Set
-                <code class="text-brand-300">OPENAI_API_KEY</code>
-                or <code class="text-brand-300">STABILITY_API_KEY</code>
-                in your <code class="text-brand-300">.env</code> and restart the API.
+                AI cover generation is routed through MADCloud. Create a MADCloud cover task,
+                then apply the returned asset here.
               </div>
             }
           </div>
