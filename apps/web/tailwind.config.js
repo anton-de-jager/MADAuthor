@@ -5,18 +5,32 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        // Brand palette - tuned for the dark, futuristic feel called for in the spec.
+        // Brand palette - sourced from Setup.xlsx.
         brand: {
-          50:  '#f5f3ff',
-          100: '#ede9fe',
-          200: '#ddd6fe',
-          300: '#c4b5fd',
-          400: '#a78bfa',
-          500: '#8b5cf6',
-          600: '#7c3aed',
-          700: '#6d28d9',
-          800: '#5b21b6',
-          900: '#4c1d95',
+          50:  '#FCEBFF',
+          100:  '#F8D6FE',
+          200:  '#F2ADFD',
+          300:  '#E97AFC',
+          400:  '#DF3DFA',
+          500:  '#D500F9',
+          600:  '#BB00DB',
+          700:  '#A200BD',
+          800:  '#84009A',
+          900:  '#620073',
+          950:  '#40004B',
+        },
+        fuchsia: {
+          50:  '#FFF0F5',
+          100:  '#FFE0EB',
+          200:  '#FFC2D7',
+          300:  '#FF9CBD',
+          400:  '#FF6E9F',
+          500:  '#FF4081',
+          600:  '#E03872',
+          700:  '#C23162',
+          800:  '#9E2850',
+          900:  '#751D3B',
+          950:  '#4D1327',
         },
         ink: {
           50:  '#f8fafc',
