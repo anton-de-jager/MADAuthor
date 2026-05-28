@@ -496,3 +496,6 @@ apps/web/.angular/
 # Local scratch / migration backups (not for repo)
 .tmp-new-favicon-preview-*.png
 legacy/gitbackup-*/
+
+# Local-only ASP.NET settings (operator credentials live here, not in repo)
+apps/api/MadAuthor.Api/appsettings.Local.json
