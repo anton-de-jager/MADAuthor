@@ -474,7 +474,7 @@ Users 1───* Notifications
 
 The spec implies but does not commit to:
 
-- **Billing/subscriptions** - Stripe customer/subscription/invoice tables. Deferred unless Phase 1 needs paid tiers.
+- **Billing/subscriptions** - Payfast customer/subscription/invoice references. Deferred unless Phase 1 needs paid tiers.
 - **Collaboration** - sharing a project with a non-owner. Mentioned in "Collaboration updates" under realtime; needs `BookProjectMembers (UserId, BookProjectId, Role)` when implemented.
 - **Prompt-template store** - the spec mentions "Prompt Templates" as a UI page. If users can edit templates in-app, add `PromptTemplates (Id, CompanyId, Name, Body, Variables, Version)`. For Phase 1, prompt templates live in the repo as Markdown files under `packages/prompts/`.
 - **API keys for tenants** - if users can call MADAuthor via API, add `ApiKeys (Id, UserId, CompanyId, KeyHash, Scopes, ExpiresAt)`.

@@ -1,0 +1,24 @@
+# Normalize text files to LF in the repo, keep CRLF on Windows checkout.
+* text=auto
+
+# Force binary handling for asset/build artifact types so git never tries
+# CRLF/LF normalization on them.
+*.pdf   binary
+*.png   binary
+*.jpg   binary
+*.jpeg  binary
+*.gif   binary
+*.ico   binary
+*.dll   binary
+*.exe   binary
+*.so    binary
+*.dylib binary
+*.zip   binary
+*.gz    binary
+*.7z    binary
+*.woff  binary
+*.woff2 binary
+*.ttf   binary
+*.otf   binary
+*.eot   binary
+*.webp  binary

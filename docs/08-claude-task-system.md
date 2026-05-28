@@ -2,7 +2,7 @@
 
 A second autonomous pipeline alongside the book-generation pipeline. Where `AIJobQueue` handles book-shaped jobs (plan, draft, edit chapters), the new **ClaudeTask** queue handles **dev / operator tasks** ("fix this bug", "add this feature", "audit this prompt"). A super-admin operator page surfaces them. A polling worker drains them. A codebase scanner files new ones.
 
-This doc is a MADAuthor-native translation of an external template spec authored for a NestJS / Prisma / MySQL stack. The shape of the design is preserved; everything stack-specific has been remapped to MADAuthor's actual idioms (.NET 8 / EF Core / SQL Server / Angular standalone + Tailwind `ink-*` primitives / SignalR / `claude.exe` invoked from PowerShell).
+This doc is a MADAuthor-native translation of an external template spec authored for a NestJS / Prisma / MSSQL stack. The shape of the design is preserved; everything stack-specific has been remapped to MADAuthor's actual idioms (.NET 8 / EF Core / SQL Server / Angular standalone + Tailwind `ink-*` primitives / SignalR / `claude.exe` invoked from PowerShell).
 
 ## 1. Why a second pipeline (and not extend `AIJobQueue`)
 
