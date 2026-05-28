@@ -81,16 +81,6 @@ See `.claude/README.md` for the end-to-end install of the `MADAuthorClaudeWorker
 and `MADAuthorClaudeScanner` scheduled tasks. Logs land in
 `.claude/worker/worker.log` and `.claude/scanner/scanner.log`.
 
-## Known issues
-
-- **Local build fails** because `apps/api/MadAuthor.Infrastructure/Covers/QuestPdfCoverComposer.cs`
-  imports `SkiaSharp` but the csproj doesn't reference the `SkiaSharp` NuGet
-  package. The deployed build is older than this file. Either add
-  `<PackageReference Include="SkiaSharp" Version="2.x" />` to
-  `MadAuthor.Infrastructure.csproj` or remove the SkiaSharp use from
-  `QuestPdfCoverComposer.cs`.
-
-
 ## Migration Update (2026-05-25)
 - Workspace migration finalized under `C:\\Code\\madprospects`; legacy source directories in `C:\\Code` were removed after true move.
 - pnpm shared store remains centralized at `C:/Code/.pnpm`; `pnpm approve-builds --all` was run in active workspace contexts.

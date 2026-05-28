@@ -492,3 +492,7 @@ apps/api/*.user
 apps/web/node_modules/
 apps/web/dist/
 apps/web/.angular/
+
+# Local scratch / migration backups (not for repo)
+.tmp-new-favicon-preview-*.png
+legacy/gitbackup-*/
