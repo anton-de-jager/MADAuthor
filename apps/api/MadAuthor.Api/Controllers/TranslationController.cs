@@ -30,8 +30,9 @@ public class TranslationController(
     ILogger<TranslationController> log) : ControllerBase
 {
     // Safety cap: refuse to translate more chapters than this in one call. Translation is slow
-    // (single-digit minutes per chapter on gpt-4o-mini) and expensive; if a user has more than
-    // 30 final chapters they should translate in batches via the per-chapter endpoint.
+    // (single-digit minutes per chapter, depending on the MADCloud-routed model) and expensive;
+    // if a user has more than 30 final chapters they should translate in batches via the
+    // per-chapter endpoint.
     private const int MaxChaptersPerBookCall = 30;
 
     /// <summary>Translate a single Final chapter. Stored as a Generated BookAsset.</summary>
