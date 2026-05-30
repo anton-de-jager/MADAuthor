@@ -2,7 +2,7 @@
   "product": "MADAuthor",
   "slug": "madauthor",
   "sourceCode": "C:\\Code\\madprospects\\madauthor",
-  "repository": "https://github.com/mad-leads/madauthor",
+  "repository": "https://github.com/anton-de-jager/MADAuthor",
   "madcloud": {
     "role": "MADCloud is the only AI service provider for this application.",
     "apiUrlProd": "https://madcloudapi.madprospects.com",
